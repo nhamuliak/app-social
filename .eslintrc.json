@@ -1,0 +1,101 @@
+{
+	"root": true,
+	"ignorePatterns": [
+		"projects/**/*"
+	],
+	"overrides": [
+		{
+			"files": [
+				"*.ts"
+			],
+			"extends": [
+				"eslint:recommended",
+				"plugin:@typescript-eslint/recommended",
+				"plugin:@angular-eslint/recommended",
+				"plugin:@angular-eslint/template/process-inline-templates"
+			],
+			"rules": {
+				"indent": [
+					"error",
+					"tab",
+					{
+						"SwitchCase": 1
+					}
+				],
+				"semi": [
+					"error",
+					"always"
+				],
+				"quotes": [
+					"error",
+					"double"
+				],
+				"id-length": [
+					"error",
+					{
+						"min": 3,
+						"properties": "never",
+						"exceptions": ["id", "i", "to", "_"]
+					}
+				],
+				"no-console": ["error", { "allow": ["error", "info"] }],
+				"@typescript-eslint/method-signature-style": ["error"],
+				"@typescript-eslint/explicit-member-accessibility": [
+					"error",
+					{
+						"accessibility": "explicit",
+						"overrides": {
+							"accessors": "explicit",
+							"constructors": "no-public",
+							"methods": "explicit",
+							"properties": "explicit",
+							"parameterProperties": "explicit"
+						}
+					}
+				],
+				"@typescript-eslint/explicit-function-return-type": [
+					"error",
+					{
+						"allowExpressions": true,
+						"allowTypedFunctionExpressions": true,
+						"allowedNames": [
+							"ngOnChanges",
+							"ngOnInit",
+							"ngDoCheck",
+							"ngAfterContentInit",
+							"ngAfterContentChecked",
+							"ngAfterViewInit",
+							"ngAfterViewChecked",
+							"ngOnDestroy"
+						]
+					}
+				],
+				"@angular-eslint/directive-selector": [
+					"error",
+					{
+						"type": "attribute",
+						"prefix": "app",
+						"style": "camelCase"
+					}
+				],
+				"@angular-eslint/component-selector": [
+					"error",
+					{
+						"type": "element",
+						"prefix": "app",
+						"style": "kebab-case"
+					}
+				]
+			}
+		},
+		{
+			"files": [
+				"*.html"
+			],
+			"extends": [
+				"plugin:@angular-eslint/template/recommended"
+			],
+			"rules": {}
+		}
+	]
+}
