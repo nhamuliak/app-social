@@ -1,0 +1,56 @@
+<main class="auth-main">
+	<div class="auth-wallpaper"></div>
+	<section class="auth-section">
+		<div class="auth-content">
+			<img class="wave" src="assets/images/waving-hand.svg" alt="wave" />
+			<h1>Welcome back</h1>
+			<h2>Sign in to manage your account.</h2>
+			{{ form.pristine }}
+			<form (submit)="onLogin()" [formGroup]="form">
+				<div class="form-block">
+					<label for="email" class="form-label">Email Address</label>
+					<input
+						id="email"
+						class="form-input"
+						type="email"
+						formControlName="email"
+						placeholder="Enter your email address"
+						required
+					/>
+				</div>
+				<div class="form-block">
+					<label for="password" class="form-label">Password</label>
+					<input
+						id="password"
+						class="form-input"
+						type="password"
+						formControlName="password"
+						placeholder="Enter your password"
+						required
+					/>
+				</div>
+				<a href="#">Forgot your password?</a>
+
+				<button type="submit" class="form-submit">Sign In</button>
+			</form>
+
+			<div>
+				<p class="auth-hint-text">
+					<span>Or do it vai other accounts.</span>
+				</p>
+				<div class="auth-social-box">
+					<button class="auth-social">
+						<img src="assets/images/socials/google.svg" alt="Google" />
+					</button>
+					<button class="auth-social">
+						<img src="assets/images/socials/facebook.svg" alt="Facebook" />
+					</button>
+				</div>
+			</div>
+		</div>
+		<p class="reverse-text">
+			Don't have an account?
+			<a [routerLink]="['/auth/registration']">Sign Up</a>
+		</p>
+	</section>
+</main>
