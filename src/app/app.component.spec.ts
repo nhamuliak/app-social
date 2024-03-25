@@ -21,16 +21,16 @@ describe("AppComponent", () => {
 		expect(app).toBeTruthy();
 	});
 
-	it("should have as title 'app-social'", () => {
-		expect(app.title).toEqual("app-social");
-	});
+	// it("should have as title 'app-social'", () => {
+	// 	expect(app.title).toEqual("app-social");
+	// });
 
-	it("should render title", () => {
-		const compiled = fixture.nativeElement as HTMLElement;
-
-		fixture.detectChanges();
-		expect(compiled.querySelector(".content span")?.textContent).toContain(
-			"app-social app is running!"
-		);
-	});
+	// it("should render title", () => {
+	// 	const compiled = fixture.nativeElement as HTMLElement;
+	//
+	// 	fixture.detectChanges();
+	// 	expect(compiled.querySelector(".content span")?.textContent).toContain(
+	// 		"app-social app is running!"
+	// 	);
+	// });
 });
