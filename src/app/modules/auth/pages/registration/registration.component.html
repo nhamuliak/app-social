@@ -1,0 +1,59 @@
+<main class="auth-main">
+	<div class="auth-wallpaper"></div>
+	<section class="auth-section">
+		<div class="auth-content">
+			<h1>Get started today</h1>
+			<h2>Enter your details to create super account.</h2>
+			<form>
+				<div class="user-data">
+					<div class="form-block">
+						<label for="name" class="form-label">Name</label>
+						<input id="name" class="form-input" type="text" placeholder="Enter your name" />
+					</div>
+					<div class="form-block">
+						<label for="age" class="form-label">Age</label>
+						<input id="age" class="form-input" type="number" placeholder="Enter your age" />
+					</div>
+				</div>
+				<div class="form-block">
+					<label for="email" class="form-label">Email Address</label>
+					<input id="email" class="form-input" type="email" placeholder="Enter your email address" />
+				</div>
+				<div class="form-block">
+					<label for="password" class="form-label">Password</label>
+					<input id="password" class="form-input" type="password" placeholder="Enter your password" />
+				</div>
+				<div class="form-block">
+					<label for="confirm-password" class="form-label">Confirm New Password</label>
+					<input
+						id="confirm-password"
+						class="form-input"
+						type="password"
+						placeholder="Enter your new password again"
+					/>
+				</div>
+				<a href="#">Terms and Policy</a>
+
+				<button type="submit" class="form-submit">Get started now</button>
+			</form>
+
+			<div>
+				<p class="auth-hint-text">
+					<span>Or sign up with</span>
+				</p>
+				<div class="auth-social-box">
+					<button class="auth-social">
+						<img src="assets/images/socials/google.svg" alt="Google" />
+					</button>
+					<button class="auth-social">
+						<img src="assets/images/socials/facebook.svg" alt="Facebook" />
+					</button>
+				</div>
+			</div>
+		</div>
+		<p class="reverse-text">
+			Already have an account?
+			<a [routerLink]="['/auth/login']">Login</a>
+		</p>
+	</section>
+</main>
