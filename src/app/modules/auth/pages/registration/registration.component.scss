@@ -1,0 +1,8 @@
+.auth-wallpaper {
+	background-image: url("~src/assets/images/wallpapers/background-2.png");
+}
+.user-data {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 30px;
+}
