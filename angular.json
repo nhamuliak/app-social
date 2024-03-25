@@ -65,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "app-social:build:production"
+              "buildTarget": "app-social:build:production"
             },
             "development": {
-              "browserTarget": "app-social:build:development"
+              "buildTarget": "app-social:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -76,7 +76,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "app-social:build"
+            "buildTarget": "app-social:build"
           }
         },
         "lint": {
