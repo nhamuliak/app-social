@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { RouterTestingModule } from "@angular/router/testing";
 
 import { AppComponent } from "./app.component";
+import { RouterModule } from "@angular/router";
 
 describe("AppComponent", () => {
 	let fixture: ComponentFixture<AppComponent>;
@@ -9,7 +9,7 @@ describe("AppComponent", () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [RouterTestingModule],
+			imports: [RouterModule.forRoot([])],
 			declarations: [AppComponent]
 		}).compileComponents();
 
@@ -20,17 +20,4 @@ describe("AppComponent", () => {
 	it("should create the app", () => {
 		expect(app).toBeTruthy();
 	});
-
-	// it("should have as title 'app-social'", () => {
-	// 	expect(app.title).toEqual("app-social");
-	// });
-
-	// it("should render title", () => {
-	// 	const compiled = fixture.nativeElement as HTMLElement;
-	//
-	// 	fixture.detectChanges();
-	// 	expect(compiled.querySelector(".content span")?.textContent).toContain(
-	// 		"app-social app is running!"
-	// 	);
-	// });
 });
