@@ -1,0 +1,30 @@
+$header-height: 74px;
+$aside-width: 230px;
+
+.header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	display: block;
+	height: $header-height;
+	width: 100%;
+	border-bottom: 1px solid #EAEDF3;
+	background-color: #cdffce;
+}
+
+.aside {
+	position: fixed;
+	top: $header-height;
+	left: 0;
+	width: $aside-width;
+	height: calc(100vh - $header-height);
+	border-right: 1px solid #EAEDF3;
+	background-color: #ffd7b9;
+}
+
+.main {
+	margin-top: $header-height;
+	margin-left: $aside-width;
+	width: calc(100% - $aside-width);
+	height: auto;
+}
