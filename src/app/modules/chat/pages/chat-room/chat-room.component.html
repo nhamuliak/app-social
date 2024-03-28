@@ -1,5 +1,24 @@
 <div class="room-main">
-	<aside class="room-aside"></aside>
+	<aside class="room-aside">
+		<div class="chat-room-item" *ngFor="let item of [1, 2, 3, 4]">
+			<div class="chat-room-user-avatar">
+				<span class="indicator"></span>
+				<img src="https://cdn-icons-png.flaticon.com/256/3135/3135789.png" alt="avatar" />
+			</div>
+			<div class="chat-room-data">
+				<div class="chat-room-title">
+					<h4 class="chat-room-username">Lebogang Flavien</h4>
+					<span class="chat-room-time">{{ item + "h" }}</span>
+				</div>
+				<div class="chat-room-info">
+					<p class="chat-room-message">
+						These sequences often show a strong correlation between consecutive or nearby tokens.
+					</p>
+					<span class="chat-room-badge">{{ item }}</span>
+				</div>
+			</div>
+		</div>
+	</aside>
 	<section class="room-section">
 		<header class="room-header"></header>
 		<div class="room-container">
