@@ -8,7 +8,7 @@ import { Observable } from "rxjs";
 	styleUrl: "./chat-list.component.scss"
 })
 export class ChatListComponent implements OnInit {
-	public chatList$: Observable<any[]>;
+	public chatList$: Observable<unknown[]>;
 
 	constructor(private chatService: ChatService) {}
 
