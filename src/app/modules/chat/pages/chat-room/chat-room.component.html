@@ -20,7 +20,33 @@
 		</div>
 	</aside>
 	<section class="room-section">
-		<header class="room-header"></header>
+		<header class="room-header">
+			<div class="chat-room-header-info">
+				<button class="chat-room-back">
+					<fa-icon [icon]="faArrowLeft"></fa-icon>
+				</button>
+				<div class="chat-room-user-avatar">
+					<img src="https://cdn-icons-png.flaticon.com/256/3135/3135789.png" alt="avatar" />
+				</div>
+				<div class="chat-room-title">
+					<h4 class="chat-room-username">Lebogang Flavien</h4>
+					<span class="chat-room-indicator">
+						Online
+						<span class="indicator"></span>
+					</span>
+				</div>
+			</div>
+			<div class="chat-room-options-container">
+				<button class="chat-room-options">
+					<fa-icon [icon]="faEllipsisVertical"></fa-icon>
+				</button>
+				<ul class="chat-room-list-options">
+					<li>Profile</li>
+					<li>Delete</li>
+					<li>Block</li>
+				</ul>
+			</div>
+		</header>
 		<div class="room-container">
 			@for (item of [1, 2, 3, 4, 5, 6]; track item) {
 				<div class="room-item" [ngClass]="{ owner: item === 2 || item === 3 }">
