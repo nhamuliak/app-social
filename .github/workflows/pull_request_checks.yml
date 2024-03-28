@@ -22,6 +22,9 @@ jobs:
                 run: |
                     npm config set @fortawesome:registry https://npm.fontawesome.com/
 
+            - name: Remove old node_modules
+              run: rm -rf node_modules
+
             - name: Install dependencies
               run: npm install
 
