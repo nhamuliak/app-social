@@ -1,0 +1,76 @@
+<div class="room-main">
+	<aside class="room-aside">
+		<div class="chat-room-item" *ngFor="let item of [1, 2, 3, 4]">
+			<div class="chat-room-user-avatar">
+				<span class="indicator"></span>
+				<img src="https://cdn-icons-png.flaticon.com/256/3135/3135789.png" alt="avatar" />
+			</div>
+			<div class="chat-room-data">
+				<div class="chat-room-title">
+					<h4 class="chat-room-username">Lebogang Flavien</h4>
+					<span class="chat-room-time">{{ item + "h" }}</span>
+				</div>
+				<div class="chat-room-info">
+					<p class="chat-room-message">
+						These sequences often show a strong correlation between consecutive or nearby tokens.
+					</p>
+					<span class="chat-room-badge">{{ item }}</span>
+				</div>
+			</div>
+		</div>
+	</aside>
+	<section class="room-section">
+		<header class="room-header">
+			<div class="chat-room-header-info">
+				<button class="chat-room-back">
+					<fa-icon [icon]="faArrowLeft"></fa-icon>
+				</button>
+				<div class="chat-room-user-avatar">
+					<img src="https://cdn-icons-png.flaticon.com/256/3135/3135789.png" alt="avatar" />
+				</div>
+				<div class="chat-room-title">
+					<h4 class="chat-room-username">Lebogang Flavien</h4>
+					<span class="chat-room-indicator">
+						Online
+						<span class="indicator"></span>
+					</span>
+				</div>
+			</div>
+			<div class="chat-room-options-container">
+				<button class="chat-room-options">
+					<fa-icon [icon]="faEllipsisVertical"></fa-icon>
+				</button>
+				<ul class="chat-room-list-options">
+					<li>Profile</li>
+					<li>Delete</li>
+					<li>Block</li>
+				</ul>
+			</div>
+		</header>
+		<div class="room-container">
+			@for (item of [1, 2, 3, 4, 5, 6]; track item) {
+				<div class="room-item" [ngClass]="{ owner: item === 2 || item === 3 }">
+					<div class="room-user">
+						<img src="" alt="" />
+					</div>
+					<div class="room-info">
+						<span class="room-user-name">{{ item === 2 || item === 3 ? "You" : "Nora" }}</span>
+						<div class="room-message">
+							<p class="text">
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam, sint. {{ item }}
+							</p>
+							<span class="time">18:54</span>
+						</div>
+					</div>
+				</div>
+			} @empty {
+				<p>Data not found</p>
+			}
+		</div>
+		<footer class="room-footer">
+			<div class="">
+				<textarea class="chat-textarea" placeholder="Type message"></textarea>
+			</div>
+		</footer>
+	</section>
+</div>
