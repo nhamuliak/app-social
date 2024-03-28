@@ -1,0 +1,31 @@
+<div class="room-main">
+	<aside class="room-aside"></aside>
+	<section class="room-section">
+		<header class="room-header"></header>
+		<div class="room-container">
+			@for (item of [1, 2, 3, 4, 5, 6]; track item) {
+				<div class="room-item" [ngClass]="{ owner: item === 2 || item === 3 }">
+					<div class="room-user">
+						<img src="" alt="" />
+					</div>
+					<div class="room-info">
+						<span class="room-user-name">{{ item === 2 || item === 3 ? "You" : "Nora" }}</span>
+						<div class="room-message">
+							<p class="text">
+								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam, sint. {{ item }}
+							</p>
+							<span class="time">18:54</span>
+						</div>
+					</div>
+				</div>
+			} @empty {
+				<p>Data not found</p>
+			}
+		</div>
+		<footer class="room-footer">
+			<div class="">
+				<textarea class="chat-textarea" placeholder="Type message"></textarea>
+			</div>
+		</footer>
+	</section>
+</div>

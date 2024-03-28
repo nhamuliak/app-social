@@ -1,3 +1,5 @@
+@import "variables";
+
 $header-height: 74px;
 $aside-width: 230px;
 
@@ -5,11 +7,12 @@ $aside-width: 230px;
 	position: fixed;
 	top: 0;
 	left: 0;
+	z-index: 9;
 	display: block;
 	height: $header-height;
 	width: 100%;
-	border-bottom: 1px solid #EAEDF3;
-	background-color: #cdffce;
+	border-bottom: 1px solid $border-color;
+	background-color: #fff;
 }
 
 .aside {
@@ -18,8 +21,8 @@ $aside-width: 230px;
 	left: 0;
 	width: $aside-width;
 	height: calc(100vh - $header-height);
-	border-right: 1px solid #EAEDF3;
-	background-color: #ffd7b9;
+	border-right: 1px solid $border-color;
+	background-color: #fff;
 }
 
 .main {
