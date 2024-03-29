@@ -16,14 +16,7 @@ jobs:
             - name: Setup Node.js
               uses: actions/setup-node@v4
               with:
-                  node-version: 20.11.1
-
-            -   name: Configure external registries
-                run: |
-                    npm config set @fortawesome:registry https://npm.fontawesome.com/
-
-            - name: Remove old node_modules
-              run: rm -rf node_modules
+                  node-version: 18
 
             - name: Install dependencies
               run: npm install
