@@ -1,0 +1,38 @@
+<section class="chat-section">
+	<div class="chat-header">
+		<h1 class="title">Chats</h1>
+		<button class="btn">New Chat</button>
+	</div>
+
+	<div class="chat-item filters">
+		<div class="chat-user-data">
+			<span>Name</span>
+		</div>
+		<div class="chat-time">
+			<span>Last message</span>
+		</div>
+		<div class="chat-action"></div>
+	</div>
+	<div class="chat-item" *ngFor="let item of chatList$ | async">
+		<div class="chat-user-data">
+			<div class="chat-user-avatar">
+				<img src="https://cdn-icons-png.flaticon.com/256/3135/3135789.png" alt="avatar" />
+			</div>
+			<div>
+				<h4 class="chat-username">Lebogang Flavien</h4>
+				<div class="chat-info">
+					<p class="chat-message">
+						These sequences often show a strong correlation between consecutive or nearby tokens.
+					</p>
+					<span class="chat-badge">{{ item }}</span>
+				</div>
+			</div>
+		</div>
+		<div class="chat-time">
+			<span>{{ item === 2 ? "21/03/2024" : item + "h" }}</span>
+		</div>
+		<div class="chat-action">
+			<button>Message</button>
+		</div>
+	</div>
+</section>

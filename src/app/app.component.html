@@ -1,7 +1,38 @@
-<a [routerLink]="['/auth/login']">Login</a>
-/
-<a [routerLink]="['/auth/registration']">Registration</a>
-/
-<a [routerLink]="['/auth/reset-password']">Reset password</a>
+<!--<a [routerLink]="['/auth/login']">Login</a>-->
+<!--/-->
+<!--<a [routerLink]="['/auth/registration']">Registration</a>-->
+<!--/-->
+<!--<a [routerLink]="['/auth/reset-password']">Reset password</a>-->
 
-<router-outlet></router-outlet>
+<!--TODO:: create a home / main component-->
+
+<header class="header"></header>
+<aside class="aside">
+	<h3 class="aside-title">Main Menu</h3>
+	<nav class="aside-menu">
+		<a href="#" class="active">
+			<fa-icon [icon]="faMessage"></fa-icon>
+			Dashboard
+		</a>
+		<a href="#">
+			<fa-icon [icon]="faMessage"></fa-icon>
+			Chat
+		</a>
+		<a href="#">
+			<fa-icon [icon]="faMessage"></fa-icon>
+			Users
+		</a>
+		<a href="#">
+			<fa-icon [icon]="faMessage"></fa-icon>
+			Posts
+		</a>
+	</nav>
+	<button class="aside-logout">
+		<fa-icon [icon]="faRightFromBracket"></fa-icon>
+		Logout
+	</button>
+</aside>
+<main class="main">
+	<router-outlet></router-outlet>
+</main>
+<!--<footer class="footer"></footer>-->
