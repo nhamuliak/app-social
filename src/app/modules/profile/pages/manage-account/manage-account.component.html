@@ -1,0 +1,54 @@
+<section class="account-wrapper">
+	<h2 class="account-title">Manage your account</h2>
+
+	<div class="account-tabs">
+		<button class="active">Edit Information</button>
+		<button>User Avatar</button>
+		<button>Change Password</button>
+	</div>
+
+	<div class="account-container">
+		<h3 class="account-tab-title">Change your information</h3>
+
+		<form>
+			<div class="form-block">
+				<label for="first-name" class="form-label">First Name</label>
+				<input
+					id="first-name"
+					class="form-input"
+					type="text"
+					formControlName="firstName"
+					placeholder="Enter your first name"
+					required
+				/>
+			</div>
+			<div class="form-block">
+				<label for="last-name" class="form-label">Last Name</label>
+				<input
+					id="last-name"
+					class="form-input"
+					type="text"
+					formControlName="lastName"
+					placeholder="Enter your last name"
+					required
+				/>
+			</div>
+			<div class="form-block">
+				<label for="age" class="form-label">Age</label>
+				<input
+					id="age"
+					class="form-input"
+					type="number"
+					formControlName="age"
+					placeholder="Enter your age"
+					required
+				/>
+			</div>
+
+			<div class="account-form-group">
+				<button type="submit" class="form-cancel">Cancel</button>
+				<button type="submit" class="form-submit">Save</button>
+			</div>
+		</form>
+	</div>
+</section>
