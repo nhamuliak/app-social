@@ -4,6 +4,10 @@
 
 	&-block {
 		margin-bottom: 27px;
+
+		&.inline {
+			display: flex;
+		}
 	}
 
 	&-label {

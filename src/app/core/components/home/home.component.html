@@ -1,0 +1,29 @@
+<header class="header"></header>
+<aside class="aside">
+	<h3 class="aside-title">Main Menu</h3>
+	<nav class="aside-menu">
+		<a href="#" class="active">
+			<fa-icon [icon]="faMessage"></fa-icon>
+			Dashboard
+		</a>
+		<a href="#">
+			<fa-icon [icon]="faMessage"></fa-icon>
+			Chat
+		</a>
+		<a href="#">
+			<fa-icon [icon]="faMessage"></fa-icon>
+			Users
+		</a>
+		<a href="#">
+			<fa-icon [icon]="faMessage"></fa-icon>
+			Posts
+		</a>
+	</nav>
+	<button class="aside-logout" (click)="logout()">
+		<fa-icon [icon]="faRightFromBracket"></fa-icon>
+		Logout
+	</button>
+</aside>
+<main class="main">
+	<router-outlet></router-outlet>
+</main>
