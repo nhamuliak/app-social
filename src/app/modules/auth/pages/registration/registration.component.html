@@ -4,35 +4,70 @@
 		<div class="auth-content">
 			<h1>Get started today</h1>
 			<h2>Enter your details to create super account.</h2>
-			<form>
+			<form (submit)="onRegister()" [formGroup]="form">
 				<div class="user-data">
 					<div class="form-block">
 						<label for="name" class="form-label">Name</label>
-						<input id="name" class="form-input" type="text" placeholder="Enter your name" />
+						<app-input
+							id="name"
+							type="text"
+							formControlName="name"
+							placeholder="Enter your name"
+							required
+						></app-input>
+						<!--						<input id="name" class="form-input" type="text" placeholder="Enter your name" />-->
 					</div>
 					<div class="form-block">
 						<label for="age" class="form-label">Age</label>
-						<input id="age" class="form-input" type="number" placeholder="Enter your age" />
+						<app-input id="age" type="text" formControlName="age" placeholder="Enter your age"></app-input>
+						<!--						<input id="age" class="form-input" type="number" placeholder="Enter your age" />-->
 					</div>
 				</div>
 				<div class="form-block">
 					<label for="email" class="form-label">Email Address</label>
-					<input id="email" class="form-input" type="email" placeholder="Enter your email address" />
+					<app-input
+						id="email"
+						type="email"
+						formControlName="email"
+						placeholder="Enter your email address"
+						required
+					></app-input>
+					<!--					<input id="email" class="form-input" type="email" placeholder="Enter your email address" />-->
 				</div>
 				<div class="form-block">
 					<label for="password" class="form-label">Password</label>
-					<input id="password" class="form-input" type="password" placeholder="Enter your password" />
+					<app-input
+						id="password"
+						type="password"
+						formControlName="password"
+						placeholder="Enter your password"
+						required
+					></app-input>
+					<!--					<input id="password" class="form-input" type="password" placeholder="Enter your password" />-->
 				</div>
 				<div class="form-block">
 					<label for="confirm-password" class="form-label">Confirm New Password</label>
-					<input
+					<app-input
 						id="confirm-password"
-						class="form-input"
 						type="password"
+						formControlName="confirmPassword"
 						placeholder="Enter your new password again"
-					/>
+						required
+					></app-input>
+					<!--					<input-->
+					<!--						id="confirm-password"-->
+					<!--						class="form-input"-->
+					<!--						type="password"-->
+					<!--						placeholder="Enter your new password again"-->
+					<!--					/>-->
 				</div>
-				<a href="#">Terms and Policy</a>
+
+				<div class="form-block inline">
+					<!--					<label for="confirm-password" class="form-label">Confirm New Password</label>-->
+					<app-input id="terms" type="checkbox" formControlName="acceptTerms" required></app-input>
+
+					<label for="terms">I agree to product <a href="#">Terms and Policy</a></label>
+				</div>
 
 				<button type="submit" class="form-submit">Get started now</button>
 			</form>

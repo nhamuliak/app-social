@@ -5,31 +5,28 @@
 			<img class="wave" src="assets/images/waving-hand.svg" alt="wave" />
 			<h1>Welcome back</h1>
 			<h2>Sign in to manage your account.</h2>
-			{{ form.pristine }}
 			<form (submit)="onLogin()" [formGroup]="form">
 				<div class="form-block">
 					<label for="email" class="form-label">Email Address</label>
-					<input
+					<app-input
 						id="email"
-						class="form-input"
 						type="email"
 						formControlName="email"
 						placeholder="Enter your email address"
 						required
-					/>
+					></app-input>
 				</div>
 				<div class="form-block">
 					<label for="password" class="form-label">Password</label>
-					<input
+					<app-input
 						id="password"
-						class="form-input"
 						type="password"
 						formControlName="password"
 						placeholder="Enter your password"
 						required
-					/>
+					></app-input>
 				</div>
-				<a href="#">Forgot your password?</a>
+				<a [routerLink]="['/auth/reset-password']">Forgot your password?</a>
 
 				<button type="submit" class="form-submit">Sign In</button>
 			</form>
