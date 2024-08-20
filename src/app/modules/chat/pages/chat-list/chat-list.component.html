@@ -32,7 +32,7 @@
 			<span>{{ item === 2 ? "21/03/2024" : item + "h" }}</span>
 		</div>
 		<div class="chat-action">
-			<button>Message</button>
+			<a [routerLink]="['/', item]">Message</a>
 		</div>
 	</div>
 </section>

@@ -1,6 +1,6 @@
 <div class="room-main">
 	<aside class="room-aside">
-		<div class="chat-room-item" *ngFor="let item of [1, 2, 3, 4]">
+		<div class="chat-room-item" *ngFor="let item of [1, 2, 3, 4]" [routerLink]="['/', item]">
 			<div class="chat-room-user-avatar">
 				<span class="indicator"></span>
 				<img src="https://cdn-icons-png.flaticon.com/256/3135/3135789.png" alt="avatar" />
