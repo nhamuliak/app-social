@@ -1,0 +1,14 @@
+<input
+	[type]="type"
+	[value]="value"
+	(input)="onInput($event.target)"
+	(blur)="onBlur()"
+	[disabled]="disabled"
+	[placeholder]="placeholder"
+	[ngClass]="{ error: errorMessages.length }"
+/>
+<ng-container *ngIf="errorMessages.length">
+	<div *ngFor="let error of errorMessages" class="error-message">
+		{{ error }}
+	</div>
+</ng-container>
