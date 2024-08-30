@@ -7,7 +7,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 	const toastService = inject(ToastService);
 
 	return next(req).pipe(
-		catchError((err: any) => {
+		catchError((err: unknown) => {
 			if (err instanceof HttpErrorResponse) {
 				// Handle HTTP errors
 				if (err.status === 401) {
@@ -31,9 +31,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 	);
 };
 
-function refreshToken(err: any) {}
+// function refreshToken(err: any): void {
+// 	// do nothing.
+// }
 
-function errorMessageHandle(err: any, toastService: ToastService) {
+function errorMessageHandle(err: any, toastService: ToastService): void {
 	toastService.addMessage({
 		type: 0,
 		message: err.message,

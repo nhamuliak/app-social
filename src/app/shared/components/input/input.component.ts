@@ -9,11 +9,11 @@ import { ControlValueAccessor, NgControl } from "@angular/forms";
 	styleUrl: "./input.component.scss"
 })
 export class InputComponent implements ControlValueAccessor {
-	@Input() type: string = "text";
-	@Input() placeholder: string = "Type something...";
-	value: any = "";
-	disabled: boolean = false;
-	isTouched: boolean = false;
+	@Input() public type = "text";
+	@Input() public placeholder = "Type something...";
+	public value = "";
+	public disabled = false;
+	public isTouched = false;
 
 	constructor(public ngControl: NgControl) {
 		if (this.ngControl) {
@@ -21,8 +21,12 @@ export class InputComponent implements ControlValueAccessor {
 		}
 	}
 
-	private onChange: (value: any) => void = () => {};
-	private onTouched: () => void = () => {};
+	private onChange: (value: any) => void = () => {
+		// do nothing.
+	};
+	private onTouched: () => void = () => {
+		// do nothing.
+	};
 
 	public get errorMessages(): string[] {
 		if (this.ngControl && this.ngControl.errors && this.isTouched) {
@@ -33,28 +37,28 @@ export class InputComponent implements ControlValueAccessor {
 		return [];
 	}
 
-	writeValue(value: any): void {
+	public writeValue(value: any): void {
 		this.value = value;
 	}
 
-	registerOnChange(fn: any): void {
+	public registerOnChange(fn: any): void {
 		this.onChange = fn;
 	}
 
-	registerOnTouched(fn: any): void {
+	public registerOnTouched(fn: any): void {
 		this.onTouched = fn;
 	}
 
-	setDisabledState(isDisabled: boolean): void {
+	public setDisabledState(isDisabled: boolean): void {
 		this.disabled = isDisabled;
 	}
 
-	onInput({ value }: any): void {
+	public onInput({ value }: any): void {
 		this.value = value;
 		this.onChange(value);
 	}
 
-	onBlur(): void {
+	public onBlur(): void {
 		this.isTouched = true;
 		this.onTouched();
 	}

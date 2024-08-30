@@ -11,20 +11,20 @@ export class AuthService {
 
 	constructor(private http: HttpClient) {}
 
-	public registration(body: RegisterRequestBody): Observable<any> {
-		return this.http.post<Observable<any>>(`${this.urlPath}/auth/registration`, body);
+	public registration(body: RegisterRequestBody): Observable<unknown> {
+		return this.http.post<Observable<unknown>>(`${this.urlPath}/auth/registration`, body);
 	}
 
-	public login(body: LoginRequestBody): Observable<any> {
-		return this.http.post<Observable<any>>(`${this.urlPath}/auth/login`, body);
+	public login(body: LoginRequestBody): Observable<unknown> {
+		return this.http.post<Observable<unknown>>(`${this.urlPath}/auth/login`, body);
 	}
 
-	public resetPassword(email: string): Observable<any> {
-		return this.http.post<Observable<any>>(`${this.urlPath}/auth/reset-password`, { email });
+	public resetPassword(email: string): Observable<unknown> {
+		return this.http.post<Observable<unknown>>(`${this.urlPath}/auth/reset-password`, { email });
 	}
 
-	public logout(userId: number): Observable<any> {
-		return this.http.post<Observable<any>>(`${this.urlPath}/auth/logout`, { userId });
+	public logout(userId: number): Observable<unknown> {
+		return this.http.post<Observable<unknown>>(`${this.urlPath}/auth/logout`, { userId });
 	}
 
 	public getAuthToken(): string {

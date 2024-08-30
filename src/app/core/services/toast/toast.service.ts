@@ -9,8 +9,6 @@ export class ToastService {
 	private _messages: Toast[] = [];
 	private source = new BehaviorSubject<Toast[]>(this.messages);
 
-	constructor() {}
-
 	public messageSource(): Observable<Toast[]> {
 		return this.source;
 	}
@@ -20,8 +18,6 @@ export class ToastService {
 	}
 
 	public addMessage(message: Toast): Toast {
-		const newAlert = null;
-
 		this._messages.push(message);
 		this.source.next(this._messages);
 

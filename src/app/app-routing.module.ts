@@ -13,7 +13,7 @@ const routes: Routes = [
 		path: "",
 		component: HomeComponent,
 		children: [
-      {
+			{
 				path: "profile",
 				loadChildren: () => import("./modules/profile/profile.module").then(module => module.ProfileModule)
 			},

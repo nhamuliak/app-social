@@ -10,19 +10,19 @@ export class ProfileService {
 
 	constructor(private http: HttpClient) {}
 
-	public updateUserInformation(userId: number, data: any): Observable<any> {
+	public updateUserInformation(userId: number, data: unknown): Observable<unknown> {
 		return this.updateUserProfile(userId, data);
 	}
 
-	public updateUserAvatar(userId: number, data: any): Observable<any> {
+	public updateUserAvatar(userId: number, data: unknown): Observable<unknown> {
 		return this.updateUserProfile(userId, data);
 	}
 
-	public changePassword(userId: number, data: any): Observable<any> {
+	public changePassword(userId: number, data: unknown): Observable<unknown> {
 		return this.updateUserProfile(userId, data);
 	}
 
-	private updateUserProfile(userId: number, data: any): Observable<any> {
-		return this.http.patch<any>(`${this.urlPath}/user/${userId}`, { data });
+	private updateUserProfile(userId: number, data: unknown): Observable<unknown> {
+		return this.http.patch<unknown>(`${this.urlPath}/user/${userId}`, { data });
 	}
 }
