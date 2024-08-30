@@ -1,0 +1,26 @@
+<section class="account-wrapper">
+	<h2 class="account-title">Manage your account</h2>
+
+	<div class="account-tabs">
+		<a
+			[routerLink]="['/profile/user-information']"
+			[class.active]="route.snapshot.children[0].url[0].path === 'user-information'"
+		>
+			Edit Information
+		</a>
+		<a
+			[routerLink]="['/profile/user-avatar']"
+			[class.active]="route.snapshot.children[0].url[0].path === 'user-avatar'"
+		>
+			User Avatar
+		</a>
+		<a
+			[routerLink]="['/profile/change-password']"
+			[class.active]="route.snapshot.children[0].url[0].path === 'change-password'"
+		>
+			Change Password
+		</a>
+	</div>
+
+	<router-outlet></router-outlet>
+</section>

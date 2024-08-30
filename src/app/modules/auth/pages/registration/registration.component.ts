@@ -25,7 +25,6 @@ export class RegistrationComponent extends ClearObservable implements OnInit {
 	}
 
 	public onRegister(): void {
-		console.log("form: ", this.form);
 		if (this.form.valid) {
 			this.authService.registration(this.form.value).pipe(takeUntil(this.destroy$));
 			// .subscribe(() => {
