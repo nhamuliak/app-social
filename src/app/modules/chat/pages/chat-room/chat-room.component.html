@@ -69,7 +69,11 @@
 		</div>
 		<footer class="room-footer">
 			<div class="">
-				<textarea class="chat-textarea" placeholder="Type message"></textarea>
+				<textarea
+					class="chat-textarea"
+					placeholder="Type message"
+					(keydown.enter)="saveMessage($event)"
+				></textarea>
 			</div>
 		</footer>
 	</section>

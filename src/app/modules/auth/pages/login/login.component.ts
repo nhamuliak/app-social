@@ -33,7 +33,8 @@ export class LoginComponent extends ClearObservable implements OnInit {
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(response => {
 					// store tokens
-					this.storeService.setItem("tokens", response);
+					// this.storeService.setItem("tokens", response);
+					this.authService.setToken(response.accessToken);
 
 					this.router.navigate(["/"]);
 				});

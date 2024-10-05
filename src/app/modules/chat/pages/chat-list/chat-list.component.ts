@@ -9,10 +9,18 @@ import { Observable } from "rxjs";
 })
 export class ChatListComponent implements OnInit {
 	public chatList$: Observable<unknown[]>;
+	public rooms: unknown[];
 
 	constructor(private chatService: ChatService) {}
 
 	public ngOnInit(): void {
 		this.chatList$ = this.chatService.getChatList();
+
+		this.chatService.getRoomsByUserId(1);
+
+		this.chatService.getRooms().subscribe(rooms => {
+			// console.log("rooms", rooms);
+			this.rooms = rooms;
+		});
 	}
 }
