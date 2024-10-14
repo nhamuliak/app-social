@@ -34,7 +34,28 @@
 }
 
 
-.account-container {}
+.account-container {
+	.form-label,
+	.form-input,
+	.form-cancel,
+	.form-submit {
+		font-size: 14px;
+	}
+
+	.form-input {
+		padding: 15px 32px;
+	}
+
+	.form-cancel,
+	.form-submit {
+		height: 38px;
+		max-width: 110px;
+		margin: 0 17px 0 0;
+		text-align: center;
+		line-height: 38px;
+	}
+
+}
 
 .account-tab-title {
 	font-size: 18px;
@@ -48,22 +69,3 @@
 	align-items: center;
 	flex-wrap: nowrap;
 }
-
-.form-label,
-.form-input,
-.form-cancel,
-.form-submit {
-	font-size: 14px;
-}
-
-.form-input {
-	padding: 15px 32px;
-}
-
-.form-cancel,
-.form-submit {
-	height: 38px;
-	max-width: 110px;
-	margin: 0 17px 0 0;
-}
-

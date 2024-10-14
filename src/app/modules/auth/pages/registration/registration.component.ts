@@ -40,7 +40,7 @@ export class RegistrationComponent extends ClearObservable implements OnInit {
 			email: new FormControl("", [Validators.required]),
 			password: new FormControl("", [Validators.required]),
 			confirmPassword: new FormControl("", [Validators.required]),
-			acceptTerms: new FormControl(true, [Validators.required])
+			acceptTerms: new FormControl(false, [Validators.required])
 		});
 	}
 }

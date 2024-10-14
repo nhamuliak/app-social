@@ -1,7 +1,7 @@
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { LoginRequestBody, RegisterRequestBody } from "@modules/auth/models/auth.models";
+import { LoginRequestBody, Payload, RegisterRequestBody } from "@modules/auth/models/auth.models";
 import { jwtDecode } from "jwt-decode";
 
 interface Token {
@@ -37,14 +37,28 @@ export class AuthService {
 	// 	return localStorage.getItem("access_token");
 	// }
 
+	public getAuthToken(): string | null {
+		return localStorage.getItem("access_token");
+	}
+
 	public setToken(token: string): void {
 		localStorage.setItem("access_token", token);
+	}
+
+	public getUser(): Payload {
+		const token = localStorage.getItem("access_token");
+
+		if (token) {
+			return jwtDecode(token);
+		}
+
+		throw new Error("Unauthorized");
 	}
 
 	public isAuthenticated(): boolean {
 		const token = localStorage.getItem("access_token");
 
-		if (token && this.isTokenValidStructure(token) && this.isTokenExpired(token)) {
+		if (token && this.isTokenValidStructure(token)) {
 			return true;
 		}
 

@@ -1,0 +1,78 @@
+@import "variables";
+
+.term-header {
+	width: 100%;
+	height: 154px;
+	background: #040D32;
+}
+
+.term-logo {
+	width: 100%;
+	max-width: 180px;
+	margin-top: 14px;
+}
+
+.term-sub-title {
+	font-size: 28px;
+	font-weight: 700;
+	color: #ffff;
+	margin-bottom: 0;
+
+	a {
+		display: inline-flex;
+		align-items: center;
+		color: #fff;
+
+		&:hover {
+			border-bottom: none;
+		}
+	}
+
+	fa-icon {
+		font-size: 16px;
+		margin-right: 5px;
+		margin-top: 3px;
+	}
+}
+
+.term-container {
+	width: 100%;
+	max-width: 1070px;
+	margin: 0 auto;
+
+	h1 {
+		color: $title;
+		font-size: 30px;
+		margin: 30px 0;
+	}
+}
+
+.term-article {
+	margin-bottom: 30px;
+
+	.title {
+		font-weight: 700;
+		font-size: 21px;
+		margin-bottom: 10px;
+		color: $title;
+	}
+
+	.text {
+		line-height: 22px;
+		color: #374A59;
+	}
+}
+
+.term-back {
+	color: #6F7C8B;
+	border: 1px solid #6F7C8B80;
+	padding: 10px 36px;
+	border-radius: 3px;
+	transition: all .2s;
+
+	&:hover {
+		color: $primary;
+		border-color: $primary;
+	}
+}
+

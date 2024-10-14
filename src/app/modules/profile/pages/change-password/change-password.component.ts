@@ -17,6 +17,8 @@ export class ChangePasswordComponent extends ClearObservable implements OnInit {
 		this.initForm();
 	}
 
+	public onSubmit(): void {}
+
 	private initForm(): void {
 		this.form = this.formBuilder.group({
 			oldPassword: ["", Validators.required],

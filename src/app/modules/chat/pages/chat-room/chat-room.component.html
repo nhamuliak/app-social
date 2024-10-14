@@ -21,21 +21,31 @@
 	</aside>
 	<section class="room-section">
 		<header class="room-header">
-			<div class="chat-room-header-info">
-				<button class="chat-room-back">
-					<fa-icon [icon]="faArrowLeft"></fa-icon>
-				</button>
-				<div class="chat-room-user-avatar">
-					<img src="https://cdn-icons-png.flaticon.com/256/3135/3135789.png" alt="avatar" />
+			@if (receiver) {
+				<div class="chat-room-header-info">
+					<a routerLink="/" class="chat-room-back">
+						<fa-icon [icon]="faArrowLeft"></fa-icon>
+					</a>
+					<div class="chat-room-user-avatar">
+						@if (receiver.avatar) {
+							<img [src]="receiver.avatar" alt="avatar" />
+						} @else {
+							<img src="https://cdn-icons-png.flaticon.com/256/3135/3135789.png" alt="avatar" />
+						}
+					</div>
+					<div class="chat-room-title">
+						<h4 class="chat-room-username">{{ receiver.firstName }} {{ receiver.lastName }}</h4>
+						<span class="chat-room-indicator">
+							@if (receiver.isOnline) {
+								Online
+								<span class="indicator"></span>
+							} @else {
+								Offline
+							}
+						</span>
+					</div>
 				</div>
-				<div class="chat-room-title">
-					<h4 class="chat-room-username">Lebogang Flavien</h4>
-					<span class="chat-room-indicator">
-						Online
-						<span class="indicator"></span>
-					</span>
-				</div>
-			</div>
+			}
 			<div class="chat-room-options-container">
 				<button class="chat-room-options">
 					<fa-icon [icon]="faEllipsisVertical"></fa-icon>
@@ -48,23 +58,29 @@
 			</div>
 		</header>
 		<div class="room-container">
-			@for (item of [1, 2, 3, 4, 5, 6]; track item) {
-				<div class="room-item" [ngClass]="{ owner: item === 2 || item === 3 }">
+			@for (msg of messages; track msg.id; let item = $index) {
+				<div class="room-item" [ngClass]="{ owner: msg.user?.id === currentUser.id }">
 					<div class="room-user">
-						<img src="" alt="" />
+						@if (msg.user?.avatar) {
+							<img [src]="msg.user.avatar" alt="avatar" />
+						} @else {
+							{{ msg.user.firstName?.charAt(0) }}{{ msg.user.lastName?.charAt(0) }}
+						}
 					</div>
 					<div class="room-info">
-						<span class="room-user-name">{{ item === 2 || item === 3 ? "You" : "Nora" }}</span>
+						<span class="room-user-name">{{
+							msg.user?.id === currentUser.id ? "You" : msg.user.firstName + " " + msg.user.lastName
+						}}</span>
 						<div class="room-message">
 							<p class="text">
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam, sint. {{ item }}
+								{{ msg.text }}
 							</p>
-							<span class="time">18:54</span>
+							<span class="time">{{ msg.createdAt | date: "HH:ss" }}</span>
 						</div>
 					</div>
 				</div>
 			} @empty {
-				<p>Data not found</p>
+				<p>There are no messages yet...</p>
 			}
 		</div>
 		<footer class="room-footer">

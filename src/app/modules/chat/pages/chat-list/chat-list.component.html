@@ -1,7 +1,12 @@
 <section class="chat-section">
 	<div class="chat-header">
 		<h1 class="title">Chats</h1>
-		<button class="btn">New Chat</button>
+		<button class="btn" (click)="openDialog = !openDialog">New Chat</button>
+	</div>
+
+	<!-- This container will hold the dialog -->
+	<div *ngIf="openDialog">
+		<ng-container *ngTemplateOutlet="dialogTemplate"></ng-container>
 	</div>
 
 	<div class="chat-item filters">
@@ -13,26 +18,47 @@
 		</div>
 		<div class="chat-action"></div>
 	</div>
-	<div class="chat-item" *ngFor="let item of chatList$ | async">
+	<div class="chat-item" *ngFor="let item of conversationList$ | async">
 		<div class="chat-user-data">
 			<div class="chat-user-avatar">
-				<img src="https://cdn-icons-png.flaticon.com/256/3135/3135789.png" alt="avatar" />
+				@if (item.user?.avatar) {
+					<img [src]="item.user.avatar" alt="avatar" />
+				} @else {
+					<img src="https://cdn-icons-png.flaticon.com/256/3135/3135789.png" alt="avatar" />
+				}
 			</div>
-			<div>
-				<h4 class="chat-username">Lebogang Flavien</h4>
+			<div class="chat-user-info">
+				<h4 class="chat-username">{{ item.user.firstName }} {{ item.user.lastName }}</h4>
 				<div class="chat-info">
 					<p class="chat-message">
-						These sequences often show a strong correlation between consecutive or nearby tokens.
+						{{ item.message.text }}
 					</p>
-					<span class="chat-badge">{{ item }}</span>
+					<span class="chat-badge">1</span>
 				</div>
 			</div>
 		</div>
 		<div class="chat-time">
-			<span>{{ item === 2 ? "21/03/2024" : item + "h" }}</span>
+			<span>{{ item.message.createdAt | date: "dd/MM/YYYY" }}</span>
 		</div>
 		<div class="chat-action">
-			<a [routerLink]="['/', item]">Message</a>
+			<a [routerLink]="['/', item.roomId]">Message</a>
 		</div>
 	</div>
 </section>
+
+<ng-template #dialogTemplate>
+	<div class="dialog-backdrop">
+		<div class="dialog-content">
+			<h2>Dialog Title</h2>
+
+			@for (user of users$ | async; track user.id) {
+				<div style="margin-bottom: 10px" (click)="onNewConversation(user.id)">
+					User name: {{ user.firstName }} {{ user.lastName }}
+					<p>id: {{ user.id }}</p>
+				</div>
+			}
+
+			<button class="btn" (click)="openDialog = false">Close</button>
+		</div>
+	</div>
+</ng-template>

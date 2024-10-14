@@ -1,6 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { ClearObservable } from "@utils/clear-observable";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { omitBy, isEmpty } from "lodash";
+import { ProfileService } from "@modules/profile/services/profile/profile.service";
+import { takeUntil } from "rxjs";
 
 @Component({
 	templateUrl: "./user-information.component.html",
@@ -9,7 +12,10 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 export class UserInformationComponent extends ClearObservable implements OnInit {
 	public form: FormGroup;
 
-	constructor(private formBuilder: FormBuilder) {
+	constructor(
+		private formBuilder: FormBuilder,
+		private profileService: ProfileService
+	) {
 		super();
 	}
 
@@ -17,11 +23,20 @@ export class UserInformationComponent extends ClearObservable implements OnInit 
 		this.initForm();
 	}
 
+	public onSubmit(): void {
+		// omitBy filter out properties with an empty string
+		const body = omitBy(this.form.value, isEmpty);
+
+		this.profileService.updateUserInformation(1, body).pipe(takeUntil(this.destroy$)).subscribe();
+
+		this.form.reset();
+	}
+
 	private initForm(): void {
 		this.form = this.formBuilder.group({
-			firstName: ["", Validators.required],
-			lastName: ["", Validators.required],
-			age: ["", Validators.required]
+			firstName: [""],
+			lastName: [""],
+			age: [""]
 		});
 	}
 }

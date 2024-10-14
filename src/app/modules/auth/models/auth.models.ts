@@ -1,3 +1,5 @@
+import { User } from "@modules/chat/models/user.models";
+
 export interface RegisterRequestBody {
 	username: string;
 	age: number | null;
@@ -9,4 +11,9 @@ export interface RegisterRequestBody {
 export interface LoginRequestBody {
 	email: string;
 	password: string;
+}
+
+export interface Payload extends User {
+	exp: number;
+	iat: number;
 }

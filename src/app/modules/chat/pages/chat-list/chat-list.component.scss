@@ -26,8 +26,8 @@
 .chat-item {
 	display: flex;
 	align-items: center;
-	height: 75px;
-	//min-height: 75px;
+	//height: 75px;
+	min-height: 75px;
 	margin-bottom: 10px;
 	padding: 20px 25px;
 	background-color: #fff;
@@ -62,9 +62,11 @@
 	margin-right: 13px;
 	color: $primary;
 	font-size: 15px;
+	overflow: hidden;
 
 	img {
 		width: 100%;
+		height: 100%;
 	}
 }
 
@@ -74,8 +76,15 @@
 	line-height: 17px;
 }
 
+.chat-user-info {
+	display: flex;
+	flex-direction: column;
+	flex: 1 0;
+}
+
 .chat-info {
 	display: inline-flex;
+	margin-right: 20px;
 }
 
 .chat-message {
@@ -89,7 +98,8 @@
 
 .chat-badge {
 	display: inline-block;
-	width: 22px;
+	max-width: 22px;
+	width: 100%;
 	height: 22px;
 	background-color: #2E5BFF;
 	text-align: center;
@@ -115,4 +125,25 @@
 		color: $primary;
 		background: transparent;
 	}
+}
+
+
+// Dialog
+.dialog-backdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.dialog-content {
+	background: white;
+	padding: 20px;
+	border-radius: 5px;
+	min-width: 300px;
 }

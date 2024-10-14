@@ -63,10 +63,8 @@
 				</div>
 
 				<div class="form-block inline">
-					<!--					<label for="confirm-password" class="form-label">Confirm New Password</label>-->
-					<app-input id="terms" type="checkbox" formControlName="acceptTerms" required></app-input>
-
-					<label for="terms">I agree to product <a href="#">Terms and Policy</a></label>
+					<input type="checkbox" id="terms" formControlName="acceptTerms" />
+					<label for="terms">I agree to product <a href="/auth/terms">Terms and Policy</a></label>
 				</div>
 
 				<button type="submit" class="form-submit">Get started now</button>

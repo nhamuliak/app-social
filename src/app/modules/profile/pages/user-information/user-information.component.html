@@ -1,7 +1,7 @@
 <div class="account-container">
 	<h3 class="account-tab-title">Change your information</h3>
 
-	<form [formGroup]="form">
+	<form [formGroup]="form" (submit)="onSubmit()">
 		<div class="form-block">
 			<label for="first-name" class="form-label">First Name</label>
 			<input
@@ -10,7 +10,6 @@
 				type="text"
 				formControlName="firstName"
 				placeholder="Enter your first name"
-				required
 			/>
 		</div>
 		<div class="form-block">
@@ -21,23 +20,15 @@
 				type="text"
 				formControlName="lastName"
 				placeholder="Enter your last name"
-				required
 			/>
 		</div>
 		<div class="form-block">
 			<label for="age" class="form-label">Age</label>
-			<input
-				id="age"
-				class="form-input"
-				type="number"
-				formControlName="age"
-				placeholder="Enter your age"
-				required
-			/>
+			<input id="age" class="form-input" type="number" formControlName="age" placeholder="Enter your age" />
 		</div>
 
 		<div class="account-form-group">
-			<button type="submit" class="form-cancel">Cancel</button>
+			<a href="/" class="form-cancel">Cancel</a>
 			<button type="submit" class="form-submit">Save</button>
 		</div>
 	</form>

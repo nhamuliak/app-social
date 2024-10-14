@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { faArrowLeft, faMessage, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faMessage, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { Router, RouterOutlet } from "@angular/router";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { ClearObservable } from "@utils/clear-observable";
@@ -16,8 +16,9 @@ import { StoreService } from "@core/services/store/store.service";
 })
 export class HomeComponent extends ClearObservable {
 	public faMessage: IconDefinition = faMessage;
-	protected readonly faArrowLeft = faArrowLeft;
+	protected readonly faAngleDown = faAngleDown;
 	protected readonly faRightFromBracket = faRightFromBracket;
+	public menuOpened: boolean = false;
 
 	constructor(
 		private router: Router,
@@ -28,13 +29,13 @@ export class HomeComponent extends ClearObservable {
 	}
 
 	public logout(): void {
-		this.storeService.removeItem("tokens");
+		this.storeService.removeItem("access_token");
 		this.router.navigate(["/auth/login"]);
 		// this.authService
 		// 	.logout(1)
 		// 	.pipe(takeUntil(this.destroy$))
 		// 	.subscribe(() => {
-		// 		this.storeService.removeItem("tokens");
+		// 		this.storeService.removeItem("access_token");
 		// 		this.router.navigate(["/auth/login"]);
 		// 	});
 	}

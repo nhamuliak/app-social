@@ -3,12 +3,16 @@
 	<p>Drag and drop the file bellow</p>
 
 	<form>
-		<div class="form-block">
-			<textarea>You can also upload files by click here</textarea>
+		<div class="upload-block file-over">
+			<fa-icon [icon]="faCloudUpload"></fa-icon>
+			<span class="upload-format">.jpg .png</span>
+			<span class="upload-text">You can also upload files by</span>
+			<span class="browse-file" (click)="fileInput.click()">clicking here</span>
+			<input type="file" #fileInput [multiple]="false" (change)="onFileSelected($event)" />
 		</div>
 
 		<div class="account-form-group">
-			<button type="submit" class="form-cancel">Cancel</button>
+			<a href="/" class="form-cancel">Cancel</a>
 			<button type="submit" class="form-submit">Save</button>
 		</div>
 	</form>

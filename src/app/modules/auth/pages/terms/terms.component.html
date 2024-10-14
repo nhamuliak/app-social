@@ -1,0 +1,25 @@
+<header class="term-header">
+	<div class="term-container">
+		<img class="term-logo" src="./assets/images/white-logo.svg" alt="Logo" />
+		<h2 class="term-sub-title">
+			<a href="/auth/registration">
+				<fa-icon [icon]="faAngleLeft"></fa-icon>
+				Product legal information
+			</a>
+		</h2>
+	</div>
+</header>
+<section>
+	<div class="term-container">
+		<h1>Privacy Policy</h1>
+
+		@for (term of terms$ | async; track term.id; let index = $index) {
+			<article class="term-article">
+				<h2 class="title">{{ index + 1 }}. {{ term.title }}</h2>
+				<p class="text">{{ term.text }}</p>
+			</article>
+		}
+
+		<a class="term-back" href="/auth/registration">Back</a>
+	</div>
+</section>
