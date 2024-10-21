@@ -11,4 +11,5 @@ export interface Conversation {
 		isRead: boolean;
 		text: string;
 	};
+	unreadMessagesCount: number;
 }

@@ -4,6 +4,7 @@ import { AuthService } from "../../services/auth/auth.service";
 import { ClearObservable } from "@utils/clear-observable";
 import { takeUntil } from "rxjs";
 import { Router } from "@angular/router";
+import { CustomSocketService } from "@core/services/custom-socket/custom-socket.service";
 
 @Component({
 	templateUrl: "./login.component.html",
@@ -15,7 +16,8 @@ export class LoginComponent extends ClearObservable implements OnInit {
 	constructor(
 		private formBuilder: FormBuilder,
 		private router: Router,
-		private authService: AuthService
+		private authService: AuthService,
+		private socket: CustomSocketService
 	) {
 		super();
 	}
@@ -32,9 +34,7 @@ export class LoginComponent extends ClearObservable implements OnInit {
 				.subscribe(tokens => {
 					console.log("login data: ", tokens);
 					// store tokens
-					// this.storeService.setItem("tokens", response);
 					this.authService.setToken(tokens.accessToken);
-					// this.authService.setUser(user);
 
 					this.router.navigate(["/"]);
 				});

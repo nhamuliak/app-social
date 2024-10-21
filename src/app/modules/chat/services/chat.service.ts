@@ -1,25 +1,30 @@
 import { Injectable } from "@angular/core";
 import { delay, map, Observable, of } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { io, Socket } from "socket.io-client";
 import { PaginationResponse, User } from "@modules/chat/models/user.models";
 import { Conversation } from "@modules/chat/models/conversation.models";
 import { Message } from "@modules/chat/models/message.models";
+import { CustomSocketService } from "@core/services/custom-socket/custom-socket.service";
 
 @Injectable({
 	providedIn: "root"
 })
 export class ChatService {
 	private readonly urlPath = "http://localhost:3000";
-	private socket: Socket;
 
-	constructor(private http: HttpClient) {
-		this.socket = io(`${this.urlPath}/chat`);
-	}
+	constructor(
+		private http: HttpClient,
+		private socket: CustomSocketService
+	) {}
 
 	public getConversations(): Observable<any[]> {
 		return this.http.get<any[]>(`${this.urlPath}/api/chat`);
 	}
+
+	public getLatestConversations(conversationId: number): Observable<any[]> {
+		return this.http.get<any[]>(`${this.urlPath}/api/chat/${conversationId}/latest-conversations`);
+	}
+
 	public createConversation(receiverId: number): Observable<Conversation> {
 		return this.http.post<Conversation>(`${this.urlPath}/api/chat`, { receiverId });
 	}
@@ -47,53 +52,42 @@ export class ChatService {
 		return this.http.get<User>(`${this.urlPath}/api/chat/${conversationId}/receiver`);
 	}
 
-	// ----------------- OLD DATA --------------------------------
+	// Sockets
 
-	public getChatList(): Observable<unknown[]> {
-		const data = new Array(40).fill("").map((_, index) => index + 1);
-
-		return of(data).pipe(delay(500));
+	public emitJoinRoom(roomId: number): void {
+		return this.socket.emit("join-room", roomId);
 	}
 
-	public createRoom(user1Id: number, user2Id: number): void {
-		this.socket.emit("createRoom", { user1Id, user2Id });
+	public getMessagesLive(): Observable<Message[]> {
+		return this.socket.fromEvent("messages");
 	}
 
-	public getRoomsByUserId(userId: number): void {
-		this.socket.emit("getRoomByUserId", userId);
+	public emitSendMessage(roomId: number, receiverId: number, content: string): void {
+		return this.socket.emit("send-message", { roomId, receiverId, content });
 	}
 
-	public getRooms(): Observable<any> {
-		return new Observable<any>(observer => {
-			this.socket.on("getRooms", (rooms: unknown[]) => {
-				observer.next(rooms);
-			});
-		});
+	public getMessage(): Observable<Message> {
+		return this.socket.fromEvent("message");
 	}
 
-	// public createMessage(userId: number, roomId: number, message: string): void {
-	// 	this.socket.emit("newMessage", { userId, roomId, message });
-	// }
-
-	public getMessagesByRoomId(roomId: number): void {
-		this.socket.emit("getMessagesByRoomId", roomId);
+	public emitMarkAsReadMessages(roomId: number, senderId: number): void {
+		this.socket.emit("mark-as-read-messages", { roomId, senderId });
 	}
 
-	// public getMessages(): Observable<any> {
-	// 	return new Observable<any>(observer => {
-	// 		this.socket.on("getMessages", (messages: unknown[]) => {
-	// 			observer.next(messages);
-	// 		});
-	// 	});
-	//
-	// 	// this.socket.on("getMessages", cb);
-	// }
+	public checkMessages(): Observable<Message[]> {
+		return this.socket.fromEvent("checked-messages");
+	}
 
-	public getNewMessage(): Observable<any> {
-		return new Observable<any>(observer => {
-			this.socket.on("message", message => {
-				observer.next(message);
-			});
-		});
+	public lastMessages(): Observable<any> {
+		return this.socket.fromEvent("last-messages");
+	}
+
+	// Socket
+	public emitOnlineUsers(): void {
+		return this.socket.emit("get-online-users");
+	}
+
+	public getOnlineUsersId(): Observable<number[]> {
+		return this.socket.fromEvent<number[]>("online-users");
 	}
 }

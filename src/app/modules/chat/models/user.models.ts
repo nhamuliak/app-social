@@ -5,7 +5,7 @@ export interface User {
 	age: number;
 	email: string;
 	// "password": string;
-	avatar: string;
+	avatar: string | null;
 	acceptTerms: boolean;
 	isOnline: boolean;
 	createdAt: string;

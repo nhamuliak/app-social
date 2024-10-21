@@ -2,9 +2,13 @@ import { HttpErrorResponse, HttpInterceptorFn } from "@angular/common/http";
 import { catchError, throwError } from "rxjs";
 import { inject } from "@angular/core";
 import { ToastService } from "@core/services/toast/toast.service";
+import { AuthService } from "@modules/auth/services/auth/auth.service";
+import { Router } from "@angular/router";
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 	const toastService = inject(ToastService);
+	const authService = inject(AuthService);
+	const router = inject(Router);
 
 	return next(req).pipe(
 		catchError((err: unknown) => {
@@ -14,6 +18,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 					// Specific handling for unauthorized errors
 					console.error("Unauthorized request:", err);
 					// You might trigger a re-authentication flow or redirect the user here
+					localStorage.removeItem("access_token");
+					router.navigate(["/auth/login"]);
+					// authService.logout();
 				} else {
 					// Handle other HTTP error codes
 					console.error("HTTP error:", err);

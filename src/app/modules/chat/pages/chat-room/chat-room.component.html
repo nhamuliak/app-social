@@ -1,23 +1,33 @@
 <div class="room-main">
 	<aside class="room-aside">
-		<div class="chat-room-item" *ngFor="let item of [1, 2, 3, 4]" [routerLink]="['/', item]">
-			<div class="chat-room-user-avatar">
-				<span class="indicator"></span>
-				<img src="https://cdn-icons-png.flaticon.com/256/3135/3135789.png" alt="avatar" />
-			</div>
-			<div class="chat-room-data">
-				<div class="chat-room-title">
-					<h4 class="chat-room-username">Lebogang Flavien</h4>
-					<span class="chat-room-time">{{ item + "h" }}</span>
+		@for (item of latestConversations; track item.id) {
+			<div
+				class="chat-room-item"
+				[ngClass]="{ selected: item.roomId === roomId }"
+				(click)="onSelectRoom(item.roomId)"
+			>
+				<div class="chat-room-user-avatar">
+					@if (item.user.isOnline) {
+						<span class="indicator"></span>
+					}
+					<app-avatar [avatar]="item.user.avatar" sizeClass="md"></app-avatar>
 				</div>
-				<div class="chat-room-info">
-					<p class="chat-room-message">
-						These sequences often show a strong correlation between consecutive or nearby tokens.
-					</p>
-					<span class="chat-room-badge">{{ item }}</span>
+				<div class="chat-room-data">
+					<div class="chat-room-title">
+						<h4 class="chat-room-username">{{ item.user.firstName }} {{ item.user.lastName }}</h4>
+						<span class="chat-room-time">{{ item.message.createdAt | timeAgo }}</span>
+					</div>
+					<div class="chat-room-info">
+						<p class="chat-room-message">
+							{{ item.message.text }}
+						</p>
+						@if (item.unreadMessagesCount) {
+							<span class="chat-room-badge">{{ item.unreadMessagesCount }}</span>
+						}
+					</div>
 				</div>
 			</div>
-		</div>
+		}
 	</aside>
 	<section class="room-section">
 		<header class="room-header">
@@ -27,11 +37,7 @@
 						<fa-icon [icon]="faArrowLeft"></fa-icon>
 					</a>
 					<div class="chat-room-user-avatar">
-						@if (receiver.avatar) {
-							<img [src]="receiver.avatar" alt="avatar" />
-						} @else {
-							<img src="https://cdn-icons-png.flaticon.com/256/3135/3135789.png" alt="avatar" />
-						}
+						<app-avatar [avatar]="receiver.avatar" sizeClass="md"></app-avatar>
 					</div>
 					<div class="chat-room-title">
 						<h4 class="chat-room-username">{{ receiver.firstName }} {{ receiver.lastName }}</h4>
@@ -57,25 +63,21 @@
 				</ul>
 			</div>
 		</header>
-		<div class="room-container">
+		<div class="room-container" #roomContainer>
 			@for (msg of messages; track msg.id; let item = $index) {
-				<div class="room-item" [ngClass]="{ owner: msg.user?.id === currentUser.id }">
+				<div class="room-item" [ngClass]="{ owner: msg.user.id === currentUser.id }">
 					<div class="room-user">
-						@if (msg.user?.avatar) {
-							<img [src]="msg.user.avatar" alt="avatar" />
-						} @else {
-							{{ msg.user.firstName?.charAt(0) }}{{ msg.user.lastName?.charAt(0) }}
-						}
+						<app-avatar [avatar]="msg.user.avatar"></app-avatar>
 					</div>
 					<div class="room-info">
 						<span class="room-user-name">{{
-							msg.user?.id === currentUser.id ? "You" : msg.user.firstName + " " + msg.user.lastName
+							msg.user.id === currentUser.id ? "You" : msg.user.firstName + " " + msg.user.lastName
 						}}</span>
 						<div class="room-message">
 							<p class="text">
 								{{ msg.text }}
 							</p>
-							<span class="time">{{ msg.createdAt | date: "HH:ss" }}</span>
+							<span class="time">{{ msg.createdAt | timeAgo }}</span>
 						</div>
 					</div>
 				</div>

@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 
+import { SocketIoModule } from "ngx-socket-io";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
@@ -11,7 +12,7 @@ import { ToastComponent } from "@core/components/toast/toast.component";
 
 @NgModule({
 	declarations: [AppComponent],
-	imports: [BrowserModule, AppRoutingModule, FaIconComponent, HttpClientModule, ToastComponent],
+	imports: [BrowserModule, SocketIoModule, AppRoutingModule, FaIconComponent, HttpClientModule, ToastComponent],
 	providers: [provideHttpClient(withInterceptors([errorInterceptor, tokenInterceptor]))],
 	bootstrap: [AppComponent]
 })

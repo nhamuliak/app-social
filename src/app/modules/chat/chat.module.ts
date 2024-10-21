@@ -5,9 +5,11 @@ import { ChatRoutingModule } from "./chat-routing.module";
 import { ChatListComponent } from "./pages/chat-list/chat-list.component";
 import { ChatRoomComponent } from "./pages/chat-room/chat-room.component";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { AvatarComponent } from "@shared/components/avatar/avatar.component";
+import { TimeAgoPipe } from "@shared/pipes/time-ago/time-ago.pipe";
 
 @NgModule({
 	declarations: [ChatListComponent, ChatRoomComponent],
-	imports: [CommonModule, ChatRoutingModule, FontAwesomeModule]
+	imports: [CommonModule, ChatRoutingModule, FontAwesomeModule, AvatarComponent, TimeAgoPipe]
 })
 export class ChatModule {}

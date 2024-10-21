@@ -6,24 +6,30 @@
 	</div>
 
 	<div class="header-right">
-		<div class="header-menu">
-			<div class="user-profile" (click)="menuOpened = !menuOpened">
-				<span class="user-avatar">
-					<img
-						src="https://png.klev.club/uploads/posts/2024-04/png-klev-club-vrj4-p-avatarka-png-28.png"
-						alt="avatar"
-					/>
-				</span>
-				<span class="user-name">Annette Black</span>
-				<fa-icon [icon]="faAngleDown"></fa-icon>
-			</div>
+		@if (user) {
+			<div class="header-menu">
+				<div class="user-profile" (click)="menuOpened = !menuOpened">
+					<span class="user-avatar">
+						@if (user.avatar) {
+							<img [src]="user.avatar" alt="avatar" />
+						} @else {
+							<img
+								src="https://png.klev.club/uploads/posts/2024-04/png-klev-club-vrj4-p-avatarka-png-28.png"
+								alt="avatar"
+							/>
+						}
+					</span>
+					<span class="user-name">{{ user.firstName }} {{ user.lastName }}</span>
+					<fa-icon [icon]="faAngleDown"></fa-icon>
+				</div>
 
-			<nav class="menu-block" [class.opened]="menuOpened">
-				<a class="menu-item" href="/profile/user-information">Edit Profile</a>
-				<!--				<a class="menu-item" href="#">Log out</a>-->
-				<!--				<a class="menu-item" href="#">Simple</a>-->
-			</nav>
-		</div>
+				<nav class="menu-block" [class.opened]="menuOpened">
+					<a class="menu-item" href="/profile/user-information">Edit Profile</a>
+					<!--				<a class="menu-item" href="#">Log out</a>-->
+					<!--				<a class="menu-item" href="#">Simple</a>-->
+				</nav>
+			</div>
+		}
 	</div>
 </header>
 <aside class="aside">

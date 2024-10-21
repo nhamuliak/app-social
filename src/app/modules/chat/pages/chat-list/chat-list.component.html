@@ -18,47 +18,59 @@
 		</div>
 		<div class="chat-action"></div>
 	</div>
-	<div class="chat-item" *ngFor="let item of conversationList$ | async">
-		<div class="chat-user-data">
-			<div class="chat-user-avatar">
-				@if (item.user?.avatar) {
-					<img [src]="item.user.avatar" alt="avatar" />
-				} @else {
-					<img src="https://cdn-icons-png.flaticon.com/256/3135/3135789.png" alt="avatar" />
-				}
-			</div>
-			<div class="chat-user-info">
-				<h4 class="chat-username">{{ item.user.firstName }} {{ item.user.lastName }}</h4>
-				<div class="chat-info">
-					<p class="chat-message">
-						{{ item.message.text }}
-					</p>
-					<span class="chat-badge">1</span>
+	@for (item of conversationList; track item.id) {
+		<div class="chat-item">
+			<div class="chat-user-data">
+				<div class="chat-user-avatar">
+					@if (item.user.isOnline) {
+						<span class="indicator"></span>
+					}
+					<app-avatar [avatar]="item.user.avatar"></app-avatar>
+				</div>
+				<div class="chat-user-info">
+					<h4 class="chat-username">{{ item.user.firstName }} {{ item.user.lastName }}</h4>
+					<div class="chat-info">
+						<p class="chat-message">
+							{{ item.message.text }}
+						</p>
+						@if (item.unreadMessagesCount) {
+							<span class="chat-badge">{{ item.unreadMessagesCount }}</span>
+						}
+					</div>
 				</div>
 			</div>
+			<div class="chat-time">
+				<span>{{ item.message.createdAt | timeAgo }}</span>
+			</div>
+			<div class="chat-action">
+				<a [routerLink]="['/', item.roomId]">Message</a>
+			</div>
 		</div>
-		<div class="chat-time">
-			<span>{{ item.message.createdAt | date: "dd/MM/YYYY" }}</span>
-		</div>
-		<div class="chat-action">
-			<a [routerLink]="['/', item.roomId]">Message</a>
-		</div>
-	</div>
+	}
 </section>
 
 <ng-template #dialogTemplate>
-	<div class="dialog-backdrop">
-		<div class="dialog-content">
-			<h2>Dialog Title</h2>
+	<div class="new-conversation-backdrop">
+		<div class="new-conversation-content">
+			<header class="new-conversation-header">
+				<h2 class="new-conversation-title">Start a new conversation!</h2>
+			</header>
 
 			@for (user of users$ | async; track user.id) {
-				<div style="margin-bottom: 10px" (click)="onNewConversation(user.id)">
-					User name: {{ user.firstName }} {{ user.lastName }}
-					<p>id: {{ user.id }}</p>
+				<div class="new-conversation-item" (click)="onNewConversation(user.id)">
+					<div class="new-conversation-user-avatar">
+						<app-avatar [avatar]="user.avatar" [male]="false" sizeClass="md"></app-avatar>
+					</div>
+					<div class="new-conversation-info">
+						<h4 class="new-conversation-username">{{ user.firstName }} {{ user.lastName }}</h4>
+						<button>Message</button>
+					</div>
 				</div>
 			}
 
-			<button class="btn" (click)="openDialog = false">Close</button>
+			<footer class="new-conversation-footer">
+				<button class="btn" (click)="openDialog = false">Close</button>
+			</footer>
 		</div>
 	</div>
 </ng-template>
