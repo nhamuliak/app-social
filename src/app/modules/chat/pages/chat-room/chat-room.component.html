@@ -86,12 +86,26 @@
 			}
 		</div>
 		<footer class="room-footer">
-			<div class="">
+			<div class="room-text-box">
+				<button (click)="showEmojiMart = !showEmojiMart">
+					<img src="./assets/images/smile.svg" alt="smile" />
+				</button>
+				<emoji-mart
+					[ngClass]="{ visible: showEmojiMart }"
+					[showPreview]="false"
+					[showSingleCategory]="false"
+					(emojiClick)="onAddEmoji($event)"
+				></emoji-mart>
 				<textarea
+					[(ngModel)]="message"
 					class="chat-textarea"
 					placeholder="Type message"
-					(keydown.enter)="saveMessage($event)"
+					(keydown)="onKeydown($event)"
+					(focus)="showEmojiMart = false"
 				></textarea>
+				<button (click)="saveMessage()">
+					<img class="send" src="./assets/images/send.svg" alt="send" />
+				</button>
 			</div>
 		</footer>
 	</section>

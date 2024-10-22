@@ -10,6 +10,7 @@ import { User } from "@modules/chat/models/user.models";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { Payload } from "@modules/auth/models/auth.models";
 import { Conversation } from "@modules/chat/models/conversation.models";
+import { EmojiEvent } from "@ctrl/ngx-emoji-mart/ngx-emoji";
 
 @Component({
 	selector: "app-chat-room",
@@ -22,6 +23,8 @@ export class ChatRoomComponent extends ClearObservable implements OnInit, AfterV
 	public faEllipsisVertical: IconDefinition = faEllipsisVertical;
 	public faArrowLeft: IconDefinition = faArrowLeft;
 
+	public message: string = "";
+	public showEmojiMart: boolean = false;
 	public currentUser: Payload;
 	public messages: Message[];
 	public receiver: User;
@@ -66,21 +69,22 @@ export class ChatRoomComponent extends ClearObservable implements OnInit, AfterV
 		});
 	}
 
-	public saveMessage(event: any): void {
-		const message = event.target.value;
-		console.log("click!", message);
+	public onAddEmoji({ emoji }: EmojiEvent): void {
+		this.message += emoji.native;
+	}
 
-		if (message?.trim()) {
-			this.chatService.emitSendMessage(this.roomId, this.receiver.id, message);
-			// this.chatService
-			// 	.createMessage(this.roomId, message)
-			// 	.pipe(takeUntil(this.destroy$))
-			// 	.subscribe(response => {
-			// 		this.messages.push(response);
-			// 	});
+	public onKeydown({ ctrlKey, key }: KeyboardEvent): void {
+		if (ctrlKey && key === "Enter") {
+			this.saveMessage();
+		}
+	}
+
+	public saveMessage(): void {
+		if (this.message?.trim()) {
+			this.chatService.emitSendMessage(this.roomId, this.receiver.id, this.message);
 		}
 
-		event.target.value = "";
+		this.message = "";
 	}
 
 	private scrollToBottom(): void {
