@@ -1,8 +1,10 @@
 @import '@ctrl/ngx-emoji-mart/picker';
+@import 'ngx-toastr/toastr';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;600;700&display=swap');
 @import "reset";
 @import "variables";
 @import "form";
+@import "button";
 @import "custom";
 
 @import "modules/auth";

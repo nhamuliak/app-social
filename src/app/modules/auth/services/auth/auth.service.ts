@@ -1,8 +1,10 @@
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { LoginRequestBody, Payload, RegisterRequestBody } from "@modules/auth/models/auth.models";
 import { jwtDecode } from "jwt-decode";
+import { User } from "@shared/models/user.model";
+import { StoreService } from "@core/services/store/store.service";
 
 interface Token {
 	accessToken: string;
@@ -15,7 +17,18 @@ interface Token {
 export class AuthService {
 	private readonly urlPath = "http://localhost:3000/api";
 
-	constructor(private http: HttpClient) {}
+	public userSubject: BehaviorSubject<User>;
+
+	constructor(
+		private http: HttpClient,
+		private storeService: StoreService
+	) {
+		this.userSubject = new BehaviorSubject<User>(this.storeService.getItem("user") as User);
+	}
+
+	public get user(): User {
+		return this.userSubject.value;
+	}
 
 	public registration(body: RegisterRequestBody): Observable<unknown> {
 		return this.http.post<Observable<unknown>>(`${this.urlPath}/auth/registration`, body);

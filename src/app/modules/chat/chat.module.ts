@@ -9,9 +9,10 @@ import { AvatarComponent } from "@shared/components/avatar/avatar.component";
 import { TimeAgoPipe } from "@shared/pipes/time-ago/time-ago.pipe";
 import { PickerComponent } from "@ctrl/ngx-emoji-mart";
 import { FormsModule } from "@angular/forms";
+import { NewChatModalComponent } from "./components/new-chat-modal/new-chat-modal.component";
 
 @NgModule({
-	declarations: [ChatListComponent, ChatRoomComponent],
+	declarations: [ChatListComponent, ChatRoomComponent, NewChatModalComponent],
 	imports: [
 		CommonModule,
 		ChatRoutingModule,

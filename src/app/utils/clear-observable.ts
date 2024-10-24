@@ -14,7 +14,7 @@ import { Injectable, OnDestroy } from "@angular/core";
  *		.subscribe()
  */
 @Injectable()
-export class ClearObservable implements OnDestroy {
+export abstract class ClearObservable implements OnDestroy {
 	public destroy$: Subject<boolean> = new Subject();
 
 	public ngOnDestroy(): void {

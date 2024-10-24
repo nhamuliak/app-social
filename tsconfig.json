@@ -29,6 +29,7 @@
 	  "@modules/*": ["src/app/modules/*"],
 	  "@shared/*": ["src/app/shared/*"],
 	  "@utils/*": ["src/app/utils/*"],
+	  "@environments/*": ["src/environments/*"],
 	  "rxjs": ["node_modules/rxjs"]
 	}
   },

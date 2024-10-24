@@ -1,0 +1,44 @@
+@import "variables";
+
+.btn-secondary,
+.btn-primary {
+	display: block;
+	border-radius: 3px;
+	background-color: $primary;
+	border: 1px solid #fff;
+	color: #FFF;
+	font-size: 18px;
+	font-weight: 500;
+	min-height: 38px;
+	max-width: 108px;
+	width: 100%;
+	text-align: center;
+	transition: all 120ms linear;
+
+	&:not(:disabled):hover {
+		border-color: $primary;
+		color: $primary;
+		background-color: white;
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+		background-color: #ccc;
+	}
+}
+
+.btn-secondary {
+	background-color: $text;
+	color: white;
+
+	&:not(:disabled):hover {
+		background-color: white;
+		border-color: $text;
+		color: $text;
+	}
+}
+
+a.btn-secondary {
+	line-height: 36px;
+	font-weight: 400;
+}

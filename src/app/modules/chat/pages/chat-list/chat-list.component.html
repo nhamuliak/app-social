@@ -1,12 +1,10 @@
 <section class="chat-section">
 	<div class="chat-header">
 		<h1 class="title">Chats</h1>
-		<button class="btn" (click)="openDialog = !openDialog">New Chat</button>
-	</div>
-
-	<!-- This container will hold the dialog -->
-	<div *ngIf="openDialog">
-		<ng-container *ngTemplateOutlet="dialogTemplate"></ng-container>
+		<button class="btn-primary" (click)="onNewChat()">
+			<fa-icon [icon]="faPlus"></fa-icon>
+			New Chat
+		</button>
 	</div>
 
 	<div class="chat-item filters">
@@ -48,29 +46,3 @@
 		</div>
 	}
 </section>
-
-<ng-template #dialogTemplate>
-	<div class="new-conversation-backdrop">
-		<div class="new-conversation-content">
-			<header class="new-conversation-header">
-				<h2 class="new-conversation-title">Start a new conversation!</h2>
-			</header>
-
-			@for (user of users$ | async; track user.id) {
-				<div class="new-conversation-item" (click)="onNewConversation(user.id)">
-					<div class="new-conversation-user-avatar">
-						<app-avatar [avatar]="user.avatar" [male]="false" sizeClass="md"></app-avatar>
-					</div>
-					<div class="new-conversation-info">
-						<h4 class="new-conversation-username">{{ user.firstName }} {{ user.lastName }}</h4>
-						<button>Message</button>
-					</div>
-				</div>
-			}
-
-			<footer class="new-conversation-footer">
-				<button class="btn" (click)="openDialog = false">Close</button>
-			</footer>
-		</div>
-	</div>
-</ng-template>

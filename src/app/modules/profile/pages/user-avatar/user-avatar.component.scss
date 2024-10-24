@@ -1,3 +1,5 @@
+@import "variables";
+
 .upload-block {
 	position: relative;
 	display: flex;
@@ -5,7 +7,7 @@
 	justify-content: center;
 	flex-direction: column;
 	width: 100%;
-	min-height: 256px;
+	min-height: 250px;
 	margin: 15px 0;
 	background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%236F7C8BFF' stroke-width='2' stroke-dasharray='6' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
 
@@ -39,5 +41,23 @@
 
 	input[type="file"] {
 		display: none;
+	}
+}
+
+.preview-content {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	margin-bottom: 10px;
+
+	.preview-img {
+		width: 100%;
+		max-width: 50px;
+		margin-right: 10px;
+	}
+
+	.preview-name {
+		font-size: 14px;
+		color: $text;
 	}
 }

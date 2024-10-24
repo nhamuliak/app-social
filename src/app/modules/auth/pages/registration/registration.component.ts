@@ -35,7 +35,8 @@ export class RegistrationComponent extends ClearObservable implements OnInit {
 
 	private initForm(): void {
 		this.form = this.formBuilder.group({
-			name: new FormControl("", [Validators.required]),
+			firstName: new FormControl("", [Validators.required]),
+			lastName: new FormControl("", [Validators.required]),
 			age: new FormControl("", []),
 			email: new FormControl("", [Validators.required]),
 			password: new FormControl("", [Validators.required]),

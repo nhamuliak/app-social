@@ -4,7 +4,6 @@ import { ControlValueAccessor, NgControl } from "@angular/forms";
 @Component({
 	selector: "app-input",
 	standalone: false,
-	// imports: [],
 	templateUrl: "./input.component.html",
 	styleUrl: "./input.component.scss"
 })
@@ -21,7 +20,7 @@ export class InputComponent implements ControlValueAccessor {
 		}
 	}
 
-	private onChange: (value: any) => void = () => {
+	private onChange: (value: string) => void = () => {
 		// do nothing.
 	};
 	private onTouched: () => void = () => {
@@ -37,15 +36,15 @@ export class InputComponent implements ControlValueAccessor {
 		return [];
 	}
 
-	public writeValue(value: any): void {
+	public writeValue(value: string): void {
 		this.value = value;
 	}
 
-	public registerOnChange(fn: any): void {
+	public registerOnChange(fn: (value: string) => void): void {
 		this.onChange = fn;
 	}
 
-	public registerOnTouched(fn: any): void {
+	public registerOnTouched(fn: () => void): void {
 		this.onTouched = fn;
 	}
 

@@ -1,9 +1,9 @@
-import { User } from "@modules/chat/models/user.models";
+import { User } from "@shared/models/user.model";
 
 export interface Conversation {
 	id: number;
 	roomId: number;
-	userId: number;
+	// userId: number;
 	user: User;
 	message: {
 		createdAt: string;

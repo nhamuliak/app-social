@@ -7,20 +7,35 @@
 			<form (submit)="onRegister()" [formGroup]="form">
 				<div class="user-data">
 					<div class="form-block">
-						<label for="name" class="form-label">Name</label>
+						<label for="first-name" class="form-label">First Name</label>
 						<app-input
-							id="name"
+							id="first-name"
 							type="text"
-							formControlName="name"
-							placeholder="Enter your name"
+							formControlName="firstName"
+							placeholder="Enter your first name"
 							required
 						></app-input>
-						<!--						<input id="name" class="form-input" type="text" placeholder="Enter your name" />-->
 					</div>
+					<div class="form-block">
+						<label for="last-name" class="form-label">Last Name</label>
+						<app-input
+							id="last-name"
+							type="text"
+							formControlName="lastName"
+							placeholder="Enter your last name"
+							required
+						></app-input>
+					</div>
+				</div>
+				<div class="user-data">
 					<div class="form-block">
 						<label for="age" class="form-label">Age</label>
 						<app-input id="age" type="text" formControlName="age" placeholder="Enter your age"></app-input>
 						<!--						<input id="age" class="form-input" type="number" placeholder="Enter your age" />-->
+					</div>
+					<div class="form-block">
+						<label for="gender" class="form-label">Gender</label>
+						<input type="checkbox" id="gender" />
 					</div>
 				</div>
 				<div class="form-block">

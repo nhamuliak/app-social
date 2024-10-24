@@ -1,11 +1,15 @@
-import { User } from "@modules/chat/models/user.models";
+import { User } from "@shared/models/user.model";
+
+type Gender = "male" | "female";
 
 export interface RegisterRequestBody {
-	username: string;
+	firstName: string;
+	lastName: string;
 	age: number | null;
 	email: string;
 	password: string;
 	confirmTerms: boolean;
+	gender?: Gender;
 }
 
 export interface LoginRequestBody {

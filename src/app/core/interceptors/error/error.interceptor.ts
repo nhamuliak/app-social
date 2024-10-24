@@ -1,12 +1,12 @@
 import { HttpErrorResponse, HttpInterceptorFn } from "@angular/common/http";
 import { catchError, throwError } from "rxjs";
 import { inject } from "@angular/core";
-import { ToastService } from "@core/services/toast/toast.service";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { Router } from "@angular/router";
+import { ToastrService } from "ngx-toastr";
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
-	const toastService = inject(ToastService);
+	const toastrService = inject(ToastrService);
 	const authService = inject(AuthService);
 	const router = inject(Router);
 
@@ -24,12 +24,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 				} else {
 					// Handle other HTTP error codes
 					console.error("HTTP error:", err);
-					errorMessageHandle(err, toastService);
+					errorMessageHandle(err, toastrService);
 				}
 			} else {
 				// Handle non-HTTP errors
 				console.error("An error occurred:", err);
-				errorMessageHandle(err, toastService);
+				errorMessageHandle(err, toastrService);
 			}
 
 			// Re-throw the error to propagate it further
@@ -42,13 +42,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 // 	// do nothing.
 // }
 
-function errorMessageHandle(err: any, toastService: ToastService): void {
-	toastService.addMessage({
-		type: 0,
-		message: err.message,
-		action: 0,
-		actionLabel: "",
-		close: 0,
-		errors: []
-	});
+function errorMessageHandle(err: any, toastrService: ToastrService): void {
+	toastrService.error(err.message);
 }

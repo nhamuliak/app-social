@@ -1,4 +1,4 @@
-import { User } from "@modules/chat/models/user.models";
+import { User } from "@shared/models/user.model";
 
 export interface Message {
 	createdAt: string;

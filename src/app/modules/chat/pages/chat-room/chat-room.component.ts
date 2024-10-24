@@ -5,12 +5,15 @@ import { ChatService } from "@modules/chat/services/chat.service";
 import { ClearObservable } from "@utils/clear-observable";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Message } from "@modules/chat/models/message.models";
-import { take, takeUntil } from "rxjs";
-import { User } from "@modules/chat/models/user.models";
+import { filter, switchMap, take, takeUntil } from "rxjs";
+import { User } from "@shared/models/user.model";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { Payload } from "@modules/auth/models/auth.models";
 import { Conversation } from "@modules/chat/models/conversation.models";
 import { EmojiEvent } from "@ctrl/ngx-emoji-mart/ngx-emoji";
+import { Page } from "@utils/page";
+import { DialogService } from "@ngneat/dialog";
+import { ConfirmationModalComponent } from "@shared/components/confirmation-modal/confirmation-modal.component";
 
 @Component({
 	selector: "app-chat-room",
@@ -23,8 +26,9 @@ export class ChatRoomComponent extends ClearObservable implements OnInit, AfterV
 	public faEllipsisVertical: IconDefinition = faEllipsisVertical;
 	public faArrowLeft: IconDefinition = faArrowLeft;
 
-	public message: string = "";
-	public showEmojiMart: boolean = false;
+	public page = new Page(100);
+	public message = "";
+	public showEmojiMart = false;
 	public currentUser: Payload;
 	public messages: Message[];
 	public receiver: User;
@@ -35,13 +39,40 @@ export class ChatRoomComponent extends ClearObservable implements OnInit, AfterV
 		private chatService: ChatService,
 		private authService: AuthService,
 		private route: ActivatedRoute,
-		private router: Router
+		private router: Router,
+		private dialogService: DialogService
 	) {
 		super();
 	}
 
 	public ngOnInit(): void {
 		this.initPage();
+	}
+
+	public onDeleteConversation(): void {
+		const dialogRef = this.dialogService.open(ConfirmationModalComponent, {
+			size: "md",
+			backdrop: true,
+			data: {
+				title: "Are you sure you want to delete this conversation?"
+			}
+		});
+
+		dialogRef.afterClosed$
+			.pipe(
+				filter(result => !!result),
+				switchMap(result => {
+					console.log("result", result);
+					return this.chatService.deleteConversation(this.roomId);
+				}),
+				takeUntil(this.destroy$)
+			)
+			.subscribe(res => {
+				this.router.navigate(["/"]).then(() => {
+					console.log("deleted!!!!", res, this.receiver.id, this.roomId);
+					this.chatService.emitDeleteMessage(this.receiver.id, this.roomId);
+				});
+			});
 	}
 
 	public ngAfterViewInit(): void {
@@ -82,9 +113,9 @@ export class ChatRoomComponent extends ClearObservable implements OnInit, AfterV
 	public saveMessage(): void {
 		if (this.message?.trim()) {
 			this.chatService.emitSendMessage(this.roomId, this.receiver.id, this.message);
-		}
 
-		this.message = "";
+			this.message = "";
+		}
 	}
 
 	private scrollToBottom(): void {
@@ -112,16 +143,26 @@ export class ChatRoomComponent extends ClearObservable implements OnInit, AfterV
 
 				this.chatService.emitOnlineUsers();
 				this.chatService.emitMarkAsReadMessages(this.roomId, this.receiver.id);
-				this.chatService.emitJoinRoom(this.roomId);
+				// this.chatService.emitJoinRoom(this.roomId);
 				this.scrollToBottom();
+
+				this.chatService
+					.getLatestConversations(this.roomId)
+					.pipe(takeUntil(this.destroy$))
+					.subscribe(response => {
+						console.log("getLatestConversations: ", response);
+
+						this.latestConversations = response;
+					});
 			});
 
 		this.chatService
-			.getMessagesLive()
+			.getMessages(this.roomId, this.page.pageNumber, this.page.size)
 			.pipe(takeUntil(this.destroy$))
-			.subscribe(response => {
-				console.log("res live messages: ", response);
-				this.messages = response;
+			.subscribe(result => {
+				console.log("res messages: ", result);
+				this.messages = result.records;
+				this.page.total = result.total;
 			});
 
 		this.chatService
@@ -132,43 +173,62 @@ export class ChatRoomComponent extends ClearObservable implements OnInit, AfterV
 				if (msg.roomId === this.roomId) {
 					this.messages.push(msg);
 					this.scrollToBottom();
+					this.chatService.emitMarkAsReadMessages(this.roomId, this.receiver.id);
+				} else {
+					// play sound if we get message from the different room
+					// TODO:: create a new SoundService
+					const audio = new Audio("./assets/sounds/notification2.mp3");
+
+					audio.volume = 0.5;
+					audio.play();
 				}
 			});
 
 		this.chatService
-			.checkMessages()
+			.roomDeleted()
 			.pipe(takeUntil(this.destroy$))
-			.subscribe(res => {
-				console.log("checked messages!");
-			});
-
-		this.chatService
-			.getLatestConversations(this.roomId)
-			.pipe(takeUntil(this.destroy$))
-			.subscribe(response => {
-				console.log("getLatestConversations: ", response);
-
-				this.latestConversations = response;
+			.subscribe(() => {
+				console.log("room was deleted!");
+				this.router.navigate(["/"]);
 			});
 
 		this.chatService
 			.lastMessages()
 			.pipe(takeUntil(this.destroy$))
-			.subscribe(({ message, unreadMessageCount }) => {
-				console.log("response: ", message, unreadMessageCount);
+			.subscribe(response => {
+				console.log("response: ", response);
+				const { message, unreadMessageCount, roomId, user, conversationId } = response;
 
-				this.latestConversations = this.latestConversations.map(item => {
-					if (item.roomId === message.roomId) {
-						item.message = message;
+				const index = this.latestConversations.findIndex(item => item.roomId === roomId);
 
-						// update unread message count only when we get messages from other users
-						if (message.userId !== this.receiver.id && message.userId !== this.currentUser.id) {
-							item.unreadMessagesCount = unreadMessageCount;
-						}
+				if (index > -1) {
+					this.latestConversations[index].message = message;
+
+					if (message.userId !== this.receiver.id && message.userId !== this.currentUser.id) {
+						this.latestConversations[index].unreadMessagesCount = unreadMessageCount;
 					}
+				} else {
+					this.latestConversations.push({
+						id: conversationId,
+						roomId,
+						message,
+						user,
+						unreadMessagesCount: unreadMessageCount
+					});
+				}
 
-					return item;
-				});
+				// this.latestConversations = this.latestConversations.map(item => {
+				// 	if (item.roomId === message.roomId) {
+				// 		item.message = message;
+				//
+				// 		// update unread message count only when we get messages from other users
+				// 		if (message.userId !== this.receiver.id && message.userId !== this.currentUser.id) {
+				// 			item.unreadMessagesCount = unreadMessageCount;
+				// 		}
+				// 	}
+				//
+				// 	return item;
+				// });
 			});
 	}
 }

@@ -1,0 +1,25 @@
+@import "variables";
+
+.dialog-content {
+	padding: 30px 20px 20px;
+}
+
+.title {
+	margin-bottom: 30px;
+	text-align: center;
+	font-size: 1.3rem;
+	font-weight: 300;
+}
+
+.actions {
+	display: flex;
+	justify-content: flex-end;
+
+	button {
+		padding: 6px 15px;
+
+		&.btn-secondary {
+			margin-right: 10px;
+		}
+	}
+}

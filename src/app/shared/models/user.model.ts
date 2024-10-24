@@ -4,14 +4,7 @@ export interface User {
 	lastName: string;
 	age: number;
 	email: string;
-	// "password": string;
 	avatar: string | null;
-	acceptTerms: boolean;
 	isOnline: boolean;
 	createdAt: string;
-}
-
-export interface PaginationResponse<T = any> {
-	records: T;
-	page: number;
 }

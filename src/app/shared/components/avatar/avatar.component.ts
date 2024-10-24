@@ -13,5 +13,5 @@ type Size = "xs" | "sm" | "md" | "lg" | "xl";
 export class AvatarComponent {
 	@Input() public sizeClass: Size = "sm";
 	@Input() public avatar: string | null;
-	@Input() public male: boolean = false;
+	@Input() public male = false;
 }

@@ -32,11 +32,13 @@ export class LoginComponent extends ClearObservable implements OnInit {
 				.login(this.form.value)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe(tokens => {
-					console.log("login data: ", tokens);
+					// console.log("login data: ", tokens);
 					// store tokens
 					this.authService.setToken(tokens.accessToken);
 
-					this.router.navigate(["/"]);
+					this.router.navigate(["/"]).then(() => {
+						this.socket.connect();
+					});
 				});
 		}
 	}

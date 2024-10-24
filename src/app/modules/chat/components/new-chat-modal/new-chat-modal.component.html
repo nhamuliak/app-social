@@ -1,0 +1,21 @@
+<div class="new-chat-content">
+	<header class="new-chat-header">
+		<h2 class="new-chat-title">Start a new conversation!</h2>
+	</header>
+
+	@for (user of data.users; track user.id) {
+		<div class="new-chat-item" (click)="ref.close(user.id)">
+			<div class="new-chat-user-avatar">
+				<app-avatar [avatar]="user.avatar" [male]="false" sizeClass="md"></app-avatar>
+			</div>
+			<div class="new-chat-info">
+				<h4 class="new-chat-username">{{ user.firstName }} {{ user.lastName }}</h4>
+				<button>Message</button>
+			</div>
+		</div>
+	}
+
+	<footer class="new-chat-footer">
+		<button class="btn-secondary" (click)="ref.close()">Close</button>
+	</footer>
+</div>

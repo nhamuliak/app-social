@@ -51,17 +51,17 @@
 						</span>
 					</div>
 				</div>
+				<div class="chat-room-options-container">
+					<button class="chat-room-options">
+						<fa-icon [icon]="faEllipsisVertical"></fa-icon>
+					</button>
+					<ul class="chat-room-list-options">
+						<li>Profile</li>
+						<li (click)="onDeleteConversation()">Delete</li>
+						<li>Block</li>
+					</ul>
+				</div>
 			}
-			<div class="chat-room-options-container">
-				<button class="chat-room-options">
-					<fa-icon [icon]="faEllipsisVertical"></fa-icon>
-				</button>
-				<ul class="chat-room-list-options">
-					<li>Profile</li>
-					<li>Delete</li>
-					<li>Block</li>
-				</ul>
-			</div>
 		</header>
 		<div class="room-container" #roomContainer>
 			@for (msg of messages; track msg.id; let item = $index) {

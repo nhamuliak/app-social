@@ -4,12 +4,10 @@ import { Injectable } from "@angular/core";
 	providedIn: "root"
 })
 export class StoreService {
-	constructor() {
-		// do nothing.
-	}
+	constructor() {}
 
 	public getItem(key: string): unknown {
-		return localStorage.getItem(key);
+		return JSON.parse(localStorage.getItem(key) || "");
 	}
 
 	public setItem(key: string, data: unknown): void {

@@ -7,12 +7,14 @@ import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { ClearObservable } from "@utils/clear-observable";
 import { StoreService } from "@core/services/store/store.service";
 import { CustomSocketService } from "@core/services/custom-socket/custom-socket.service";
-import { User } from "@modules/chat/models/user.models";
+import { User } from "@shared/models/user.model";
+import { AvatarComponent } from "@shared/components/avatar/avatar.component";
+import { takeUntil } from "rxjs";
 
 @Component({
 	selector: "app-home",
 	standalone: true,
-	imports: [FaIconComponent, RouterOutlet],
+	imports: [FaIconComponent, RouterOutlet, AvatarComponent],
 	templateUrl: "./home.component.html",
 	styleUrl: "./home.component.scss"
 })
@@ -20,7 +22,7 @@ export class HomeComponent extends ClearObservable implements OnInit {
 	public faMessage: IconDefinition = faMessage;
 	protected readonly faAngleDown = faAngleDown;
 	protected readonly faRightFromBracket = faRightFromBracket;
-	public menuOpened: boolean = false;
+	public menuOpened = false;
 	public user: User;
 
 	constructor(
@@ -33,15 +35,15 @@ export class HomeComponent extends ClearObservable implements OnInit {
 	}
 
 	ngOnInit() {
-		this.user = this.authService.getUser();
-
-		this.socket.connect(() => this.user);
+		this.authService.userSubject.pipe(takeUntil(this.destroy$)).subscribe(user => {
+			this.user = user;
+		});
 	}
 
 	public logout(): void {
 		this.storeService.removeItem("access_token");
 		this.router.navigate(["/auth/login"]);
-		this.socket.disconnect(this.user.id);
+		this.socket.disconnect(this.user?.id);
 
 		// this.authService
 		// 	.logout(1)
