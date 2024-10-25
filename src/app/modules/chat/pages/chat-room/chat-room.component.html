@@ -1,37 +1,47 @@
 <div class="room-main">
 	<aside class="room-aside">
-		@for (item of latestConversations; track item.id) {
-			<div
-				class="chat-room-item"
-				[ngClass]="{ selected: item.roomId === roomId }"
-				(click)="onSelectRoom(item.roomId)"
-			>
-				<div class="chat-room-user-avatar">
-					@if (item.user.isOnline) {
-						<span class="indicator"></span>
-					}
-					<app-avatar [avatar]="item.user.avatar" sizeClass="md"></app-avatar>
-				</div>
-				<div class="chat-room-data">
-					<div class="chat-room-title">
-						<h4 class="chat-room-username">{{ item.user.firstName }} {{ item.user.lastName }}</h4>
-						<span class="chat-room-time">{{ item.message.createdAt | timeAgo }}</span>
-					</div>
-					<div class="chat-room-info">
-						<p class="chat-room-message">
-							{{ item.message.text }}
-						</p>
-						@if (item.unreadMessagesCount) {
-							<span class="chat-room-badge">{{ item.unreadMessagesCount }}</span>
-						}
-					</div>
-				</div>
+		@if (loading) {
+			<div class="chat-loader">
+				<app-loader [loading]="loading"></app-loader>
 			</div>
+		} @else {
+			@for (item of latestConversations; track item.id) {
+				<div
+					class="chat-room-item"
+					[ngClass]="{ selected: item.roomId === roomId }"
+					(click)="onSelectRoom(item.roomId)"
+				>
+					<div class="chat-room-user-avatar">
+						@if (item.user.isOnline) {
+							<span class="indicator"></span>
+						}
+						<app-avatar [avatar]="item.user.avatar" sizeClass="md"></app-avatar>
+					</div>
+					<div class="chat-room-data">
+						<div class="chat-room-title">
+							<h4 class="chat-room-username">{{ item.user.firstName }} {{ item.user.lastName }}</h4>
+							<span class="chat-room-time">{{ item.message.createdAt | timeAgo }}</span>
+						</div>
+						<div class="chat-room-info">
+							<p class="chat-room-message">
+								{{ item.message.text }}
+							</p>
+							@if (item.unreadMessagesCount) {
+								<span class="chat-room-badge">{{ item.unreadMessagesCount }}</span>
+							}
+						</div>
+					</div>
+				</div>
+			}
 		}
 	</aside>
 	<section class="room-section">
-		<header class="room-header">
-			@if (receiver) {
+		@if (loading) {
+			<div class="chat-loader">
+				<app-loader [loading]="loading"></app-loader>
+			</div>
+		} @else {
+			<header class="room-header">
 				<div class="chat-room-header-info">
 					<a routerLink="/" class="chat-room-back">
 						<fa-icon [icon]="faArrowLeft"></fa-icon>
@@ -51,18 +61,17 @@
 						</span>
 					</div>
 				</div>
-				<div class="chat-room-options-container">
-					<button class="chat-room-options">
+				<div class="chat-room-options-container" appClickOutside (clickOutside)="menuOpened = false">
+					<button class="chat-room-options" (click)="menuOpened = !menuOpened">
 						<fa-icon [icon]="faEllipsisVertical"></fa-icon>
 					</button>
-					<ul class="chat-room-list-options">
-						<li>Profile</li>
-						<li (click)="onDeleteConversation()">Delete</li>
-						<li>Block</li>
-					</ul>
+
+					<menu class="menu-block" [class.opened]="menuOpened">
+						<button class="menu-item" (click)="onDeleteConversation()">Delete</button>
+					</menu>
 				</div>
-			}
-		</header>
+			</header>
+		}
 		<div class="room-container" #roomContainer>
 			@for (msg of messages; track msg.id; let item = $index) {
 				<div class="room-item" [ngClass]="{ owner: msg.user.id === currentUser.id }">
@@ -82,7 +91,9 @@
 					</div>
 				</div>
 			} @empty {
-				<p>There are no messages yet...</p>
+				@if (loading === false) {
+					<p>There are no messages yet...</p>
+				}
 			}
 		</div>
 		<footer class="room-footer">

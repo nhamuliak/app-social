@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ChatListComponent } from "./chat-list.component";
-import { ChatService } from "../../services/chat.service";
+import { ChatService } from "../../services/chat/chat.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 describe("ChatListComponent", () => {

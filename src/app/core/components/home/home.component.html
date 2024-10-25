@@ -7,7 +7,7 @@
 
 	<div class="header-right">
 		@if (user) {
-			<div class="header-menu">
+			<div class="header-menu" appClickOutside (clickOutside)="menuOpened = false">
 				<div class="user-profile" (click)="menuOpened = !menuOpened">
 					<span class="user-avatar">
 						<app-avatar [avatar]="user.avatar" sizeClass="md"></app-avatar>
@@ -16,10 +16,10 @@
 					<fa-icon [icon]="faAngleDown"></fa-icon>
 				</div>
 
-				<nav class="menu-block" [class.opened]="menuOpened">
+				<menu class="menu-block" [class.opened]="menuOpened">
 					<a class="menu-item" href="/profile/user-information">Edit Profile</a>
-					<!--					<button class="menu-item" (click)="logout()">Log out</button>-->
-				</nav>
+					<button class="menu-item" (click)="logout()">Log out</button>
+				</menu>
 			</div>
 		}
 	</div>

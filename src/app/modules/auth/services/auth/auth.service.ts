@@ -17,16 +17,16 @@ interface Token {
 export class AuthService {
 	private readonly urlPath = "http://localhost:3000/api";
 
-	public userSubject: BehaviorSubject<User>;
+	public userSubject: BehaviorSubject<User | null>;
 
 	constructor(
 		private http: HttpClient,
 		private storeService: StoreService
 	) {
-		this.userSubject = new BehaviorSubject<User>(this.storeService.getItem("user") as User);
+		this.userSubject = new BehaviorSubject<User | null>(this.storeService.getItem("user"));
 	}
 
-	public get user(): User {
+	public get user(): User | null {
 		return this.userSubject.value;
 	}
 

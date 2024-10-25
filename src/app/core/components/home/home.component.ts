@@ -10,11 +10,12 @@ import { CustomSocketService } from "@core/services/custom-socket/custom-socket.
 import { User } from "@shared/models/user.model";
 import { AvatarComponent } from "@shared/components/avatar/avatar.component";
 import { takeUntil } from "rxjs";
+import { ClickOutsideDirective } from "@shared/directives/click-outside/click-outside.directive";
 
 @Component({
 	selector: "app-home",
 	standalone: true,
-	imports: [FaIconComponent, RouterOutlet, AvatarComponent],
+	imports: [FaIconComponent, RouterOutlet, AvatarComponent, ClickOutsideDirective],
 	templateUrl: "./home.component.html",
 	styleUrl: "./home.component.scss"
 })
@@ -23,7 +24,7 @@ export class HomeComponent extends ClearObservable implements OnInit {
 	protected readonly faAngleDown = faAngleDown;
 	protected readonly faRightFromBracket = faRightFromBracket;
 	public menuOpened = false;
-	public user: User;
+	public user: User | null;
 
 	constructor(
 		private router: Router,

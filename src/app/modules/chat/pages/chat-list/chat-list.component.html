@@ -1,48 +1,54 @@
 <section class="chat-section">
-	<div class="chat-header">
-		<h1 class="title">Chats</h1>
-		<button class="btn-primary" (click)="onNewChat()">
-			<fa-icon [icon]="faPlus"></fa-icon>
-			New Chat
-		</button>
-	</div>
+	@if (loading) {
+		<div class="chat-loader">
+			<app-loader [loading]="loading"></app-loader>
+		</div>
+	} @else {
+		<div class="chat-header">
+			<h1 class="title">Chats</h1>
+			<button class="btn-primary" (click)="onNewChat()">
+				<fa-icon [icon]="faPlus"></fa-icon>
+				New Chat
+			</button>
+		</div>
 
-	<div class="chat-item filters">
-		<div class="chat-user-data">
-			<span>Name</span>
-		</div>
-		<div class="chat-time">
-			<span>Last message</span>
-		</div>
-		<div class="chat-action"></div>
-	</div>
-	@for (item of conversationList; track item.id) {
-		<div class="chat-item">
+		<div class="chat-item filters">
 			<div class="chat-user-data">
-				<div class="chat-user-avatar">
-					@if (item.user.isOnline) {
-						<span class="indicator"></span>
-					}
-					<app-avatar [avatar]="item.user.avatar"></app-avatar>
-				</div>
-				<div class="chat-user-info">
-					<h4 class="chat-username">{{ item.user.firstName }} {{ item.user.lastName }}</h4>
-					<div class="chat-info">
-						<p class="chat-message">
-							{{ item.message.text }}
-						</p>
-						@if (item.unreadMessagesCount) {
-							<span class="chat-badge">{{ item.unreadMessagesCount }}</span>
-						}
-					</div>
-				</div>
+				<span>Name</span>
 			</div>
 			<div class="chat-time">
-				<span>{{ item.message.createdAt | timeAgo }}</span>
+				<span>Last message</span>
 			</div>
-			<div class="chat-action">
-				<a [routerLink]="['/', item.roomId]">Message</a>
-			</div>
+			<div class="chat-action"></div>
 		</div>
+		@for (item of conversationList; track item.id) {
+			<div class="chat-item">
+				<div class="chat-user-data">
+					<div class="chat-user-avatar">
+						@if (item.user.isOnline) {
+							<span class="indicator"></span>
+						}
+						<app-avatar [avatar]="item.user.avatar"></app-avatar>
+					</div>
+					<div class="chat-user-info">
+						<h4 class="chat-username">{{ item.user.firstName }} {{ item.user.lastName }}</h4>
+						<div class="chat-info">
+							<p class="chat-message">
+								{{ item.message.text }}
+							</p>
+							@if (item.unreadMessagesCount) {
+								<span class="chat-badge">{{ item.unreadMessagesCount }}</span>
+							}
+						</div>
+					</div>
+				</div>
+				<div class="chat-time">
+					<span>{{ item.message.createdAt | timeAgo }}</span>
+				</div>
+				<div class="chat-action">
+					<a [routerLink]="['/', item.roomId]">Message</a>
+				</div>
+			</div>
+		}
 	}
 </section>

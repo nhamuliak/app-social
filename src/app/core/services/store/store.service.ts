@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { User } from "@shared/models";
 
 @Injectable({
 	providedIn: "root"
@@ -6,8 +7,8 @@ import { Injectable } from "@angular/core";
 export class StoreService {
 	constructor() {}
 
-	public getItem(key: string): unknown {
-		return JSON.parse(localStorage.getItem(key) || "");
+	public getItem(key: string): User | null {
+		return JSON.parse(localStorage.getItem(key) as any);
 	}
 
 	public setItem(key: string, data: unknown): void {

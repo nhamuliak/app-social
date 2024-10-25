@@ -1,5 +1,13 @@
 @import "variables";
 
+.account-tab-title {
+	margin-bottom: 10px;
+
+	+p {
+		font-size: 13px;
+	}
+}
+
 .upload-block {
 	position: relative;
 	display: flex;
@@ -7,8 +15,8 @@
 	justify-content: center;
 	flex-direction: column;
 	width: 100%;
-	min-height: 250px;
-	margin: 15px 0;
+	min-height: 256px;
+	margin: 20px 0;
 	background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%236F7C8BFF' stroke-width='2' stroke-dasharray='6' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
 
 	&.file-over {

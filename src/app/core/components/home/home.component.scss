@@ -66,41 +66,6 @@ $aside-width: 230px;
 	}
 }
 
-.menu-block {
-	display: flex;
-	flex-direction: column;
-	min-width: 160px;
-	margin-top: -8px;
-	transform: translate(25px, 0);
-	opacity: 0;
-	transition: all .2s linear;
-
-	&.opened {
-		transform: translate(0, 0);
-		opacity: 1;
-	}
-
-	.menu-item {
-		width: 100%;
-		border-radius: 8px;
-		background: #fff;
-		color: rgba(0, 0, 0, 0.85);
-		font-size: 14px;
-		line-height: 22px;
-		font-weight: 400;
-		padding: 10px 15px;
-		box-shadow: 0 9px 28px 8px #0000000D, 0 6px 16px 0 #00000014, 0 3px 6px -4px #0000001F;
-		margin-bottom: 8px;
-		text-align: left;
-		transition: all .2s linear;
-
-		&:hover {
-			border-bottom: none;
-			color: $primary;
-		}
-	}
-}
-
 .aside {
 	position: fixed;
 	top: $header-height;

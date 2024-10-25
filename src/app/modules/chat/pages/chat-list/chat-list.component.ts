@@ -1,73 +1,98 @@
-import { AfterViewInit, Component, OnInit } from "@angular/core";
-import { ChatService } from "../../services/chat.service";
-import { filter, Observable, switchMap, takeUntil } from "rxjs";
-import { User } from "@shared/models/user.model";
-import { Conversation } from "@modules/chat/models/conversation.models";
+import { Component, OnInit } from "@angular/core";
+import { ChatService } from "../../services/chat/chat.service";
+import { filter, finalize, switchMap, takeUntil } from "rxjs";
+import { Conversation } from "@modules/chat/models/conversation.model";
 import { Router } from "@angular/router";
 import { ClearObservable } from "@utils/clear-observable";
 import { faPlus } from "@fortawesome/free-solid-svg-icons/faPlus";
 import { DialogService } from "@ngneat/dialog";
 import { NewChatModalComponent } from "@modules/chat/components/new-chat-modal/new-chat-modal.component";
+import { AudioService } from "@core/services/audio/audio.service";
+import { ChatSocketService } from "@modules/chat/services/chat-socket/chat-socket.service";
+import { User } from "@shared/models";
 
 @Component({
 	selector: "app-chat-list",
 	templateUrl: "./chat-list.component.html",
 	styleUrl: "./chat-list.component.scss"
 })
-export class ChatListComponent extends ClearObservable implements OnInit, AfterViewInit {
+export class ChatListComponent extends ClearObservable implements OnInit {
 	protected readonly faPlus = faPlus;
 
+	public loading: boolean = true;
 	public conversationList: Conversation[] = [];
-	// public users$: Observable<User[]>;
 
 	constructor(
-		private chatService: ChatService,
 		private router: Router,
-		private dialogService: DialogService
+		private dialogService: DialogService,
+		private audioService: AudioService,
+		private chatService: ChatService,
+		private chatSocketService: ChatSocketService
 	) {
 		super();
 	}
 
 	public ngOnInit(): void {
-		// Online users
+		this.initConversations();
+	}
+
+	public onNewChat(): void {
+		this.createNewConversation();
+	}
+
+	private createNewConversation(): void {
 		this.chatService
-			.getOnlineUsersId()
+			.getUsers()
 			.pipe(takeUntil(this.destroy$))
-			.subscribe((userIdList: number[]) => {
-				console.log("userIdList: ", userIdList);
-
-				this.conversationList = this.conversationList?.map(item => {
-					const userId = userIdList.find(id => id == item.user?.id);
-
-					item.user.isOnline = Boolean(userId);
-
-					return item;
+			.subscribe((users: User[]) => {
+				const dialogRef = this.dialogService.open(NewChatModalComponent, {
+					data: {
+						users
+					}
 				});
-			});
 
+				dialogRef.afterClosed$
+					.pipe(
+						filter((result): result is number => !!result),
+						switchMap((receiverId: number) => this.chatService.createConversation(receiverId)),
+						takeUntil(this.destroy$)
+					)
+					.subscribe((response: Conversation) => {
+						this.router.navigate([response.roomId]);
+					});
+			});
+	}
+
+	private initConversations(): void {
 		this.chatService
 			.getConversations()
-			.pipe(takeUntil(this.destroy$))
+			.pipe(
+				finalize(() => (this.loading = false)),
+				takeUntil(this.destroy$)
+			)
 			.subscribe(response => {
 				this.conversationList = response;
 
-				this.chatService.emitOnlineUsers();
+				this.checkOnlineUserStatus();
+				this.checkNewLastMessages();
+				this.checkIsRoomWasDeleted();
 			});
+	}
 
-		this.chatService
-			.roomDeleted()
+	private checkIsRoomWasDeleted(): void {
+		this.chatSocketService
+			.checkIsRoomDeleted()
 			.pipe(takeUntil(this.destroy$))
 			.subscribe((roomId: number) => {
-				console.log("room was deleted!", roomId);
-
 				this.conversationList = this.conversationList.filter(item => item.roomId !== roomId);
 			});
+	}
 
-		this.chatService
-			.lastMessages()
+	private checkNewLastMessages(): void {
+		this.chatSocketService
+			.checkLastMessages()
 			.pipe(takeUntil(this.destroy$))
 			.subscribe(response => {
-				console.log("response: ", response);
 				const { message, unreadMessageCount, roomId, user, conversationId } = response;
 
 				const index = this.conversationList.findIndex(item => item.roomId === roomId);
@@ -85,47 +110,22 @@ export class ChatListComponent extends ClearObservable implements OnInit, AfterV
 					});
 				}
 
-				// TODO:: create a new SoundService
-				const audio = new Audio("./assets/sounds/notification.wav");
-
-				audio.volume = 0.5;
-				audio.play();
-
-				// this.conversationList = this.conversationList.map(item => {
-				// 	if (item.roomId === message.roomId) {
-				// 		item.message = message;
-				// 		item.unreadMessagesCount = unreadMessageCount;
-				// 	}
-				//
-				// 	return item;
-				// });
+				this.audioService.playNotification();
 			});
 	}
 
-	ngAfterViewInit(): void {}
-
-	public onNewChat(): void {
-		this.chatService
-			.getUsers()
+	private checkOnlineUserStatus(): void {
+		this.chatSocketService
+			.checkOnlineUsers()
 			.pipe(takeUntil(this.destroy$))
-			.subscribe(users => {
-				const dialogRef = this.dialogService.open(NewChatModalComponent, {
-					data: {
-						users
-					}
+			.subscribe((idList: number[]) => {
+				this.conversationList = this.conversationList?.map(item => {
+					const userId = idList.find(id => id == item.user.id) || null;
+
+					item.user.isOnline = Boolean(userId);
+
+					return item;
 				});
-
-				dialogRef.afterClosed$
-					.pipe(
-						filter((result): result is number => !!result),
-						switchMap((receiverId: number) => this.chatService.createConversation(receiverId)),
-						takeUntil(this.destroy$)
-					)
-					.subscribe((response: any) => {
-						console.log("res: ", response);
-
-						this.router.navigate([response.roomId]);
-					});
 			});
 	}
 }

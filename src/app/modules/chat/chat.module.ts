@@ -10,6 +10,8 @@ import { TimeAgoPipe } from "@shared/pipes/time-ago/time-ago.pipe";
 import { PickerComponent } from "@ctrl/ngx-emoji-mart";
 import { FormsModule } from "@angular/forms";
 import { NewChatModalComponent } from "./components/new-chat-modal/new-chat-modal.component";
+import { LoaderComponent } from "@shared/components/loader/loader.component";
+import { ClickOutsideDirective } from "@shared/directives/click-outside/click-outside.directive";
 
 @NgModule({
 	declarations: [ChatListComponent, ChatRoomComponent, NewChatModalComponent],
@@ -20,7 +22,9 @@ import { NewChatModalComponent } from "./components/new-chat-modal/new-chat-moda
 		AvatarComponent,
 		TimeAgoPipe,
 		PickerComponent,
-		FormsModule
+		FormsModule,
+		LoaderComponent,
+		ClickOutsideDirective
 	]
 })
 export class ChatModule {}

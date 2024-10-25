@@ -5,6 +5,7 @@ import { ClearObservable } from "@utils/clear-observable";
 import { takeUntil } from "rxjs";
 import { Router } from "@angular/router";
 import { CustomSocketService } from "@core/services/custom-socket/custom-socket.service";
+import { StoreService } from "@core/services/store/store.service";
 
 @Component({
 	templateUrl: "./login.component.html",
@@ -17,6 +18,7 @@ export class LoginComponent extends ClearObservable implements OnInit {
 		private formBuilder: FormBuilder,
 		private router: Router,
 		private authService: AuthService,
+		private storeService: StoreService,
 		private socket: CustomSocketService
 	) {
 		super();
@@ -35,6 +37,8 @@ export class LoginComponent extends ClearObservable implements OnInit {
 					// console.log("login data: ", tokens);
 					// store tokens
 					this.authService.setToken(tokens.accessToken);
+
+					this.storeService.setItem("user", this.authService.getUser());
 
 					this.router.navigate(["/"]).then(() => {
 						this.socket.connect();

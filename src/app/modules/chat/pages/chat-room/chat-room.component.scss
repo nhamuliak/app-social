@@ -184,12 +184,23 @@
 
 .chat-room-options-container {
 	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
 
 	&:hover {
 		.chat-room-list-options {
 			right: 0;
 			opacity: 1;
 		}
+	}
+
+	.menu-block {
+		position: absolute;
+		right: -10px;
+		top: 100%;
+		min-width: 80px;
+		margin-top: 0;
 	}
 }
 
@@ -356,4 +367,11 @@ emoji-mart {
 	&.visible {
 		display: block;
 	}
+}
+
+.chat-loader {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 30px;
 }
