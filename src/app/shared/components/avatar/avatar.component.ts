@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { NgClass } from "@angular/common";
 
 type Size = "xs" | "sm" | "md" | "lg" | "xl";
@@ -8,7 +8,8 @@ type Size = "xs" | "sm" | "md" | "lg" | "xl";
 	standalone: true,
 	imports: [NgClass],
 	templateUrl: "./avatar.component.html",
-	styleUrl: "./avatar.component.scss"
+	styleUrl: "./avatar.component.scss",
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AvatarComponent {
 	@Input() public sizeClass: Size = "sm";

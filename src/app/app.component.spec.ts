@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AppComponent } from "./app.component";
-import { RouterModule } from "@angular/router";
+import { RouterModule, RouterOutlet } from "@angular/router";
 import { FontAwesomeTestingModule } from "@fortawesome/angular-fontawesome/testing";
+import { By } from "@angular/platform-browser";
 
 describe("AppComponent", () => {
 	let fixture: ComponentFixture<AppComponent>;
@@ -11,7 +12,7 @@ describe("AppComponent", () => {
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
 			imports: [RouterModule.forRoot([]), FontAwesomeTestingModule],
-			declarations: [AppComponent]
+			declarations: [AppComponent, RouterOutlet]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(AppComponent);
@@ -20,5 +21,10 @@ describe("AppComponent", () => {
 
 	it("should create the app", () => {
 		expect(app).toBeTruthy();
+	});
+
+	it("should render the router outlet", () => {
+		const routerOutlet = fixture.debugElement.query(By.directive(RouterOutlet));
+		expect(routerOutlet).toBeTruthy();
 	});
 });

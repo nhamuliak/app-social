@@ -26,6 +26,7 @@
     ],
 	"paths": {
 	  "@core/*": ["src/app/core/*"],
+	  "@mock/*": ["src/app/mock/*"],
 	  "@modules/*": ["src/app/modules/*"],
 	  "@shared/*": ["src/app/shared/*"],
 	  "@utils/*": ["src/app/utils/*"],
