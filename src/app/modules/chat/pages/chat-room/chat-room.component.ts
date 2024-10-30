@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
 import { faArrowLeft, faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { ChatService } from "@modules/chat/services/chat/chat.service";
@@ -8,7 +8,7 @@ import { Message } from "@modules/chat/models/message.model";
 import { filter, finalize, forkJoin, switchMap, takeUntil } from "rxjs";
 import { User } from "@shared/models/user.model";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
-import { Payload } from "@modules/auth/models/auth.models";
+import { Payload } from "@modules/auth/models/auth.model";
 import { Conversation } from "@modules/chat/models/conversation.model";
 import { EmojiEvent } from "@ctrl/ngx-emoji-mart/ngx-emoji";
 import { Page } from "@utils/page";
@@ -17,6 +17,7 @@ import { ConfirmationModalComponent } from "@shared/components/confirmation-moda
 import { ChatSocketService } from "@modules/chat/services/chat-socket/chat-socket.service";
 import { AudioService } from "@core/services/audio/audio.service";
 import { ToastrService } from "ngx-toastr";
+import { PaginationResponse } from "@shared/models";
 
 @Component({
 	selector: "app-chat-room",
@@ -29,8 +30,9 @@ export class ChatRoomComponent extends ClearObservable implements OnInit {
 	public faEllipsisVertical: IconDefinition = faEllipsisVertical;
 	public faArrowLeft: IconDefinition = faArrowLeft;
 
-	public menuOpened: boolean = false;
-	public loading: boolean = false;
+	public menuOpened = false;
+	public loading = false;
+	public loadingUpMessages = false;
 
 	public page = new Page(100);
 	public roomId: number;
@@ -89,23 +91,60 @@ export class ChatRoomComponent extends ClearObservable implements OnInit {
 		}
 	}
 
+	@HostListener("window:scroll", [])
+	public onWindowScroll(): void {
+		const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+		if (scrollTop === 0 && this.loading === false) {
+			const currentScrollHeight = document.documentElement.scrollHeight;
+
+			if (this.messages.length < this.page.total) {
+				this.loadingUpMessages = true;
+				this.page.pageNumber += 1;
+
+				this.chatService
+					.getMessages(this.roomId, this.page.pageNumber, this.page.size)
+					.pipe(
+						finalize(() => (this.loadingUpMessages = false)),
+						takeUntil(this.destroy$)
+					)
+					.subscribe(result => {
+						this.messages = [...result.records, ...this.messages];
+
+						setTimeout(() => {
+							// Calculate the new scroll position based on the height change
+							const newScrollHeight = document.documentElement.scrollHeight;
+
+							window.scrollTo(0, newScrollHeight - currentScrollHeight);
+						}, 0);
+					});
+			}
+		}
+	}
+
 	private initPage(): void {
 		this.loading = true;
 
 		this.currentUser = this.authService.getUser();
 		this.roomId = Number(this.route.snapshot.paramMap.get("roomId")) || 0;
 
-		forkJoin([
-			this.chatService.getReceiver(this.roomId),
-			this.chatService.getMessages(this.roomId, this.page.pageNumber, this.page.size),
-			this.chatService.getLatestConversations(this.roomId)
-		])
+		this.chatService
+			.getReceiver(this.roomId)
 			.pipe(
+				switchMap((receiver: User) => {
+					this.receiver = receiver;
+
+					this.chatSocketService.markMessagesAsRead(this.roomId, this.receiver.id);
+
+					return forkJoin([
+						this.chatService.getMessages(this.roomId, this.page.pageNumber, this.page.size),
+						this.chatService.getLatestConversations(this.roomId)
+					]);
+				}),
 				finalize(() => (this.loading = false)),
 				takeUntil(this.destroy$)
 			)
-			.subscribe(([receiver, result, conversations]: [User, any, any]) => {
-				this.receiver = receiver;
+			.subscribe(([result, conversations]: [PaginationResponse<Message>, Conversation[]]) => {
 				this.latestConversations = conversations;
 
 				this.messages = result.records;
@@ -159,24 +198,22 @@ export class ChatRoomComponent extends ClearObservable implements OnInit {
 		this.chatSocketService
 			.checkLastMessages()
 			.pipe(takeUntil(this.destroy$))
-			.subscribe(response => {
-				const { message, unreadMessageCount, roomId, user, conversationId } = response;
-
+			.subscribe(({ message, unreadMessagesCount, roomId, user, id }: Conversation) => {
 				const index = this.latestConversations.findIndex(item => item.roomId === roomId);
 
 				if (index > -1) {
 					this.latestConversations[index].message = message;
 
-					if (message.userId !== this.receiver.id && message.userId !== this.currentUser.id) {
-						this.latestConversations[index].unreadMessagesCount = unreadMessageCount;
+					if (user.id !== this.receiver.id && user.id !== this.currentUser.id) {
+						this.latestConversations[index].unreadMessagesCount = unreadMessagesCount;
 					}
 				} else {
 					this.latestConversations.push({
-						id: conversationId,
+						id,
 						roomId,
 						message,
 						user,
-						unreadMessagesCount: unreadMessageCount
+						unreadMessagesCount
 					});
 				}
 			});

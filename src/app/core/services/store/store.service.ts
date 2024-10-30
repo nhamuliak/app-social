@@ -5,9 +5,8 @@ import { User } from "@shared/models";
 	providedIn: "root"
 })
 export class StoreService {
-	constructor() {}
-
 	public getItem(key: string): User | null {
+		// eslint-disable-next-line
 		return JSON.parse(localStorage.getItem(key) as any);
 	}
 

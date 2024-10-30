@@ -11,8 +11,8 @@ describe("AppComponent", () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [RouterModule.forRoot([]), FontAwesomeTestingModule],
-			declarations: [AppComponent, RouterOutlet]
+			imports: [RouterModule.forRoot([]), FontAwesomeTestingModule, RouterOutlet],
+			declarations: [AppComponent]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(AppComponent);

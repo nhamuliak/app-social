@@ -19,7 +19,7 @@ import { User } from "@shared/models";
 export class ChatListComponent extends ClearObservable implements OnInit {
 	protected readonly faPlus = faPlus;
 
-	public loading: boolean = true;
+	public loading = true;
 	public conversationList: Conversation[] = [];
 
 	constructor(
@@ -92,21 +92,19 @@ export class ChatListComponent extends ClearObservable implements OnInit {
 		this.chatSocketService
 			.checkLastMessages()
 			.pipe(takeUntil(this.destroy$))
-			.subscribe(response => {
-				const { message, unreadMessageCount, roomId, user, conversationId } = response;
-
+			.subscribe(({ message, unreadMessagesCount, roomId, user, id }: Conversation) => {
 				const index = this.conversationList.findIndex(item => item.roomId === roomId);
 
 				if (index > -1) {
 					this.conversationList[index].message = message;
-					this.conversationList[index].unreadMessagesCount = unreadMessageCount;
+					this.conversationList[index].unreadMessagesCount = unreadMessagesCount;
 				} else {
 					this.conversationList.push({
-						id: conversationId,
+						id,
 						roomId,
 						message,
 						user,
-						unreadMessagesCount: unreadMessageCount
+						unreadMessagesCount
 					});
 				}
 

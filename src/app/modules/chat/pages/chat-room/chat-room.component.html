@@ -73,6 +73,12 @@
 			</header>
 		}
 		<div class="room-container" #roomContainer>
+			@if (loadingUpMessages) {
+				<div class="chat-loader">
+					<app-loader [loading]="loadingUpMessages"></app-loader>
+				</div>
+			}
+
 			@for (msg of messages; track msg.id; let item = $index) {
 				<div class="room-item" [ngClass]="{ owner: msg.user.id === currentUser.id }">
 					<div class="room-user">

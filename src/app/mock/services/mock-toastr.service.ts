@@ -1,6 +1,6 @@
 export class MockToastrService {
-	success = jest.fn();
-	info = jest.fn();
-	warning = jest.fn();
-	error = jest.fn();
+	public success = jest.fn();
+	public info = jest.fn();
+	public warning = jest.fn();
+	public error = jest.fn();
 }

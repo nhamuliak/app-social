@@ -1,3 +1,3 @@
-import { MockRouterOutlet } from "./mock-router-outlet.component";
+import { MockRouterOutletComponent } from "./mock-router-outlet.component";
 
-export { MockRouterOutlet };
+export { MockRouterOutletComponent };

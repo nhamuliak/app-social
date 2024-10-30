@@ -1,5 +1,8 @@
+import { of } from "rxjs";
+import { mockUserData } from "@mock/data";
+
 export class MockProfileService {
-	changePassword = jest.fn();
-	updateUserAvatar = jest.fn();
-	updateUserInformation = jest.fn();
+	public changePassword = jest.fn().mockReturnValue(of());
+	public updateUserAvatar = jest.fn();
+	public updateUserInformation = jest.fn().mockReturnValue(of(mockUserData));
 }

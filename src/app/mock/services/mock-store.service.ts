@@ -1,3 +1,4 @@
 export class MockStoreService {
-	setItem = jest.fn();
+	public setItem = jest.fn();
+	public removeItem = jest.fn(key => key);
 }

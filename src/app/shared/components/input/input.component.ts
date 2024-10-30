@@ -1,11 +1,18 @@
-import { Component, Input } from "@angular/core";
-import { ControlValueAccessor, NgControl } from "@angular/forms";
+import { Component, forwardRef, Input } from "@angular/core";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from "@angular/forms";
 
 @Component({
 	selector: "app-input",
 	standalone: false,
 	templateUrl: "./input.component.html",
-	styleUrl: "./input.component.scss"
+	styleUrl: "./input.component.scss",
+	providers: [
+		{
+			provide: NG_VALUE_ACCESSOR,
+			useExisting: forwardRef(() => InputComponent),
+			multi: true
+		}
+	]
 })
 export class InputComponent implements ControlValueAccessor {
 	@Input() public type = "text";
@@ -52,6 +59,7 @@ export class InputComponent implements ControlValueAccessor {
 		this.disabled = isDisabled;
 	}
 
+	// eslint-disable-next-line
 	public onInput({ value }: any): void {
 		this.value = value;
 		this.onChange(value);

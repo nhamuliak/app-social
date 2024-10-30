@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, NgZone, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../../services/auth/auth.service";
 import { ClearObservable } from "@utils/clear-observable";
@@ -6,6 +6,7 @@ import { takeUntil } from "rxjs";
 import { Router } from "@angular/router";
 import { CustomSocketService } from "@core/services/custom-socket/custom-socket.service";
 import { StoreService } from "@core/services/store/store.service";
+import { GoogleAuthService } from "@modules/auth/services/google-auth/google-auth.service";
 
 @Component({
 	templateUrl: "./login.component.html",
@@ -18,14 +19,23 @@ export class LoginComponent extends ClearObservable implements OnInit {
 		private formBuilder: FormBuilder,
 		private router: Router,
 		private authService: AuthService,
+		private googleAuthService: GoogleAuthService,
 		private storeService: StoreService,
-		private socket: CustomSocketService
+		private socket: CustomSocketService,
+		private ngZone: NgZone
 	) {
 		super();
 	}
 
 	public ngOnInit(): void {
+		// this.googleAuthService.initConfigs();
+
 		this.initForm();
+	}
+
+	public onLoginWithGoogle(): void {
+		// console.log("google!!!!");
+		this.googleAuthService.loginWithGoogle();
 	}
 
 	public onLogin(): void {
@@ -40,8 +50,10 @@ export class LoginComponent extends ClearObservable implements OnInit {
 
 					this.storeService.setItem("user", this.authService.getUser());
 
-					this.router.navigate(["/"]).then(() => {
-						this.socket.connect();
+					this.ngZone.run(() => {
+						this.router.navigate(["/"]).then(() => {
+							this.socket.connect();
+						});
 					});
 				});
 		}

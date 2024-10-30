@@ -7,6 +7,7 @@ import { ToastrService } from "ngx-toastr";
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 	const toastrService = inject(ToastrService);
+	// eslint-disable-next-line
 	const authService = inject(AuthService);
 	const router = inject(Router);
 
@@ -23,12 +24,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 					// authService.logout();
 				} else {
 					// Handle other HTTP error codes
-					console.error("HTTP error:", err);
 					errorMessageHandle(err, toastrService);
 				}
 			} else {
 				// Handle non-HTTP errors
-				console.error("An error occurred:", err);
 				errorMessageHandle(err, toastrService);
 			}
 
@@ -38,10 +37,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 	);
 };
 
-// function refreshToken(err: any): void {
-// 	// do nothing.
-// }
-
+// eslint-disable-next-line
 function errorMessageHandle(err: any, toastrService: ToastrService): void {
-	toastrService.error(err.message);
+	console.error(err);
+
+	toastrService.error(err.error.message);
 }

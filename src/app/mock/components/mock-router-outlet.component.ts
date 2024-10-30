@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 
 @Component({
-	selector: "router-outlet",
-	template: "",
+	selector: "app-mock-router-outlet",
+	template: "<ng-content></ng-content>",
 	standalone: true
 })
-export class MockRouterOutlet {}
+export class MockRouterOutletComponent {}

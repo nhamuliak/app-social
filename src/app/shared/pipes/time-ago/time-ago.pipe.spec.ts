@@ -12,7 +12,7 @@ describe("TimeAgoPipe", () => {
 		expect(pipe).toBeTruthy();
 	});
 
-	it('should return "Just now" for dates within the last minute', () => {
+	it("should return \"Just now\" for dates within the last minute", () => {
 		const date = new Date();
 		expect(pipe.transform(date.toISOString())).toBe("Just now");
 	});

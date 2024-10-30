@@ -6,11 +6,40 @@ import { By } from "@angular/platform-browser";
 @Component({
 	template: `
 		<div appDragAndDrop (fileDropped)="onFileDropped($event)" [multiple]="allowMultiple">Drop files here</div>
-	`
+	`,
+	standalone: false
 })
 class TestComponent {
-	onFileDropped = jest.fn();
-	allowMultiple = false;
+	public onFileDropped = jest.fn();
+	public allowMultiple = false;
+}
+
+class MockDragEvent extends Event {
+	public dataTransfer: { files: File[] };
+
+	constructor(type: string, eventInitDict?: DragEventInit) {
+		super(type, eventInitDict);
+		this.dataTransfer = { files: [] };
+	}
+}
+
+// Mocking DataTransfer for Jest environment
+class MockDataTransfer {
+	private _files: File[] = [];
+
+	public get files(): File[] {
+		return this._files;
+	}
+
+	// Method to add files to the DataTransfer
+	public add(file: File): void {
+		this._files.push(file);
+	}
+
+	// Method to simulate adding multiple files
+	public items = {
+		add: (file: File) => this.add(file)
+	};
 }
 
 describe("DragAndDropDirective", () => {
@@ -20,12 +49,14 @@ describe("DragAndDropDirective", () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			declarations: [DragAndDropDirective, TestComponent]
+			imports: [DragAndDropDirective],
+			declarations: [TestComponent]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(TestComponent);
 		testComponent = fixture.componentInstance;
 		directiveElement = fixture.debugElement.query(By.directive(DragAndDropDirective)).nativeElement;
+
 		fixture.detectChanges();
 	});
 
@@ -34,9 +65,9 @@ describe("DragAndDropDirective", () => {
 		expect(directive).toBeTruthy();
 	});
 
-	it('should add "file-over" class on dragover and remove it on dragleave', () => {
-		const dragOverEvent = new DragEvent("dragover");
-		const dragLeaveEvent = new DragEvent("dragleave");
+	it("should add 'file-over' class on dragover and remove it on dragleave", () => {
+		const dragOverEvent = new MockDragEvent("dragover");
+		const dragLeaveEvent = new MockDragEvent("dragleave");
 
 		directiveElement.dispatchEvent(dragOverEvent);
 		fixture.detectChanges();
@@ -48,8 +79,9 @@ describe("DragAndDropDirective", () => {
 	});
 
 	it("should emit a single file on drop when multiple is false", () => {
-		const dropEvent = new DragEvent("drop", {
-			dataTransfer: { files: new DataTransfer().files } as any
+		const dropEvent = new MockDragEvent("drop", {
+			// eslint-disable-next-line
+			dataTransfer: { files: new MockDataTransfer().files } as any
 		});
 		Object.defineProperty(dropEvent.dataTransfer, "files", {
 			value: [new File(["file content"], "test-file.txt")]
@@ -65,8 +97,9 @@ describe("DragAndDropDirective", () => {
 
 	it("should emit multiple files on drop when multiple is true", () => {
 		const fileList = [new File(["file content 1"], "file1.txt"), new File(["file content 2"], "file2.txt")];
-		const dropEvent = new DragEvent("drop", {
-			dataTransfer: { files: new DataTransfer().files } as any
+		const dropEvent = new MockDragEvent("drop", {
+			// eslint-disable-next-line
+			dataTransfer: { files: new MockDataTransfer().files } as any
 		});
 		Object.defineProperty(dropEvent.dataTransfer, "files", {
 			value: fileList

@@ -15,4 +15,8 @@ export class ConfirmationModalComponent {
 	constructor(public ref: DialogRef) {
 		this.data = ref.data;
 	}
+
+	public onClose(): void {
+		this.ref.close(true);
+	}
 }

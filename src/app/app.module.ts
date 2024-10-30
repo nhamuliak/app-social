@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
-
 import { SocketIoModule } from "ngx-socket-io";
 import { ToastrModule } from "ngx-toastr";
 import { AppRoutingModule } from "./app-routing.module";
@@ -10,6 +9,7 @@ import { HttpClientModule, provideHttpClient, withInterceptors } from "@angular/
 import { tokenInterceptor } from "@core/interceptors/token/token.interceptor";
 import { errorInterceptor } from "@core/interceptors/error/error.interceptor";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { OAuthModule } from "angular-oauth2-oidc";
 
 @NgModule({
 	declarations: [AppComponent],
@@ -26,7 +26,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 		SocketIoModule,
 		AppRoutingModule,
 		FaIconComponent,
-		HttpClientModule
+		HttpClientModule,
+		OAuthModule.forRoot()
 	],
 	providers: [provideHttpClient(withInterceptors([errorInterceptor, tokenInterceptor]))],
 	bootstrap: [AppComponent]

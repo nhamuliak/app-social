@@ -19,16 +19,19 @@ const config: Config = {
 	clearMocks: true,
 
 	// Indicates whether the coverage information should be collected while executing the test
-	collectCoverage: true,
+	// collectCoverage: true,
 
 	// An array of glob patterns indicating a set of files for which coverage information should be collected
-	collectCoverageFrom: [
-		"src/**/*.{js,jsx,ts,tsx,spec.ts}", // Include .spec.ts files
-		"!**/node_modules/**", // Exclude node_modules
-		"!**/*.d.ts", // Exclude TypeScript declaration files
-		"!**/*.model.ts", // Exclude TypeScript declaration files
-		"!**/*.index.ts" // Exclude TypeScript declaration files
-	],
+	// collectCoverageFrom: [
+	// 	// "**/*.spec.ts" // Include only .spec.ts files for coverage
+	// 	"src/**/*.{js,jsx,ts,tsx,spec.ts}", // Include .spec.ts files
+	// 	"!**/node_modules/**", // Exclude node_modules
+	// 	"!**/*.d.ts", // Exclude TypeScript declaration files
+	// 	"!**/main.ts", // Exclude TypeScript declaration files
+	// 	"!**/*.module.ts", // Exclude TypeScript declaration files
+	// 	"!**/*.index.ts", // Exclude TypeScript declaration files
+	// 	"!**/models/**" // Exclude TypeScript declaration files
+	// ],
 
 	// The directory where Jest should output its coverage files
 	coverageDirectory: "coverage",
@@ -96,7 +99,14 @@ const config: Config = {
 	// ],
 
 	// A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-	// moduleNameMapper: {},
+	moduleNameMapper: {
+		"^@environments/(.*)$": "<rootDir>/src/environments/$1",
+		"^@mock/(.*)$": "<rootDir>/src/app/mock/$1",
+		"^@modules/(.*)$": "<rootDir>/src/app/modules/$1",
+		"^@core/(.*)$": "<rootDir>/src/app/core/$1",
+		"^@utils/(.*)$": "<rootDir>/src/app/utils/$1",
+		"^@shared/(.*)$": "<rootDir>/src/app/shared/$1"
+	},
 
 	// An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
 	// modulePathIgnorePatterns: [],

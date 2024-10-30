@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, NgZone, OnInit } from "@angular/core";
 import { ClearObservable } from "@utils/clear-observable";
 import { Router } from "@angular/router";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
@@ -15,7 +15,8 @@ export class RegistrationComponent extends ClearObservable implements OnInit {
 	constructor(
 		private formBuilder: FormBuilder,
 		private router: Router,
-		private authService: AuthService
+		private authService: AuthService,
+		private ngZone: NgZone
 	) {
 		super();
 	}
@@ -26,10 +27,14 @@ export class RegistrationComponent extends ClearObservable implements OnInit {
 
 	public onRegister(): void {
 		if (this.form.valid) {
-			this.authService.registration(this.form.value).pipe(takeUntil(this.destroy$));
-			// .subscribe(() => {
-			// 	this.router.navigate(["/auth/login"]);
-			// });
+			this.authService
+				.registration(this.form.value)
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(() => {
+					this.ngZone.run(() => {
+						this.router.navigate(["/auth/login"]);
+					});
+				});
 		}
 	}
 

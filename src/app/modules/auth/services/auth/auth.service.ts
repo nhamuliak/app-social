@@ -1,21 +1,17 @@
 import { BehaviorSubject, Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { LoginRequestBody, Payload, RegisterRequestBody } from "@modules/auth/models/auth.models";
+import { LoginRequestBody, Payload, RegisterRequestBody, Token } from "@modules/auth/models/auth.model";
 import { jwtDecode } from "jwt-decode";
 import { User } from "@shared/models/user.model";
 import { StoreService } from "@core/services/store/store.service";
-
-interface Token {
-	accessToken: string;
-	refreshToken: string;
-}
+import { environment } from "@environments/environment";
 
 @Injectable({
 	providedIn: "root"
 })
 export class AuthService {
-	private readonly urlPath = "http://localhost:3000/api";
+	private readonly urlPath = `${environment.apiUrl}/auth`;
 
 	public userSubject: BehaviorSubject<User | null>;
 
@@ -31,24 +27,20 @@ export class AuthService {
 	}
 
 	public registration(body: RegisterRequestBody): Observable<unknown> {
-		return this.http.post<Observable<unknown>>(`${this.urlPath}/auth/registration`, body);
+		return this.http.post<Observable<unknown>>(`${this.urlPath}/registration`, body);
 	}
 
 	public login(body: LoginRequestBody): Observable<Token> {
-		return this.http.post<Token>(`${this.urlPath}/auth/login`, body);
+		return this.http.post<Token>(`${this.urlPath}/login`, body);
 	}
 
 	public resetPassword(email: string): Observable<unknown> {
-		return this.http.post<Observable<unknown>>(`${this.urlPath}/auth/reset-password`, { email });
+		return this.http.post<Observable<unknown>>(`${this.urlPath}/reset-password`, { email });
 	}
 
-	public logout(userId: number): Observable<unknown> {
-		return this.http.post<Observable<unknown>>(`${this.urlPath}/auth/logout`, { userId });
+	public logout(): Observable<unknown> {
+		return this.http.post<Observable<unknown>>(`${this.urlPath}/logout`, {});
 	}
-
-	// public getToken(): string | null {
-	// 	return localStorage.getItem("access_token");
-	// }
 
 	public getAuthToken(): string | null {
 		return localStorage.getItem("access_token");
@@ -71,23 +63,10 @@ export class AuthService {
 	public isAuthenticated(): boolean {
 		const token = localStorage.getItem("access_token");
 
-		if (token && this.isTokenValidStructure(token)) {
-			return true;
+		if (token) {
+			return jwtDecode(token);
 		}
 
 		return false;
-	}
-
-	private isTokenExpired(token: string): boolean {
-		const decoded: any = jwtDecode(token);
-		const currentTime = Math.floor(Date.now() / 1000);
-
-		return decoded.exp < currentTime;
-	}
-
-	private isTokenValidStructure(token: string): boolean {
-		const parts = token.split(".");
-
-		return parts.length === 3;
 	}
 }

@@ -4,10 +4,10 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
 
 @Component({
-	template: ` <div appClickOutside (clickOutside)="onOutsideClick()">Menu Content</div> `
+	template: " <div appClickOutside (clickOutside)=\"onOutsideClick()\">Menu Content</div> "
 })
 class TestComponent {
-	onOutsideClick = jest.fn();
+	public onOutsideClick = jest.fn();
 }
 
 describe("ClickOutsideDirective", () => {
@@ -16,7 +16,8 @@ describe("ClickOutsideDirective", () => {
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
-			declarations: [ClickOutsideDirective, TestComponent]
+			imports: [ClickOutsideDirective],
+			declarations: [TestComponent]
 		});
 
 		fixture = TestBed.createComponent(TestComponent);

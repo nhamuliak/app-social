@@ -46,6 +46,7 @@ export interface ExtendedSocketIoConfig extends SocketIoConfig {
 		 * The parser to use. Defaults to an instance of the Parser that ships with Socket.IO
 		 * Reference: https://github.com/socketio/socket.io-parser
 		 */
+		// eslint-disable-next-line
 		parser?: any;
 		/**
 		 * Whether the client should try to upgrade the transport from long-polling to something better. Default: true
@@ -86,6 +87,7 @@ export interface ExtendedSocketIoConfig extends SocketIoConfig {
 		/**
 		 * Hash of options, indexed by transport name, overriding the common options for the given transport. Default: {}
 		 */
+		// eslint-disable-next-line
 		transportOptions?: any;
 		/**
 		 * If true and if the previous websocket connection to the server succeeded, the connection attempt will bypass the normal upgrade process and will initially try websocket. A connection attempt following a transport error will use the normal upgrade process. It is recommended you turn this on only when using SSL/TLS connections, or if you know that your network does not block websockets. Default: false.
@@ -102,10 +104,13 @@ export interface ExtendedSocketIoConfig extends SocketIoConfig {
 		/**
 		 * A list of subprotocols. See https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers#Subprotocols
 		 */
+		// eslint-disable-next-line
 		protocols?: any;
 
 		// add extraHeaders to Options
-		extraHeaders?: {};
+		extraHeaders?: {
+			[header: string]: string;
+		};
 	};
 }
 
@@ -113,7 +118,7 @@ const config: ExtendedSocketIoConfig = {
 	url: "http://localhost:3000/chat",
 	options: {
 		extraHeaders: {
-			Authorization: localStorage.getItem("access_token")
+			Authorization: localStorage.getItem("access_token") ?? ""
 		}
 	}
 };

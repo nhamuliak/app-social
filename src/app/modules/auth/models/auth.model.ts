@@ -2,6 +2,11 @@ import { User } from "@shared/models/user.model";
 
 type Gender = "male" | "female";
 
+export interface Token {
+	accessToken: string;
+	refreshToken: string;
+}
+
 export interface RegisterRequestBody {
 	firstName: string;
 	lastName: string;

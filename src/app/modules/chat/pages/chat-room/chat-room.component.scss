@@ -134,6 +134,7 @@
 	width: 100%;
 	padding: 20px;
 	background-color: #fff;
+	z-index: 2;
 }
 
 .chat-room-back {
@@ -201,6 +202,7 @@
 		top: 100%;
 		min-width: 80px;
 		margin-top: 0;
+		transform: none;
 	}
 }
 

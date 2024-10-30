@@ -19,8 +19,8 @@ export class ChatService {
 		return this.http.get<Conversation[]>(this.urlPath);
 	}
 
-	public getLatestConversations(conversationId: number): Observable<any[]> {
-		return this.http.get<any[]>(`${this.urlPath}/${conversationId}/latest-conversations`);
+	public getLatestConversations(conversationId: number): Observable<Conversation[]> {
+		return this.http.get<Conversation[]>(`${this.urlPath}/${conversationId}/latest-conversations`);
 	}
 
 	public createConversation(receiverId: number): Observable<Conversation> {
@@ -33,19 +33,15 @@ export class ChatService {
 
 	// TODO:: move to user service
 	public getUsers(): Observable<User[]> {
-		return this.http.get<PaginationResponse<User[]>>(`${environment.rootUrl}/api/user`).pipe(
+		return this.http.get<PaginationResponse<User>>(`${environment.rootUrl}/api/user`).pipe(
 			map(response => {
 				return response.records;
 			})
 		);
 	}
 
-	public getMessages(
-		conversationId: number,
-		page: number,
-		size: number
-	): Observable<{ total: number; records: Message[] }> {
-		return this.http.get<{ total: number; records: Message[] }>(`${this.urlPath}/${conversationId}/messages`, {
+	public getMessages(conversationId: number, page: number, size: number): Observable<PaginationResponse<Message>> {
+		return this.http.get<PaginationResponse<Message>>(`${this.urlPath}/${conversationId}/messages`, {
 			params: {
 				page,
 				size
@@ -53,9 +49,9 @@ export class ChatService {
 		});
 	}
 
-	public createMessage(roomId: number, content: string): Observable<any> {
-		return this.http.post(`${this.urlPath}/message`, { roomId, content });
-	}
+	// public createMessage(roomId: number, content: string): Observable<any> {
+	// 	return this.http.post(`${this.urlPath}/message`, { roomId, content });
+	// }
 
 	public getReceiver(conversationId: number): Observable<User> {
 		return this.http.get<User>(`${this.urlPath}/${conversationId}/receiver`);

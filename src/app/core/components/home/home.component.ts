@@ -35,23 +35,22 @@ export class HomeComponent extends ClearObservable implements OnInit {
 		super();
 	}
 
-	ngOnInit() {
+	public ngOnInit(): void {
 		this.authService.userSubject.pipe(takeUntil(this.destroy$)).subscribe(user => {
 			this.user = user;
 		});
 	}
 
 	public logout(): void {
-		this.storeService.removeItem("access_token");
-		this.router.navigate(["/auth/login"]);
-		this.socket.disconnect(this.user?.id);
+		const user = this.authService.getUser();
 
-		// this.authService
-		// 	.logout(1)
-		// 	.pipe(takeUntil(this.destroy$))
-		// 	.subscribe(() => {
-		// 		this.storeService.removeItem("access_token");
-		// 		this.router.navigate(["/auth/login"]);
-		// 	});
+		this.authService
+			.logout()
+			.pipe(takeUntil(this.destroy$))
+			.subscribe(() => {
+				this.storeService.removeItem("access_token");
+				this.socket.disconnect(user.id);
+				this.router.navigate(["/auth/login"]);
+			});
 	}
 }

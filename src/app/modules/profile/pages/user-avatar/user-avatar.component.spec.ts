@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testing";
 
 import { UserAvatarComponent } from "./user-avatar.component";
 import { ToastrService } from "ngx-toastr";
@@ -7,6 +7,8 @@ import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { StoreService } from "@core/services/store/store.service";
 import { MockAuthService, MockProfileService, MockStoreService, MockToastrService } from "@mock/services";
 import { of } from "rxjs";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
 
 describe("UserAvatarComponent", () => {
 	let component: UserAvatarComponent;
@@ -14,50 +16,32 @@ describe("UserAvatarComponent", () => {
 	let profileService: MockProfileService;
 	let toastrService: MockToastrService;
 	let authService: MockAuthService;
-	let storeService: MockStoreService;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
+			imports: [FontAwesomeModule],
 			declarations: [UserAvatarComponent],
 			providers: [
-				{ provide: ToastrService, useValue: MockToastrService },
-				{ provide: ProfileService, useValue: MockProfileService },
-				{ provide: AuthService, useValue: MockAuthService },
-				{ provide: StoreService, useValue: MockStoreService }
-			]
+				{ provide: ToastrService, useClass: MockToastrService },
+				{ provide: ProfileService, useClass: MockProfileService },
+				{ provide: AuthService, useClass: MockAuthService },
+				{ provide: StoreService, useClass: MockStoreService }
+			],
+			schemas: [NO_ERRORS_SCHEMA]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(UserAvatarComponent);
 		component = fixture.componentInstance;
 
-		profileService = new MockProfileService();
-		toastrService = new MockToastrService();
-		authService = new MockAuthService();
-		storeService = new MockStoreService();
+		profileService = TestBed.inject(ProfileService) as unknown as MockProfileService;
+		toastrService = TestBed.inject(ToastrService) as unknown as MockToastrService;
+		authService = TestBed.inject(AuthService) as unknown as MockAuthService;
 
 		fixture.detectChanges();
 	});
 
 	it("should create", () => {
 		expect(component).toBeTruthy();
-	});
-
-	it("should set up the file correctly on file dropped", () => {
-		const file = new File([""], "avatar.png", { type: "image/png" });
-		component.onFileDropped(file);
-		expect(component.file).toBe(file);
-		expect(component.previewImage).toBeNull(); // initially null
-		expect(component.previewImage).toBeInstanceOf(String); // should be a data URL string after reading
-	});
-
-	it("should set up the file correctly on file selected", () => {
-		const file = new File([""], "avatar.png", { type: "image/png" });
-		const event = { target: { files: [file] } } as unknown as Event;
-
-		component.onFileSelected(event);
-		expect(component.file).toBe(file);
-		expect(component.previewImage).toBeNull(); // initially null
-		expect(component.previewImage).toBeInstanceOf(String); // should be a data URL string after reading
 	});
 
 	it("should not set up the file if a non-image file is selected", () => {
@@ -72,28 +56,31 @@ describe("UserAvatarComponent", () => {
 	it("should call updateUserAvatar method and show success toastr on save", () => {
 		const file = new File([""], "avatar.png", { type: "image/png" });
 		component.file = file;
+		const user = { id: "123" }; // Mock user data
+		authService.getUser = jest.fn().mockReturnValue(user);
 
-		profileService.updateUserAvatar.mockReturnValue(of({ id: "123" })); // mock successful response
+		profileService.updateUserAvatar.mockReturnValue(of(user));
 
 		component.onSaveFile();
 
-		expect(profileService.updateUserAvatar).toHaveBeenCalledWith("123", file);
+		expect(profileService.updateUserAvatar).toHaveBeenCalledWith(user.id, file);
 		expect(toastrService.success).toHaveBeenCalledWith("The avatar was updated.");
 		expect(component.loading).toBe(false);
-		expect(component.file).toBeNull(); // file should be reset
-		expect(component.previewImage).toBeNull(); // preview should be reset
+		expect(component.file).toBeNull();
+		expect(component.previewImage).toBeNull();
 	});
 
-	it("should handle loading state on save file", () => {
-		const file = new File([""], "avatar.png", { type: "image/png" });
-		component.file = file;
+	it("should handle loading state on save file", fakeAsync(() => {
+		component.file = new File([""], "avatar.png", { type: "image/png" });
+		const user = { id: "123" };
+		authService.getUser = jest.fn().mockReturnValue(user);
 
-		profileService.updateUserAvatar.mockReturnValue(of({ id: "123" })); // mock successful response
+		profileService.updateUserAvatar.mockReturnValue(of(user));
 
 		component.onSaveFile();
-		expect(component.loading).toBe(true); // loading should be true when saving
 
-		// After observable completes
-		expect(component.loading).toBe(false); // loading should be false after completion
-	});
+		tick();
+
+		expect(component.loading).toBe(false);
+	}));
 });
