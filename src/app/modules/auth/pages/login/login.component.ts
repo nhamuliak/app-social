@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, NgZone, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../../services/auth/auth.service";
 import { ClearObservable } from "@utils/clear-observable";
@@ -22,7 +22,7 @@ export class LoginComponent extends ClearObservable implements OnInit {
 		private router: Router,
 		private authService: AuthService,
 		private socket: CustomSocketService,
-		// private ngZone: NgZone,
+		private ngZone: NgZone,
 		private userStoreService: UserStoreService,
 		private tokenStoreService: TokenStoreService
 	) {
@@ -42,13 +42,12 @@ export class LoginComponent extends ClearObservable implements OnInit {
 					this.tokenStoreService.setItem(response.accessToken);
 					this.userStoreService.setItem(response.user);
 
-					this.router.navigate(["/"]).then(() => {
-						this.authService.userSubject.next(response.user);
-						this.socket.connect();
+					this.ngZone.run(() => {
+						this.router.navigate(["/"]).then(() => {
+							this.authService.userSubject.next(response.user);
+							this.socket.connect();
+						});
 					});
-					// this.ngZone.run(() => {
-					//
-					// });
 				});
 		} else {
 			markAllAsRequired(this.form);

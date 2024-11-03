@@ -4,6 +4,7 @@ import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { ToastrService } from "ngx-toastr";
 import { finalize, takeUntil } from "rxjs";
 import { ClearObservable } from "@utils/clear-observable";
+import { ApiMessageResponse } from "@modules/auth/models/auth.model";
 
 @Component({
 	selector: "app-recovery-password",
@@ -33,8 +34,8 @@ export class RecoveryPasswordComponent extends ClearObservable {
 					finalize(() => (this.loading = false)),
 					takeUntil(this.destroy$)
 				)
-				.subscribe(({ title }) => {
-					this.toastrService.success(title);
+				.subscribe(({ message }: ApiMessageResponse) => {
+					this.toastrService.success(message);
 				});
 		} else {
 			this.emailCtrl.markAsTouched();

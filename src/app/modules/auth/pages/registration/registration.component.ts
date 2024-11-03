@@ -4,7 +4,9 @@ import { Router } from "@angular/router";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { takeUntil } from "rxjs";
-import { markAllAsRequired } from "@utils/validators";
+import { markAllAsRequired, passwordMatchValidator } from "@utils/validators";
+import { ToastrService } from "ngx-toastr";
+import { ApiMessageResponse } from "@modules/auth/models/auth.model";
 
 @Component({
 	templateUrl: "./registration.component.html",
@@ -17,7 +19,8 @@ export class RegistrationComponent extends ClearObservable implements OnInit {
 		private formBuilder: FormBuilder,
 		private router: Router,
 		private authService: AuthService,
-		private ngZone: NgZone
+		private ngZone: NgZone,
+		private toastrService: ToastrService
 	) {
 		super();
 	}
@@ -27,13 +30,19 @@ export class RegistrationComponent extends ClearObservable implements OnInit {
 	}
 
 	public onRegister(): void {
+		if (this.form.value.age === "") {
+			delete this.form.controls["age"];
+		}
+
 		if (this.form.valid) {
 			this.authService
 				.registration(this.form.value)
 				.pipe(takeUntil(this.destroy$))
-				.subscribe(() => {
+				.subscribe(({ message }: ApiMessageResponse) => {
 					this.ngZone.run(() => {
-						this.router.navigate(["/auth/login"]);
+						this.router.navigate(["/auth/login"]).then(() => {
+							this.toastrService.success(message);
+						});
 					});
 				});
 		} else {
@@ -66,14 +75,19 @@ export class RegistrationComponent extends ClearObservable implements OnInit {
 	}
 
 	private initForm(): void {
-		this.form = this.formBuilder.group({
-			firstName: new FormControl("", [Validators.required]),
-			lastName: new FormControl("", [Validators.required]),
-			age: new FormControl("", []),
-			email: new FormControl("", [Validators.required]),
-			password: new FormControl("", [Validators.required]),
-			confirmPassword: new FormControl("", [Validators.required]),
-			acceptTerms: new FormControl(false, [Validators.required])
-		});
+		this.form = this.formBuilder.group(
+			{
+				firstName: new FormControl("", [Validators.required]),
+				lastName: new FormControl("", [Validators.required]),
+				age: new FormControl("", []),
+				email: new FormControl("", [Validators.required]),
+				password: new FormControl("", [Validators.required]),
+				confirmPassword: new FormControl("", [Validators.required]),
+				acceptTerms: new FormControl(false, [Validators.required])
+			},
+			{
+				validators: passwordMatchValidator("password", "confirmPassword")
+			}
+		);
 	}
 }

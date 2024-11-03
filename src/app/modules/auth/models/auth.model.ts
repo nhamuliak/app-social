@@ -5,6 +5,10 @@ export interface AuthResponse {
 	user: User;
 }
 
+export interface ApiMessageResponse {
+	message: string;
+}
+
 export interface Tokens {
 	accessToken: string;
 	refreshToken: string;

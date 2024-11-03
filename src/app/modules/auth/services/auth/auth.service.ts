@@ -5,7 +5,8 @@ import {
 	LoginRequestBody,
 	RegisterRequestBody,
 	SocialAuthRequestBody,
-	AuthResponse
+	AuthResponse,
+	ApiMessageResponse
 } from "@modules/auth/models/auth.model";
 import { jwtDecode } from "jwt-decode";
 import { User } from "@shared/models/user.model";
@@ -33,8 +34,8 @@ export class AuthService {
 		return this.userSubject.value;
 	}
 
-	public registration(body: RegisterRequestBody): Observable<unknown> {
-		return this.http.post<Observable<unknown>>(`${this.urlPath}/registration`, body);
+	public registration(body: RegisterRequestBody): Observable<ApiMessageResponse> {
+		return this.http.post<ApiMessageResponse>(`${this.urlPath}/registration`, body);
 	}
 
 	public login(body: LoginRequestBody): Observable<AuthResponse> {
@@ -45,12 +46,12 @@ export class AuthService {
 		return this.http.post<AuthResponse>(`${this.urlPath}/social-auth`, body);
 	}
 
-	public recoveryPassword(email: string): Observable<{ title: string }> {
-		return this.http.post<{ title: string }>(`${this.urlPath}/recover-password`, { email });
+	public recoveryPassword(email: string): Observable<ApiMessageResponse> {
+		return this.http.post<ApiMessageResponse>(`${this.urlPath}/recover-password`, { email });
 	}
 
-	public resetPassword(token: string, password: string): Observable<{ title: string }> {
-		return this.http.post<{ title: string }>(`${this.urlPath}/reset-password`, { token, password });
+	public resetPassword(token: string, password: string): Observable<ApiMessageResponse> {
+		return this.http.post<ApiMessageResponse>(`${this.urlPath}/reset-password`, { token, password });
 	}
 
 	public logout(): Observable<void> {

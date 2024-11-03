@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ClearObservable } from "@utils/clear-observable";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { omitBy, isEmpty } from "lodash";
+import { omitBy } from "lodash";
 import { ProfileService } from "@modules/profile/services/profile/profile.service";
 import { finalize, takeUntil } from "rxjs";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
@@ -42,8 +42,7 @@ export class UserInformationComponent extends ClearObservable implements OnInit 
 
 			this.loading = true;
 
-			// omitBy filter out properties with an empty string
-			const body = omitBy(this.form.value, isEmpty);
+			const body = omitBy(this.form.value, value => value === "");
 
 			this.profileService
 				.updateUserInformation(user.id, body)
@@ -57,8 +56,6 @@ export class UserInformationComponent extends ClearObservable implements OnInit 
 
 					this.toastrService.success("The data was updated.");
 				});
-
-			this.form.reset();
 		}
 	}
 

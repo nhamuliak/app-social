@@ -5,6 +5,7 @@ import { FormControl, Validators } from "@angular/forms";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { finalize, takeUntil } from "rxjs";
 import { ToastrService } from "ngx-toastr";
+import { ApiMessageResponse } from "@modules/auth/models/auth.model";
 
 @Component({
 	templateUrl: "./reset-password.component.html",
@@ -36,9 +37,9 @@ export class ResetPasswordComponent extends ClearObservable {
 					finalize(() => (this.loading = false)),
 					takeUntil(this.destroy$)
 				)
-				.subscribe(({ title }) => {
+				.subscribe(({ message }: ApiMessageResponse) => {
 					this.router.navigate(["/auth/login"]).then(() => {
-						this.toastrService.success(title);
+						this.toastrService.success(message);
 					});
 				});
 		} else {
