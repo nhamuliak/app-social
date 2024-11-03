@@ -5,6 +5,7 @@ import { LoginComponent } from "./pages/login/login.component";
 import { RegistrationComponent } from "./pages/registration/registration.component";
 import { ResetPasswordComponent } from "./pages/reset-password/reset-password.component";
 import { TermsComponent } from "./pages/terms/terms.component";
+import { RecoveryPasswordComponent } from "./pages/recovery-password/recovery-password.component";
 
 const routes: Routes = [
 	{
@@ -14,6 +15,10 @@ const routes: Routes = [
 	{
 		path: "registration",
 		component: RegistrationComponent
+	},
+	{
+		path: "recovery-password",
+		component: RecoveryPasswordComponent
 	},
 	{
 		path: "reset-password",

@@ -11,6 +11,7 @@ import { ChangePasswordComponent } from "./pages/change-password/change-password
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { DragAndDropDirective } from "@shared/directives/drag-and-drop/drag-and-drop.directive";
 import { LoaderComponent } from "@shared/components/loader/loader.component";
+import { FormErrorComponent } from "@shared/components/form-error/form-error.component";
 
 @NgModule({
 	declarations: [ProfileComponent, UserInformationComponent, UserAvatarComponent, ChangePasswordComponent],
@@ -22,7 +23,8 @@ import { LoaderComponent } from "@shared/components/loader/loader.component";
 		ReactiveFormsModule,
 		FaIconComponent,
 		DragAndDropDirective,
-		LoaderComponent
+		LoaderComponent,
+		FormErrorComponent
 	]
 })
 export class ProfileModule {}

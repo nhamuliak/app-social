@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { takeUntil } from "rxjs";
+import { markAllAsRequired } from "@utils/validators";
 
 @Component({
 	templateUrl: "./registration.component.html",
@@ -35,7 +36,33 @@ export class RegistrationComponent extends ClearObservable implements OnInit {
 						this.router.navigate(["/auth/login"]);
 					});
 				});
+		} else {
+			markAllAsRequired(this.form);
 		}
+	}
+
+	public get firstNameControl(): FormControl {
+		return this.form.get("firstName") as FormControl;
+	}
+
+	public get lastNameControl(): FormControl {
+		return this.form.get("lastName") as FormControl;
+	}
+
+	public get emailControl(): FormControl {
+		return this.form.get("email") as FormControl;
+	}
+
+	public get passwordControl(): FormControl {
+		return this.form.get("password") as FormControl;
+	}
+
+	public get confirmPasswordControl(): FormControl {
+		return this.form.get("confirmPassword") as FormControl;
+	}
+
+	public get acceptTermsControl(): FormControl {
+		return this.form.get("acceptTerms") as FormControl;
 	}
 
 	private initForm(): void {

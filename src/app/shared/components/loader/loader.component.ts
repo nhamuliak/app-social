@@ -10,5 +10,5 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 })
 export class LoaderComponent {
 	@Input() public loading: boolean;
-	@Input() public coverPage = false;
+	@Input() public coverPage: boolean = false;
 }

@@ -8,27 +8,29 @@
 			<form (submit)="onLogin()" [formGroup]="form">
 				<div class="form-block">
 					<label for="email" class="form-label">Email Address</label>
-					<app-input
+					<input
+						class="form-input"
 						id="email"
 						type="email"
 						formControlName="email"
 						placeholder="Enter your email address"
 						required
-						ngDefaultControl
-					></app-input>
+					/>
+					<app-form-error [control]="emailControl"></app-form-error>
 				</div>
 				<div class="form-block">
 					<label for="password" class="form-label">Password</label>
-					<app-input
+					<input
+						class="form-input"
 						id="password"
 						type="password"
 						formControlName="password"
 						placeholder="Enter your password"
 						required
-						ngDefaultControl
-					></app-input>
+					/>
+					<app-form-error [control]="passwordControl"></app-form-error>
 				</div>
-				<a [routerLink]="['/auth/reset-password']">Forgot your password?</a>
+				<a [routerLink]="['/auth/recovery-password']">Forgot your password?</a>
 
 				<button type="submit" class="form-submit">Sign In</button>
 			</form>
@@ -37,14 +39,7 @@
 				<p class="auth-hint-text">
 					<span>Or do it vai other accounts.</span>
 				</p>
-				<div class="auth-social-box">
-					<button class="auth-social" (click)="onLoginWithGoogle()">
-						<img src="assets/images/socials/google.svg" alt="Google" />
-					</button>
-					<button class="auth-social">
-						<img src="assets/images/socials/facebook.svg" alt="Facebook" />
-					</button>
-				</div>
+				<app-socials></app-socials>
 			</div>
 		</div>
 		<p class="reverse-text">

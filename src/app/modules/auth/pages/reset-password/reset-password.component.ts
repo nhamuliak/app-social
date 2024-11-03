@@ -1,25 +1,49 @@
 import { Component } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ClearObservable } from "@utils/clear-observable";
 import { FormControl, Validators } from "@angular/forms";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
-import { takeUntil } from "rxjs";
+import { finalize, takeUntil } from "rxjs";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
 	templateUrl: "./reset-password.component.html",
 	styleUrls: ["./reset-password.component.scss"]
 })
 export class ResetPasswordComponent extends ClearObservable {
-	public emailCtrl: FormControl = new FormControl("", [Validators.required, Validators.email]);
+	public loading = false;
+	public passwordCtrl: FormControl = new FormControl("", [Validators.required, Validators.minLength(5)]);
 
-	constructor(private authService: AuthService) {
+	constructor(
+		private route: ActivatedRoute,
+		private router: Router,
+		private authService: AuthService,
+		private toastrService: ToastrService
+	) {
 		super();
 	}
 
 	public onReset(): void {
-		if (this.emailCtrl.valid) {
-			const email = this.emailCtrl.value;
+		if (this.passwordCtrl.valid) {
+			const password = this.passwordCtrl.value;
+			const token = this.route.snapshot.queryParams["token"];
 
-			this.authService.resetPassword(email).pipe(takeUntil(this.destroy$)).subscribe();
+			this.loading = true;
+
+			this.authService
+				.resetPassword(token, password)
+				.pipe(
+					finalize(() => (this.loading = false)),
+					takeUntil(this.destroy$)
+				)
+				.subscribe(({ title }) => {
+					this.router.navigate(["/auth/login"]).then(() => {
+						this.toastrService.success(title);
+					});
+				});
+		} else {
+			this.passwordCtrl.markAsTouched();
+			this.passwordCtrl.setErrors({ required: true });
 		}
 	}
 }

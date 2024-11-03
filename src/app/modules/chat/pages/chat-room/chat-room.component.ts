@@ -8,7 +8,6 @@ import { Message } from "@modules/chat/models/message.model";
 import { filter, finalize, forkJoin, switchMap, takeUntil } from "rxjs";
 import { User } from "@shared/models/user.model";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
-import { Payload } from "@modules/auth/models/auth.model";
 import { Conversation } from "@modules/chat/models/conversation.model";
 import { EmojiEvent } from "@ctrl/ngx-emoji-mart/ngx-emoji";
 import { Page } from "@utils/page";
@@ -38,7 +37,7 @@ export class ChatRoomComponent extends ClearObservable implements OnInit {
 	public roomId: number;
 	public message = "";
 	public showEmojiMart = false;
-	public currentUser: Payload;
+	public currentUser: User | null;
 	public receiver: User;
 	public messages: Message[];
 	public latestConversations: Conversation[];
@@ -125,7 +124,8 @@ export class ChatRoomComponent extends ClearObservable implements OnInit {
 	private initPage(): void {
 		this.loading = true;
 
-		this.currentUser = this.authService.getUser();
+		this.currentUser = this.authService.user;
+
 		this.roomId = Number(this.route.snapshot.paramMap.get("roomId")) || 0;
 
 		this.chatService
@@ -204,7 +204,7 @@ export class ChatRoomComponent extends ClearObservable implements OnInit {
 				if (index > -1) {
 					this.latestConversations[index].message = message;
 
-					if (user.id !== this.receiver.id && user.id !== this.currentUser.id) {
+					if (user.id !== this.receiver.id && user.id !== this.currentUser?.id) {
 						this.latestConversations[index].unreadMessagesCount = unreadMessagesCount;
 					}
 				} else {

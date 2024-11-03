@@ -1,10 +1,20 @@
 import { User } from "@shared/models/user.model";
 
-type Gender = "male" | "female";
+export interface AuthResponse {
+	accessToken: string;
+	user: User;
+}
 
-export interface Token {
+export interface Tokens {
 	accessToken: string;
 	refreshToken: string;
+}
+
+export interface SocialAuthRequestBody {
+	firstName: string;
+	lastName: string;
+	email: string;
+	avatar: string;
 }
 
 export interface RegisterRequestBody {
@@ -14,7 +24,6 @@ export interface RegisterRequestBody {
 	email: string;
 	password: string;
 	confirmTerms: boolean;
-	gender?: Gender;
 }
 
 export interface LoginRequestBody {

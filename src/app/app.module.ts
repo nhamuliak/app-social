@@ -9,7 +9,8 @@ import { HttpClientModule, provideHttpClient, withInterceptors } from "@angular/
 import { tokenInterceptor } from "@core/interceptors/token/token.interceptor";
 import { errorInterceptor } from "@core/interceptors/error/error.interceptor";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { OAuthModule } from "angular-oauth2-oidc";
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig } from "@abacritt/angularx-social-login";
+import { environment } from "@environments/environment";
 
 @NgModule({
 	declarations: [AppComponent],
@@ -26,10 +27,30 @@ import { OAuthModule } from "angular-oauth2-oidc";
 		SocketIoModule,
 		AppRoutingModule,
 		FaIconComponent,
-		HttpClientModule,
-		OAuthModule.forRoot()
+		HttpClientModule
 	],
-	providers: [provideHttpClient(withInterceptors([errorInterceptor, tokenInterceptor]))],
+	providers: [
+		provideHttpClient(withInterceptors([errorInterceptor, tokenInterceptor])),
+		{
+			provide: "SocialAuthServiceConfig",
+			useValue: {
+				autoLogin: false,
+				providers: [
+					{
+						id: GoogleLoginProvider.PROVIDER_ID,
+						provider: new GoogleLoginProvider(environment.googleClientId)
+					},
+					{
+						id: FacebookLoginProvider.PROVIDER_ID,
+						provider: new FacebookLoginProvider(environment.facebookClientId)
+					}
+				],
+				onError: err => {
+					console.error(err);
+				}
+			} as SocialAuthServiceConfig
+		}
+	],
 	bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-import { FormGroup } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 
 export const passwordMatchValidator = (passwordKey: string, confirmPasswordKey: string) => {
 	return (group: FormGroup) => {
@@ -7,4 +7,18 @@ export const passwordMatchValidator = (passwordKey: string, confirmPasswordKey: 
 
 		return newPassword === confirmNewPassword ? null : { passwordMismatch: true };
 	};
+};
+
+export const markAllAsRequired = (form: FormGroup): void => {
+	Object.keys(form.controls).forEach(key => {
+		const control = form.get(key);
+
+		if (control instanceof FormControl) {
+			control.markAsTouched();
+
+			if (!control.value) {
+				control.setErrors({ required: true });
+			}
+		}
+	});
 };

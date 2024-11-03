@@ -1,11 +1,17 @@
 import { BehaviorSubject, Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { LoginRequestBody, Payload, RegisterRequestBody, Token } from "@modules/auth/models/auth.model";
+import {
+	LoginRequestBody,
+	RegisterRequestBody,
+	SocialAuthRequestBody,
+	AuthResponse
+} from "@modules/auth/models/auth.model";
 import { jwtDecode } from "jwt-decode";
 import { User } from "@shared/models/user.model";
-import { StoreService } from "@core/services/store/store.service";
 import { environment } from "@environments/environment";
+import { UserStoreService } from "@core/services/user-store/user-store.service";
+import { TokenStoreService } from "@core/services/token-store/token-store.service";
 
 @Injectable({
 	providedIn: "root"
@@ -17,9 +23,10 @@ export class AuthService {
 
 	constructor(
 		private http: HttpClient,
-		private storeService: StoreService
+		private userStoreService: UserStoreService,
+		private tokenStoreService: TokenStoreService
 	) {
-		this.userSubject = new BehaviorSubject<User | null>(this.storeService.getItem("user"));
+		this.userSubject = new BehaviorSubject<User | null>(this.userStoreService.getItem);
 	}
 
 	public get user(): User | null {
@@ -30,38 +37,32 @@ export class AuthService {
 		return this.http.post<Observable<unknown>>(`${this.urlPath}/registration`, body);
 	}
 
-	public login(body: LoginRequestBody): Observable<Token> {
-		return this.http.post<Token>(`${this.urlPath}/login`, body);
+	public login(body: LoginRequestBody): Observable<AuthResponse> {
+		return this.http.post<AuthResponse>(`${this.urlPath}/login`, body, { withCredentials: true });
 	}
 
-	public resetPassword(email: string): Observable<unknown> {
-		return this.http.post<Observable<unknown>>(`${this.urlPath}/reset-password`, { email });
+	public socialAuth(body: SocialAuthRequestBody): Observable<AuthResponse> {
+		return this.http.post<AuthResponse>(`${this.urlPath}/social-auth`, body);
 	}
 
-	public logout(): Observable<unknown> {
-		return this.http.post<Observable<unknown>>(`${this.urlPath}/logout`, {});
+	public recoveryPassword(email: string): Observable<{ title: string }> {
+		return this.http.post<{ title: string }>(`${this.urlPath}/recover-password`, { email });
 	}
 
-	public getAuthToken(): string | null {
-		return localStorage.getItem("access_token");
+	public resetPassword(token: string, password: string): Observable<{ title: string }> {
+		return this.http.post<{ title: string }>(`${this.urlPath}/reset-password`, { token, password });
 	}
 
-	public setToken(token: string): void {
-		localStorage.setItem("access_token", token);
+	public logout(): Observable<void> {
+		return this.http.post<void>(`${this.urlPath}/logout`, {});
 	}
 
-	public getUser(): Payload {
-		const token = localStorage.getItem("access_token");
-
-		if (token) {
-			return jwtDecode(token);
-		}
-
-		throw new Error("Unauthorized");
+	public refresh(): Observable<{ accessToken: string }> {
+		return this.http.post<{ accessToken: string }>(`${this.urlPath}/refresh`, {}, { withCredentials: true });
 	}
 
 	public isAuthenticated(): boolean {
-		const token = localStorage.getItem("access_token");
+		const token = this.tokenStoreService.getItem;
 
 		if (token) {
 			return jwtDecode(token);

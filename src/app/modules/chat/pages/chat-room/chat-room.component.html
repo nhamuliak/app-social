@@ -80,13 +80,13 @@
 			}
 
 			@for (msg of messages; track msg.id; let item = $index) {
-				<div class="room-item" [ngClass]="{ owner: msg.user.id === currentUser.id }">
+				<div class="room-item" [ngClass]="{ owner: msg.user.id === currentUser?.id }">
 					<div class="room-user">
 						<app-avatar [avatar]="msg.user.avatar"></app-avatar>
 					</div>
 					<div class="room-info">
 						<span class="room-user-name">{{
-							msg.user.id === currentUser.id ? "You" : msg.user.firstName + " " + msg.user.lastName
+							msg.user.id === currentUser?.id ? "You" : msg.user.firstName + " " + msg.user.lastName
 						}}</span>
 						<div class="room-message">
 							<p class="text">

@@ -7,8 +7,7 @@ export const mockRegisterData: RegisterRequestBody = {
 	age: 18,
 	email: "test@gmail.com",
 	password: "secret12345",
-	confirmTerms: true,
-	gender: "male"
+	confirmTerms: true
 };
 
 export const mockLoginData: LoginRequestBody = {

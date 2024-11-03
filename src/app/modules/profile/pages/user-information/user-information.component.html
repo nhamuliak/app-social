@@ -11,6 +11,7 @@
 				formControlName="firstName"
 				placeholder="Enter your first name"
 			/>
+			<app-form-error [control]="firstNameControl"></app-form-error>
 		</div>
 		<div class="form-block">
 			<label for="last-name" class="form-label">Last Name</label>
@@ -21,6 +22,7 @@
 				formControlName="lastName"
 				placeholder="Enter your last name"
 			/>
+			<app-form-error [control]="lastNameControl"></app-form-error>
 		</div>
 		<div class="form-block">
 			<label for="age" class="form-label">Age</label>

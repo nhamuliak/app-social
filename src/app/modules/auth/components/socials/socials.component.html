@@ -1,0 +1,9 @@
+<div class="auth-social-box">
+	<span class="auth-social">
+		<asl-google-signin-button size="large"></asl-google-signin-button>
+	</span>
+	<button class="auth-social" (click)="onSignInWithFB()">
+		<img src="assets/images/socials/facebook.svg" alt="Facebook" />
+	</button>
+</div>
+<app-loader [loading]="loading" [coverPage]="true"></app-loader>

@@ -39,6 +39,7 @@
 					}
 				],
 				"no-console": ["error", { "allow": ["error", "info"] }],
+				"@typescript-eslint/no-inferrable-types": ["off"],
 				"@typescript-eslint/method-signature-style": ["error"],
 				"@typescript-eslint/explicit-member-accessibility": [
 					"error",

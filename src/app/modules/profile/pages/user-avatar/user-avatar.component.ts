@@ -4,9 +4,9 @@ import { ProfileService } from "@modules/profile/services/profile/profile.servic
 import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { finalize, takeUntil } from "rxjs";
 import { ClearObservable } from "@utils/clear-observable";
-import { StoreService } from "@core/services/store/store.service";
 import { ToastrService } from "ngx-toastr";
 import { User } from "@shared/models/user.model";
+import { UserStoreService } from "@core/services/user-store/user-store.service";
 
 @Component({
 	selector: "app-user-avatar",
@@ -24,7 +24,7 @@ export class UserAvatarComponent extends ClearObservable {
 		private authService: AuthService,
 		private profileService: ProfileService,
 		private toastrService: ToastrService,
-		private storeService: StoreService
+		private userStoreService: UserStoreService
 	) {
 		super();
 	}
@@ -44,7 +44,9 @@ export class UserAvatarComponent extends ClearObservable {
 	public onSaveFile(): void {
 		if (this.file) {
 			this.loading = true;
-			const user = this.authService.getUser();
+			const user = this.userStoreService.getItem;
+
+			if (!user) throw new Error("User does not exist in local storage.");
 
 			this.profileService
 				.updateUserAvatar(user.id, this.file)
@@ -53,7 +55,7 @@ export class UserAvatarComponent extends ClearObservable {
 					takeUntil(this.destroy$)
 				)
 				.subscribe((user: User) => {
-					this.storeService.setItem("user", user);
+					this.userStoreService.setItem(user);
 
 					this.previewImage = null;
 					this.file = null;

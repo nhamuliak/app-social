@@ -1,12 +1,14 @@
-import { Component, NgZone, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../../services/auth/auth.service";
 import { ClearObservable } from "@utils/clear-observable";
 import { takeUntil } from "rxjs";
 import { Router } from "@angular/router";
 import { CustomSocketService } from "@core/services/custom-socket/custom-socket.service";
-import { StoreService } from "@core/services/store/store.service";
-import { GoogleAuthService } from "@modules/auth/services/google-auth/google-auth.service";
+import { markAllAsRequired } from "@utils/validators";
+import { UserStoreService } from "@core/services/user-store/user-store.service";
+import { TokenStoreService } from "@core/services/token-store/token-store.service";
+import { AuthResponse } from "@modules/auth/models/auth.model";
 
 @Component({
 	templateUrl: "./login.component.html",
@@ -19,23 +21,16 @@ export class LoginComponent extends ClearObservable implements OnInit {
 		private formBuilder: FormBuilder,
 		private router: Router,
 		private authService: AuthService,
-		private googleAuthService: GoogleAuthService,
-		private storeService: StoreService,
 		private socket: CustomSocketService,
-		private ngZone: NgZone
+		// private ngZone: NgZone,
+		private userStoreService: UserStoreService,
+		private tokenStoreService: TokenStoreService
 	) {
 		super();
 	}
 
 	public ngOnInit(): void {
-		// this.googleAuthService.initConfigs();
-
 		this.initForm();
-	}
-
-	public onLoginWithGoogle(): void {
-		// console.log("google!!!!");
-		this.googleAuthService.loginWithGoogle();
 	}
 
 	public onLogin(): void {
@@ -43,19 +38,20 @@ export class LoginComponent extends ClearObservable implements OnInit {
 			this.authService
 				.login(this.form.value)
 				.pipe(takeUntil(this.destroy$))
-				.subscribe(tokens => {
-					// console.log("login data: ", tokens);
-					// store tokens
-					this.authService.setToken(tokens.accessToken);
+				.subscribe((response: AuthResponse) => {
+					this.tokenStoreService.setItem(response.accessToken);
+					this.userStoreService.setItem(response.user);
 
-					this.storeService.setItem("user", this.authService.getUser());
-
-					this.ngZone.run(() => {
-						this.router.navigate(["/"]).then(() => {
-							this.socket.connect();
-						});
+					this.router.navigate(["/"]).then(() => {
+						this.authService.userSubject.next(response.user);
+						this.socket.connect();
 					});
+					// this.ngZone.run(() => {
+					//
+					// });
 				});
+		} else {
+			markAllAsRequired(this.form);
 		}
 	}
 
@@ -64,5 +60,13 @@ export class LoginComponent extends ClearObservable implements OnInit {
 			email: ["", [Validators.required, Validators.email]],
 			password: ["", Validators.required]
 		});
+	}
+
+	public get emailControl(): FormControl {
+		return this.form.controls["email"] as FormControl;
+	}
+
+	public get passwordControl(): FormControl {
+		return this.form.controls["password"] as FormControl;
 	}
 }

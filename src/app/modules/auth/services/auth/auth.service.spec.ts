@@ -2,7 +2,7 @@ import { TestBed } from "@angular/core/testing";
 
 import { AuthService } from "./auth.service";
 import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing";
-import { LoginRequestBody, RegisterRequestBody, Token } from "@modules/auth/models/auth.model";
+import { LoginRequestBody, RegisterRequestBody, Tokens } from "@modules/auth/models/auth.model";
 import { environment } from "@environments/environment";
 import { mockLoginData, mockRegisterData } from "@mock/data";
 
@@ -46,7 +46,7 @@ describe("AuthService", () => {
 	describe("login", () => {
 		it("should call the login API with the correct body and return tokens", done => {
 			const loginBody: LoginRequestBody = mockLoginData;
-			const mockToken: Token = { accessToken: "access_token", refreshToken: "refresh_token" };
+			const mockToken: Tokens = { accessToken: "access_token", refreshToken: "refresh_token" };
 
 			service.login(loginBody).subscribe(token => {
 				expect(token).toEqual(mockToken);
@@ -64,7 +64,7 @@ describe("AuthService", () => {
 		it("should call the reset password API with the correct email", done => {
 			const email = "test@example.com";
 
-			service.resetPassword(email).subscribe(response => {
+			service.recoveryPassword(email).subscribe(response => {
 				expect(response).toBeTruthy();
 				done();
 			});
@@ -86,15 +86,6 @@ describe("AuthService", () => {
 			const req = httpMock.expectOne(`${environment.apiUrl}/auth/logout`);
 			expect(req.request.method).toBe("POST");
 			req.flush({});
-		});
-	});
-
-	describe("getAuthToken", () => {
-		it("should return the access token from localStorage", () => {
-			const token = "access_token";
-			jest.spyOn(Storage.prototype, "getItem").mockReturnValue(token);
-
-			expect(service.getAuthToken()).toBe(token);
 		});
 	});
 });

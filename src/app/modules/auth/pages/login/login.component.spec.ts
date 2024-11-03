@@ -5,17 +5,13 @@ import { Router, RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MockAuthService, MockStoreService } from "@mock/services";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
-import { StoreService } from "@core/services/store/store.service";
 import { CustomSocketService } from "@core/services/custom-socket/custom-socket.service";
 import { of } from "rxjs";
 import { mockUserData } from "@mock/data";
-import { GoogleAuthService } from "@modules/auth/services/google-auth/google-auth.service";
 
 class MockCustomSocketService {
 	public connect = jest.fn();
 }
-
-class MockGoogleAuthService {}
 
 describe("LoginComponent", () => {
 	let component: LoginComponent;
@@ -39,16 +35,8 @@ describe("LoginComponent", () => {
 					provide: Router
 				},
 				{
-					provide: StoreService,
-					useClass: MockStoreService
-				},
-				{
 					provide: CustomSocketService,
 					useClass: MockCustomSocketService
-				},
-				{
-					provide: GoogleAuthService,
-					useClass: MockGoogleAuthService
 				}
 			]
 		}).compileComponents();
@@ -58,8 +46,6 @@ describe("LoginComponent", () => {
 
 		mockAuthService = TestBed.inject(AuthService) as unknown as MockAuthService;
 		mockRouter = TestBed.inject(Router);
-		mockStoreService = TestBed.inject(StoreService) as unknown as MockStoreService;
-		// mockSocketService = TestBed.inject(CustomSocketService) as unknown as MockCustomSocketService;
 
 		// Note: use spyOn on real Router class to avoid TypeError: Cannot read properties of undefined (reading 'root')
 		jest.spyOn(mockRouter, "navigate");
@@ -95,7 +81,6 @@ describe("LoginComponent", () => {
 		expect(mockAuthService.setToken).toHaveBeenCalledWith("fakeToken");
 		expect(mockStoreService.setItem).toHaveBeenCalledWith("user", mockUserData);
 		expect(mockRouter.navigate).toHaveBeenCalledWith(["/"]);
-		// expect(mockSocketService.connect).toHaveBeenCalled();
 	}));
 
 	it("should not call login service if the form is invalid", () => {

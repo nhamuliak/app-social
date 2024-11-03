@@ -1,37 +1,54 @@
 import { HttpErrorResponse, HttpInterceptorFn } from "@angular/common/http";
-import { catchError, throwError } from "rxjs";
+import { catchError, switchMap, take, throwError } from "rxjs";
 import { inject } from "@angular/core";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
-import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
+import { TokenStoreService } from "@core/services/token-store/token-store.service";
+import { UserStoreService } from "@core/services/user-store/user-store.service";
+import { Router } from "@angular/router";
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 	const toastrService = inject(ToastrService);
-	// eslint-disable-next-line
-	const authService = inject(AuthService);
+	const tokenStoreService = inject(TokenStoreService);
+	const userStoreService = inject(UserStoreService);
 	const router = inject(Router);
+	const authService = inject(AuthService);
 
 	return next(req).pipe(
 		catchError((err: unknown) => {
 			if (err instanceof HttpErrorResponse) {
-				// Handle HTTP errors
 				if (err.status === 401) {
-					// Specific handling for unauthorized errors
-					console.error("Unauthorized request:", err);
-					// You might trigger a re-authentication flow or redirect the user here
-					localStorage.removeItem("access_token");
-					router.navigate(["/auth/login"]);
-					// authService.logout();
+					return authService.refresh().pipe(
+						switchMap(({ accessToken }: { accessToken: string }) => {
+							tokenStoreService.setItem(accessToken);
+
+							const retryRequest = req.clone({
+								setHeaders: { Authorization: `Bearer ${accessToken}` }
+							});
+
+							return next(retryRequest);
+						}),
+						catchError(refreshError => {
+							authService
+								.logout()
+								.pipe(take(1))
+								.subscribe(() => {
+									tokenStoreService.removeItem();
+									userStoreService.removeItem();
+
+									router.navigate(["/auth/login"]);
+								});
+
+							return throwError(() => refreshError);
+						})
+					);
 				} else {
-					// Handle other HTTP error codes
 					errorMessageHandle(err, toastrService);
 				}
 			} else {
-				// Handle non-HTTP errors
 				errorMessageHandle(err, toastrService);
 			}
 
-			// Re-throw the error to propagate it further
 			return throwError(() => err);
 		})
 	);
@@ -41,5 +58,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 function errorMessageHandle(err: any, toastrService: ToastrService): void {
 	console.error(err);
 
-	toastrService.error(err.error.message);
+	const errorTitle = err.error.message?.error || "Error";
+	const errorMessage = err.error.message?.message ? err.error.message.message : err.error.message;
+
+	toastrService.error(errorMessage, errorTitle);
 }

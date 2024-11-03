@@ -8,7 +8,7 @@
 .auth-wallpaper {
 	width: 100%;
 	max-width: 670px;
-	height: 100vh;
+	min-height: 100vh;
 	background-repeat: no-repeat;
 	background-size: cover;
 }
@@ -56,7 +56,9 @@
 }
 
 .auth-social-box {
-	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	margin: 29px 0;
 }
 
@@ -75,6 +77,12 @@
 	&:hover {
 		box-shadow: 0 0 2px rgba(0, 0, 0, .1);
 	}
+}
+
+span.auth-social {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .reverse-text {

@@ -1,13 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { ClearObservable } from "@utils/clear-observable";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { omitBy, isEmpty } from "lodash";
 import { ProfileService } from "@modules/profile/services/profile/profile.service";
 import { finalize, takeUntil } from "rxjs";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { User } from "@shared/models/user.model";
-import { StoreService } from "@core/services/store/store.service";
 import { ToastrService } from "ngx-toastr";
+import { UserStoreService } from "@core/services/user-store/user-store.service";
 
 @Component({
 	selector: "app-user-information",
@@ -15,14 +15,14 @@ import { ToastrService } from "ngx-toastr";
 	styleUrl: "./user-information.component.scss"
 })
 export class UserInformationComponent extends ClearObservable implements OnInit {
-	public loading = false;
+	public loading: boolean = false;
 	public form: FormGroup;
 
 	constructor(
 		private formBuilder: FormBuilder,
 		private profileService: ProfileService,
 		private authService: AuthService,
-		private storeService: StoreService,
+		private userStoreService: UserStoreService,
 		private toastrService: ToastrService
 	) {
 		super();
@@ -36,9 +36,11 @@ export class UserInformationComponent extends ClearObservable implements OnInit 
 		const { firstName, lastName, age } = this.form.controls;
 
 		if (firstName.value || lastName.value || age.value) {
-			this.loading = true;
+			const user = this.authService.user;
 
-			const user = this.authService.getUser();
+			if (!user) throw new Error("User does not exist in local storage.");
+
+			this.loading = true;
 
 			// omitBy filter out properties with an empty string
 			const body = omitBy(this.form.value, isEmpty);
@@ -50,8 +52,7 @@ export class UserInformationComponent extends ClearObservable implements OnInit 
 					takeUntil(this.destroy$)
 				)
 				.subscribe((user: User) => {
-					this.storeService.setItem("user", user);
-
+					this.userStoreService.setItem(user);
 					this.authService.userSubject.next(user);
 
 					this.toastrService.success("The data was updated.");
@@ -61,11 +62,21 @@ export class UserInformationComponent extends ClearObservable implements OnInit 
 		}
 	}
 
+	public get firstNameControl(): FormControl {
+		return this.form.get("firstName") as FormControl;
+	}
+
+	public get lastNameControl(): FormControl {
+		return this.form.get("lastName") as FormControl;
+	}
+
 	private initForm(): void {
+		const user = this.userStoreService.getItem;
+
 		this.form = this.formBuilder.group({
-			firstName: [""],
-			lastName: [""],
-			age: [""]
+			firstName: [user?.firstName ?? "", [Validators.required]],
+			lastName: [user?.lastName ?? "", [Validators.required]],
+			age: [user?.age ?? ""]
 		});
 	}
 }

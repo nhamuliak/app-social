@@ -8,89 +8,77 @@
 				<div class="user-data">
 					<div class="form-block">
 						<label for="first-name" class="form-label">First Name</label>
-						<app-input
+						<input
+							class="form-input"
 							id="first-name"
 							type="text"
 							formControlName="firstName"
 							placeholder="Enter your first name"
 							required
-							ngDefaultControl
-						></app-input>
+						/>
+						<app-form-error [control]="firstNameControl"></app-form-error>
 					</div>
 					<div class="form-block">
 						<label for="last-name" class="form-label">Last Name</label>
-						<app-input
+						<input
+							class="form-input"
 							id="last-name"
 							type="text"
 							formControlName="lastName"
 							placeholder="Enter your last name"
 							required
-							ngDefaultControl
-						></app-input>
-					</div>
-				</div>
-				<div class="user-data">
-					<div class="form-block">
-						<label for="age" class="form-label">Age</label>
-						<app-input
-							id="age"
-							type="text"
-							formControlName="age"
-							placeholder="Enter your age"
-							ngDefaultControl
-						></app-input>
-						<!--						<input id="age" class="form-input" type="number" placeholder="Enter your age" />-->
-					</div>
-					<div class="form-block">
-						<label for="gender" class="form-label">Gender</label>
-						<input type="checkbox" id="gender" />
+						/>
+						<app-form-error [control]="lastNameControl"></app-form-error>
 					</div>
 				</div>
 				<div class="form-block">
+					<label for="age" class="form-label">Age</label>
+					<input class="form-input" id="age" type="text" formControlName="age" placeholder="Enter your age" />
+				</div>
+				<div class="form-block">
 					<label for="email" class="form-label">Email Address</label>
-					<app-input
+					<input
+						class="form-input"
 						id="email"
 						type="email"
 						formControlName="email"
 						placeholder="Enter your email address"
 						required
-						ngDefaultControl
-					></app-input>
-					<!--					<input id="email" class="form-input" type="email" placeholder="Enter your email address" />-->
+					/>
+					<app-form-error [control]="emailControl"></app-form-error>
 				</div>
 				<div class="form-block">
 					<label for="password" class="form-label">Password</label>
-					<app-input
+					<input
+						class="form-input"
 						id="password"
 						type="password"
 						formControlName="password"
 						placeholder="Enter your password"
 						required
-						ngDefaultControl
-					></app-input>
-					<!--					<input id="password" class="form-input" type="password" placeholder="Enter your password" />-->
+					/>
+					<app-form-error [control]="passwordControl"></app-form-error>
 				</div>
 				<div class="form-block">
 					<label for="confirm-password" class="form-label">Confirm New Password</label>
-					<app-input
+					<input
+						class="form-input"
 						id="confirm-password"
 						type="password"
 						formControlName="confirmPassword"
 						placeholder="Enter your new password again"
 						required
-						ngDefaultControl
-					></app-input>
-					<!--					<input-->
-					<!--						id="confirm-password"-->
-					<!--						class="form-input"-->
-					<!--						type="password"-->
-					<!--						placeholder="Enter your new password again"-->
-					<!--					/>-->
+					/>
+					<app-form-error [control]="confirmPasswordControl"></app-form-error>
 				</div>
 
-				<div class="form-block inline">
-					<input type="checkbox" id="terms" formControlName="acceptTerms" />
-					<label for="terms">I agree to product <a href="/auth/terms">Terms and Policy</a></label>
+				<div class="form-block">
+					<div class="inline custom-checkbox">
+						<input type="checkbox" id="terms" formControlName="acceptTerms" />
+						<label for="terms" class="checkmark"></label>
+						<label for="terms"> I agree to product <a href="/auth/terms">Terms and Policy</a> </label>
+					</div>
+					<app-form-error [control]="acceptTermsControl"></app-form-error>
 				</div>
 
 				<button type="submit" class="form-submit">Get started now</button>
@@ -100,14 +88,7 @@
 				<p class="auth-hint-text">
 					<span>Or sign up with</span>
 				</p>
-				<div class="auth-social-box">
-					<button class="auth-social">
-						<img src="assets/images/socials/google.svg" alt="Google" />
-					</button>
-					<button class="auth-social">
-						<img src="assets/images/socials/facebook.svg" alt="Facebook" />
-					</button>
-				</div>
+				<app-socials></app-socials>
 			</div>
 		</div>
 		<p class="reverse-text">
