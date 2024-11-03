@@ -69,7 +69,7 @@ describe("AuthService", () => {
 				done();
 			});
 
-			const req = httpMock.expectOne(`${environment.apiUrl}/auth/reset-password`);
+			const req = httpMock.expectOne(`${environment.apiUrl}/auth/recovery-password`);
 			expect(req.request.method).toBe("POST");
 			expect(req.request.body).toEqual({ email });
 			req.flush({});

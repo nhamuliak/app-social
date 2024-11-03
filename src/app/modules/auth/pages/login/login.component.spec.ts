@@ -8,6 +8,8 @@ import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { CustomSocketService } from "@core/services/custom-socket/custom-socket.service";
 import { of } from "rxjs";
 import { mockUserData } from "@mock/data";
+import { UserStoreService } from "@core/services/user-store/user-store.service";
+import { TokenStoreService } from "@core/services/token-store/token-store.service";
 
 class MockCustomSocketService {
 	public connect = jest.fn();
@@ -19,7 +21,8 @@ describe("LoginComponent", () => {
 
 	let mockAuthService: MockAuthService;
 	let mockRouter: Router;
-	let mockStoreService: MockStoreService;
+	let mockUserStoreService: MockStoreService;
+	let mockTokenStoreService: MockStoreService;
 	// let mockSocketService: MockCustomSocketService;
 
 	beforeEach(async () => {
@@ -37,6 +40,14 @@ describe("LoginComponent", () => {
 				{
 					provide: CustomSocketService,
 					useClass: MockCustomSocketService
+				},
+				{
+					provide: UserStoreService,
+					useClass: MockStoreService
+				},
+				{
+					provide: TokenStoreService,
+					useClass: MockStoreService
 				}
 			]
 		}).compileComponents();
@@ -45,6 +56,8 @@ describe("LoginComponent", () => {
 		component = fixture.componentInstance;
 
 		mockAuthService = TestBed.inject(AuthService) as unknown as MockAuthService;
+		mockUserStoreService = TestBed.inject(UserStoreService) as unknown as MockStoreService;
+		mockTokenStoreService = TestBed.inject(TokenStoreService) as unknown as MockStoreService;
 		mockRouter = TestBed.inject(Router);
 
 		// Note: use spyOn on real Router class to avoid TypeError: Cannot read properties of undefined (reading 'root')
@@ -71,15 +84,15 @@ describe("LoginComponent", () => {
 		component.form.controls["email"].setValue("test@example.com");
 		component.form.controls["password"].setValue("password");
 
-		mockAuthService.login.mockReturnValue(of({ accessToken: "fakeToken" }));
+		mockAuthService.login.mockReturnValue(of({ accessToken: "fakeToken", user: mockUserData }));
 
 		component.onLogin();
 
 		tick();
 
 		expect(mockAuthService.login).toHaveBeenCalledWith({ email: "test@example.com", password: "password" });
-		expect(mockAuthService.setToken).toHaveBeenCalledWith("fakeToken");
-		expect(mockStoreService.setItem).toHaveBeenCalledWith("user", mockUserData);
+		expect(mockTokenStoreService.setItem).toHaveBeenCalledWith("fakeToken");
+		expect(mockUserStoreService.setItem).toHaveBeenCalledWith(mockUserData);
 		expect(mockRouter.navigate).toHaveBeenCalledWith(["/"]);
 	}));
 

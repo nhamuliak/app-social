@@ -8,6 +8,7 @@ import { MockDialogService } from "./mock-dialog.service";
 import { MockAudioService } from "./mock-audio.service";
 import { MockTermService } from "./mock-term.service";
 import { MockCustomSocketService } from "./mock-custom-socket.service";
+import { MockSocialAuthService } from "./mock-social-auth.service";
 
 export {
 	MockAuthService,
@@ -19,5 +20,6 @@ export {
 	MockDialogService,
 	MockAudioService,
 	MockTermService,
-	MockCustomSocketService
+	MockCustomSocketService,
+	MockSocialAuthService
 };

@@ -10,6 +10,20 @@ export const mockRegisterData: RegisterRequestBody = {
 	confirmTerms: true
 };
 
+export const mockSocialRequestData = {
+	firstName: "Test",
+	lastName: "User",
+	email: "test@gmail.com",
+	photoUrl: "avatar_url"
+};
+
+export const mockSocialData = {
+	firstName: "Test",
+	lastName: "User",
+	email: "test@gmail.com",
+	avatar: "avatar_url"
+};
+
 export const mockLoginData: LoginRequestBody = {
 	email: "test@gmail.com",
 	password: "secret12345"

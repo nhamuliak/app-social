@@ -22,7 +22,7 @@ export class RecoveryPasswordComponent extends ClearObservable {
 		super();
 	}
 
-	public onReset(): void {
+	public onRecovery(): void {
 		if (this.emailCtrl.valid) {
 			const email = this.emailCtrl.value;
 

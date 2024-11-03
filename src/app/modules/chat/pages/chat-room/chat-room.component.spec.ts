@@ -143,7 +143,6 @@ describe("ChatRoomComponent", () => {
 
 		expect(mockDialogService.open).toHaveBeenCalled();
 		expect(mockChatService.deleteConversation).toHaveBeenCalledWith(roomId, mockUserData.id);
-		// expect(mockRouter.navigate).toHaveBeenCalledWith(["/"]);
 	});
 
 	it("should add emoji to message input", () => {
@@ -160,7 +159,7 @@ describe("ChatRoomComponent", () => {
 
 		component.saveMessage();
 
-		expect(mockChatSocketService.emitSendMessage).toHaveBeenCalledWith(1, 1, "New Message");
+		expect(mockChatService.createMessage).toHaveBeenCalledWith(1, 1, "New Message");
 		expect(component.message).toBe("");
 	});
 

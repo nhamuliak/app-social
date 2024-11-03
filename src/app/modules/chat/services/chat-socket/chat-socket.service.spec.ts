@@ -38,17 +38,6 @@ describe("ChatSocketService", () => {
 		});
 	});
 
-	it("should emit send message", () => {
-		const roomId = 1;
-		const receiverId = 2;
-		const content = "Hello!";
-
-		service.emitSendMessage(roomId, receiverId, content);
-
-		// Verify that the message was emitted
-		expect(mockSocketService.events["send-message"]).toContainEqual({ roomId, receiverId, content });
-	});
-
 	it("should check for a new message", done => {
 		const newMessage: Message = mockMessageData;
 		mockSocketService.emit("message", newMessage);

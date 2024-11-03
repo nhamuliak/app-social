@@ -7,8 +7,9 @@ import { User } from "@shared/models";
 import { mockUserData } from "@mock/data";
 import { CustomSocketService } from "@core/services/custom-socket/custom-socket.service";
 import { Router } from "@angular/router";
-import { StoreService } from "@core/services/store/store.service";
 import { MockRouter } from "@mock/helpers";
+import { UserStoreService } from "@core/services/user-store/user-store.service";
+import { TokenStoreService } from "@core/services/token-store/token-store.service";
 
 describe("HomeComponent", () => {
 	let component: HomeComponent;
@@ -29,7 +30,11 @@ describe("HomeComponent", () => {
 					useClass: MockCustomSocketService
 				},
 				{
-					provide: StoreService,
+					provide: UserStoreService,
+					useClass: MockStoreService
+				},
+				{
+					provide: TokenStoreService,
 					useClass: MockStoreService
 				},
 				{

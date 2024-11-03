@@ -5,16 +5,18 @@ import { ToastrService } from "ngx-toastr";
 import { ProfileService } from "@modules/profile/services/profile/profile.service";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { ReactiveFormsModule } from "@angular/forms";
-import { MockAuthService, MockProfileService, MockToastrService } from "@mock/services";
+import { MockAuthService, MockProfileService, MockStoreService, MockToastrService } from "@mock/services";
 import { throwError } from "rxjs";
 import { mockUserData } from "@mock/data";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { UserStoreService } from "@core/services/user-store/user-store.service";
 
 describe("ChangePasswordComponent", () => {
 	let component: ChangePasswordComponent;
 	let fixture: ComponentFixture<ChangePasswordComponent>;
 	let profileService: MockProfileService;
 	let toastrService: MockToastrService;
+	let mockUserStoreService: MockStoreService;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
@@ -23,6 +25,7 @@ describe("ChangePasswordComponent", () => {
 			providers: [
 				{ provide: ToastrService, useClass: MockToastrService },
 				{ provide: ProfileService, useClass: MockProfileService },
+				{ provide: UserStoreService, useClass: MockStoreService },
 				{ provide: AuthService, useClass: MockAuthService }
 			],
 			schemas: [NO_ERRORS_SCHEMA]
@@ -33,6 +36,9 @@ describe("ChangePasswordComponent", () => {
 
 		profileService = TestBed.inject(ProfileService) as unknown as MockProfileService;
 		toastrService = TestBed.inject(ToastrService) as unknown as MockToastrService;
+		mockUserStoreService = TestBed.inject(UserStoreService) as unknown as MockStoreService;
+
+		jest.spyOn(mockUserStoreService, "getItem").mockReturnValue(mockUserData);
 
 		fixture.detectChanges();
 	});

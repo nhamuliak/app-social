@@ -5,10 +5,10 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { ProfileService } from "@modules/profile/services/profile/profile.service";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
-import { StoreService } from "@core/services/store/store.service";
 import { MockAuthService, MockProfileService, MockStoreService, MockToastrService } from "@mock/services";
 import { of } from "rxjs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { UserStoreService } from "@core/services/user-store/user-store.service";
 
 describe("UserInformationComponent", () => {
 	let component: UserInformationComponent;
@@ -25,7 +25,7 @@ describe("UserInformationComponent", () => {
 				{ provide: ToastrService, useClass: MockToastrService },
 				{ provide: ProfileService, useClass: MockProfileService },
 				{ provide: AuthService, useClass: MockAuthService },
-				{ provide: StoreService, useClass: MockStoreService }
+				{ provide: UserStoreService, useClass: MockStoreService }
 			],
 			schemas: [NO_ERRORS_SCHEMA]
 		}).compileComponents();

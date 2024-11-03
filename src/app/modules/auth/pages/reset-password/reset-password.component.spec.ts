@@ -1,17 +1,20 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
-
+import { ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testing";
 import { ResetPasswordComponent } from "./reset-password.component";
-import { RouterModule } from "@angular/router";
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
-import { MockAuthService } from "@mock/services";
+import { MockAuthService, MockToastrService } from "@mock/services";
 import { By } from "@angular/platform-browser";
+import { ToastrService } from "ngx-toastr";
+import { of, throwError } from "rxjs";
 
 describe("ResetPasswordComponent", () => {
 	let component: ResetPasswordComponent;
 	let fixture: ComponentFixture<ResetPasswordComponent>;
 
 	let mockAuthService: MockAuthService;
+	let mockToastrService: MockToastrService;
+	let mockRouter: Router;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
@@ -21,7 +24,16 @@ describe("ResetPasswordComponent", () => {
 				{
 					provide: AuthService,
 					useClass: MockAuthService
-				}
+				},
+				{
+					provide: ToastrService,
+					useClass: MockToastrService
+				},
+				{
+					provide: ActivatedRoute,
+					useValue: { snapshot: { queryParams: { token: "test-token" } } }
+				},
+				Router
 			]
 		}).compileComponents();
 
@@ -29,6 +41,10 @@ describe("ResetPasswordComponent", () => {
 		component = fixture.componentInstance;
 
 		mockAuthService = TestBed.inject(AuthService) as unknown as MockAuthService;
+		mockToastrService = TestBed.inject(ToastrService) as unknown as MockToastrService;
+		mockRouter = TestBed.inject(Router);
+
+		jest.spyOn(mockRouter, "navigate");
 
 		fixture.detectChanges();
 	});
@@ -37,34 +53,75 @@ describe("ResetPasswordComponent", () => {
 		expect(component).toBeTruthy();
 	});
 
-	it("should initialize email control", () => {
-		expect(component.emailCtrl).toBeTruthy();
-		expect(component.emailCtrl.valid).toBeFalsy();
+	it("should initialize password control", () => {
+		expect(component.passwordCtrl).toBeTruthy();
+		expect(component.passwordCtrl.valid).toBeFalsy();
 	});
 
-	it("should call resetPassword when onReset is called with valid email", () => {
-		const email = "test@example.com";
-		component.emailCtrl.setValue(email); // Set a valid email
+	it("should call resetPassword when onReset is called with valid password", () => {
+		const password = "qwe123";
+		component.passwordCtrl.setValue(password);
 
+		jest.spyOn(mockAuthService, "resetPassword").mockReturnValue(of({ message: "Password reset successful" }));
 		component.onReset();
 
-		expect(mockAuthService.resetPassword).toHaveBeenCalledWith(email);
+		expect(mockAuthService.resetPassword).toHaveBeenCalledWith("test-token", password);
 	});
 
-	it("should not call resetPassword when onReset is called with invalid email", () => {
-		component.emailCtrl.setValue("invalid-email"); // Set an invalid email
+	it("should not call resetPassword when onReset is called with invalid password", () => {
+		component.passwordCtrl.setValue("");
 
+		jest.spyOn(mockAuthService, "resetPassword");
 		component.onReset();
 
 		expect(mockAuthService.resetPassword).not.toHaveBeenCalled();
 	});
 
-	it("should handle the form submission correctly", () => {
+	it("should handle form submission correctly", fakeAsync(() => {
+		const password = "qwe12345";
 		const button = fixture.debugElement.query(By.css("button.form-submit"));
 
-		component.emailCtrl.setValue("test@example.com"); // Set a valid email
-		button.triggerEventHandler("click", null);
+		component.passwordCtrl.setValue(password);
+		jest.spyOn(mockAuthService, "resetPassword").mockReturnValue(of({ message: "Password reset successful" }));
+		jest.spyOn(mockToastrService, "success");
 
-		expect(mockAuthService.resetPassword).toHaveBeenCalledWith("test@example.com");
-	});
+		button.nativeElement.click();
+
+		tick();
+
+		expect(mockAuthService.resetPassword).toHaveBeenCalledWith("test-token", password);
+		// expect(mockToastrService.success).toHaveBeenCalledWith("Password reset successful");
+		expect(mockRouter.navigate).toHaveBeenCalledWith(["/auth/login"]);
+	}));
+
+	it("should set loading to true, call resetPassword, and navigate on success", fakeAsync(() => {
+		const password = "newpassword123";
+		component.passwordCtrl.setValue(password);
+
+		jest.spyOn(mockAuthService, "resetPassword").mockReturnValue(of({ message: "Password reset successful" }));
+		jest.spyOn(mockRouter, "navigate");
+		jest.spyOn(mockToastrService, "success");
+
+		component.onReset();
+
+		expect(component.loading).toBe(true); // Before finalize
+
+		tick();
+
+		expect(component.loading).toBe(false); // After finalize
+		expect(mockAuthService.resetPassword).toHaveBeenCalledWith("test-token", password);
+		expect(mockRouter.navigate).toHaveBeenCalledWith(["/auth/login"]);
+		expect(mockToastrService.success).toHaveBeenCalledWith("Password reset successful");
+	}));
+
+	it("should set loading to true, handle errors, and stop loading on failure", fakeAsync(() => {
+		const password = "newpassword123";
+		component.passwordCtrl.setValue(password);
+
+		jest.spyOn(mockAuthService, "resetPassword").mockReturnValue(throwError(() => new Error("Reset failed")));
+
+		component.onReset();
+
+		expect(mockRouter.navigate).not.toHaveBeenCalled();
+	}));
 });

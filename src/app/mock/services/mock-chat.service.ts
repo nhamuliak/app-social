@@ -5,5 +5,6 @@ export class MockChatService {
 	public deleteConversation = jest.fn();
 	public getUsers = jest.fn();
 	public getMessages = jest.fn();
+	public createMessage = jest.fn();
 	public getReceiver = jest.fn();
 }
