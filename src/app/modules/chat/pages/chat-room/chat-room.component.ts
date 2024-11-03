@@ -83,8 +83,20 @@ export class ChatRoomComponent extends ClearObservable implements OnInit {
 
 	public saveMessage(): void {
 		if (this.message?.trim()) {
-			// this.chatService.createMessage(this.roomId, this.message).pipe().subscribe();
-			this.chatSocketService.emitSendMessage(this.roomId, this.receiver.id, this.message);
+			this.chatService
+				.createMessage(this.roomId, this.receiver.id, this.message)
+				.pipe(takeUntil(this.destroy$))
+				.subscribe(message => {
+					this.messages.push(message);
+
+					const index = this.latestConversations.findIndex(item => item.roomId === message.roomId);
+
+					if (index >= 0) {
+						this.latestConversations[index].message = message;
+					}
+
+					this.scrollToBottom();
+				});
 
 			this.message = "";
 		}

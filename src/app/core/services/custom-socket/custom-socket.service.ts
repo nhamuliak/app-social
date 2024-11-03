@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Socket, SocketIoConfig } from "ngx-socket-io";
+import { environment } from "@environments/environment";
+import { TokenStoreService } from "@core/services/token-store/token-store.service";
 
 // Workaround till ngx-socket-io fixes the missing "extraHeaders", add extraHeaders to Options
 export interface ExtendedSocketIoConfig extends SocketIoConfig {
@@ -114,20 +116,20 @@ export interface ExtendedSocketIoConfig extends SocketIoConfig {
 	};
 }
 
-const config: ExtendedSocketIoConfig = {
-	url: "http://localhost:3000/chat",
+const config = (token: string): ExtendedSocketIoConfig => ({
+	url: `${environment.rootUrl}/chat`,
 	options: {
 		extraHeaders: {
-			Authorization: localStorage.getItem("access_token") ?? ""
+			Authorization: token
 		}
 	}
-};
+});
 
 @Injectable({
 	providedIn: "root"
 })
 export class CustomSocketService extends Socket {
-	constructor() {
-		super(config);
+	constructor(tokenStoreService: TokenStoreService) {
+		super(config(tokenStoreService.getItem));
 	}
 }

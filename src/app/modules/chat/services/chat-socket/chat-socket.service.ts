@@ -14,10 +14,6 @@ export class ChatSocketService {
 		return this.socket.fromEvent("room-was-deleted");
 	}
 
-	public emitSendMessage(roomId: number, receiverId: number, content: string): void {
-		return this.socket.emit("send-message", { roomId, receiverId, content });
-	}
-
 	public checkNewMessage(): Observable<Message> {
 		return this.socket.fromEvent("message");
 	}

@@ -49,9 +49,9 @@ export class ChatService {
 		});
 	}
 
-	// public createMessage(roomId: number, content: string): Observable<any> {
-	// 	return this.http.post(`${this.urlPath}/message`, { roomId, content });
-	// }
+	public createMessage(roomId: number, receiverId: number, content: string): Observable<Message> {
+		return this.http.post<Message>(`${this.urlPath}/message`, { roomId, receiverId, content });
+	}
 
 	public getReceiver(conversationId: number): Observable<User> {
 		return this.http.get<User>(`${this.urlPath}/${conversationId}/receiver`);
