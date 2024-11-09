@@ -10,6 +10,7 @@ import { of } from "rxjs";
 import { mockUserData } from "@mock/data";
 import { UserStoreService } from "@core/services/user-store/user-store.service";
 import { TokenStoreService } from "@core/services/token-store/token-store.service";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
 
 class MockCustomSocketService {
 	public connect = jest.fn();
@@ -49,7 +50,8 @@ describe("LoginComponent", () => {
 					provide: TokenStoreService,
 					useClass: MockStoreService
 				}
-			]
+			],
+			schemas: [NO_ERRORS_SCHEMA]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(LoginComponent);

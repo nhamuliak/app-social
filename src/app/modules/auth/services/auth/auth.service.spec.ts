@@ -5,6 +5,8 @@ import { HttpClientTestingModule, HttpTestingController } from "@angular/common/
 import { LoginRequestBody, RegisterRequestBody, Tokens } from "@modules/auth/models/auth.model";
 import { environment } from "@environments/environment";
 import { mockLoginData, mockRegisterData } from "@mock/data";
+import { MockStoreService } from "@mock/services";
+import { TokenStoreService } from "@core/services/token-store/token-store.service";
 
 describe("AuthService", () => {
 	let service: AuthService;
@@ -12,7 +14,13 @@ describe("AuthService", () => {
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
-			imports: [HttpClientTestingModule]
+			imports: [HttpClientTestingModule],
+			providers: [
+				{
+					provide: TokenStoreService,
+					useClass: MockStoreService
+				}
+			]
 		});
 		service = TestBed.inject(AuthService);
 		httpMock = TestBed.inject(HttpTestingController);
@@ -69,7 +77,7 @@ describe("AuthService", () => {
 				done();
 			});
 
-			const req = httpMock.expectOne(`${environment.apiUrl}/auth/recovery-password`);
+			const req = httpMock.expectOne(`${environment.apiUrl}/auth/recover-password`);
 			expect(req.request.method).toBe("POST");
 			expect(req.request.body).toEqual({ email });
 			req.flush({});
@@ -86,6 +94,23 @@ describe("AuthService", () => {
 			const req = httpMock.expectOne(`${environment.apiUrl}/auth/logout`);
 			expect(req.request.method).toBe("POST");
 			req.flush({});
+		});
+	});
+
+	describe("refresh", () => {
+		it("should make a POST request to refresh endpoint with credentials", done => {
+			const mockResponse = { accessToken: "new-access-token" };
+
+			service.refresh().subscribe(result => {
+				expect(result).toEqual(mockResponse);
+				done();
+			});
+
+			const req = httpMock.expectOne(`${environment.apiUrl}/auth/refresh`);
+			expect(req.request.method).toBe("POST");
+			expect(req.request.withCredentials).toBe(true);
+
+			req.flush(mockResponse);
 		});
 	});
 });

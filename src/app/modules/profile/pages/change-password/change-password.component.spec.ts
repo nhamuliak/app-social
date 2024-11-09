@@ -16,7 +16,6 @@ describe("ChangePasswordComponent", () => {
 	let fixture: ComponentFixture<ChangePasswordComponent>;
 	let profileService: MockProfileService;
 	let toastrService: MockToastrService;
-	let mockUserStoreService: MockStoreService;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
@@ -36,9 +35,6 @@ describe("ChangePasswordComponent", () => {
 
 		profileService = TestBed.inject(ProfileService) as unknown as MockProfileService;
 		toastrService = TestBed.inject(ToastrService) as unknown as MockToastrService;
-		mockUserStoreService = TestBed.inject(UserStoreService) as unknown as MockStoreService;
-
-		jest.spyOn(mockUserStoreService, "getItem").mockReturnValue(mockUserData);
 
 		fixture.detectChanges();
 	});
@@ -70,17 +66,16 @@ describe("ChangePasswordComponent", () => {
 
 	it("should call changePassword method and show success toastr on valid form submission", () => {
 		component.form.controls["oldPassword"].setValue("oldpassword");
-		component.form.controls["newPassword"].setValue("newpassword");
-		component.form.controls["confirmNewPassword"].setValue("newpassword");
+		component.form.controls["newPassword"].setValue("qwe123");
+		component.form.controls["confirmNewPassword"].setValue("qwe123");
 
 		component.onSubmit();
 
 		expect(profileService.changePassword).toHaveBeenCalledWith(mockUserData.id, {
 			oldPassword: "oldpassword",
-			password: "newpassword"
+			password: "qwe123"
 		});
-
-		// expect(toastrService.success).toHaveBeenCalledWith("The password was changed.");
+		expect(toastrService.success).toHaveBeenCalledWith("The password was changed.");
 		expect(component.loading).toBe(false);
 	});
 

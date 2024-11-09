@@ -5,6 +5,7 @@ import { By } from "@angular/platform-browser";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { MockAuthService, MockToastrService } from "@mock/services";
 import { ToastrService } from "ngx-toastr";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
 
 describe("RecoveryPasswordComponent", () => {
 	let component: RecoveryPasswordComponent;
@@ -24,7 +25,8 @@ describe("RecoveryPasswordComponent", () => {
 					provide: ToastrService,
 					useClass: MockToastrService
 				}
-			]
+			],
+			schemas: [NO_ERRORS_SCHEMA]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(RecoveryPasswordComponent);

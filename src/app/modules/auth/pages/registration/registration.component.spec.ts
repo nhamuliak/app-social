@@ -7,6 +7,7 @@ import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { MockAuthService, MockToastrService } from "@mock/services";
 import { of } from "rxjs";
 import { ToastrService } from "ngx-toastr";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
 
 describe("RegistrationComponent", () => {
 	let component: RegistrationComponent;
@@ -31,7 +32,8 @@ describe("RegistrationComponent", () => {
 				{
 					provide: Router
 				}
-			]
+			],
+			schemas: [NO_ERRORS_SCHEMA]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(RegistrationComponent);

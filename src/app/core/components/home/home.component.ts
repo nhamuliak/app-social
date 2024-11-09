@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, NgZone, OnInit } from "@angular/core";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { faAngleDown, faMessage, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { Router, RouterOutlet } from "@angular/router";
@@ -32,7 +32,8 @@ export class HomeComponent extends ClearObservable implements OnInit {
 		private authService: AuthService,
 		private userStoreService: UserStoreService,
 		private tokenStoreService: TokenStoreService,
-		private socket: CustomSocketService
+		private socket: CustomSocketService,
+		private ngZone: NgZone
 	) {
 		super();
 	}
@@ -56,7 +57,10 @@ export class HomeComponent extends ClearObservable implements OnInit {
 				this.userStoreService.removeItem();
 
 				this.socket.disconnect(user.id);
-				this.router.navigate(["/auth/login"]);
+
+				this.ngZone.run(() => {
+					this.router.navigate(["/auth/login"]);
+				});
 			});
 	}
 }

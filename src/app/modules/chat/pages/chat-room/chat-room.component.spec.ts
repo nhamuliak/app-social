@@ -134,8 +134,8 @@ describe("ChatRoomComponent", () => {
 
 	it("should delete conversation and navigate to root on delete confirmation", () => {
 		const dialogRefMock = { afterClosed$: of(1) };
-		mockDialogService.open.mockReturnValue(dialogRefMock);
-		mockChatService.deleteConversation.mockReturnValue(of());
+
+		jest.spyOn(mockDialogService, "open").mockReturnValue(dialogRefMock);
 
 		component.roomId = roomId;
 		component.receiver = mockUserData;

@@ -16,7 +16,6 @@ describe("UserAvatarComponent", () => {
 	let fixture: ComponentFixture<UserAvatarComponent>;
 	let profileService: MockProfileService;
 	let toastrService: MockToastrService;
-	let authService: MockAuthService;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
@@ -36,7 +35,6 @@ describe("UserAvatarComponent", () => {
 
 		profileService = TestBed.inject(ProfileService) as unknown as MockProfileService;
 		toastrService = TestBed.inject(ToastrService) as unknown as MockToastrService;
-		authService = TestBed.inject(AuthService) as unknown as MockAuthService;
 
 		fixture.detectChanges();
 	});
@@ -58,7 +56,6 @@ describe("UserAvatarComponent", () => {
 		const file = new File([""], "avatar.png", { type: "image/png" });
 		component.file = file;
 		const user = mockUserData;
-		authService.getUser = jest.fn().mockReturnValue(user);
 
 		profileService.updateUserAvatar.mockReturnValue(of(user));
 
@@ -73,8 +70,7 @@ describe("UserAvatarComponent", () => {
 
 	it("should handle loading state on save file", fakeAsync(() => {
 		component.file = new File([""], "avatar.png", { type: "image/png" });
-		const user = { id: "123" };
-		authService.getUser = jest.fn().mockReturnValue(user);
+		const user = mockUserData;
 
 		profileService.updateUserAvatar.mockReturnValue(of(user));
 

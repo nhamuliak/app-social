@@ -36,7 +36,7 @@ export class UserInformationComponent extends ClearObservable implements OnInit 
 		const { firstName, lastName, age } = this.form.controls;
 
 		if (firstName.value || lastName.value || age.value) {
-			const user = this.authService.user;
+			const user = this.userStoreService.getItem;
 
 			if (!user) throw new Error("User does not exist in local storage.");
 

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, NgZone } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ClearObservable } from "@utils/clear-observable";
 import { FormControl, Validators } from "@angular/forms";
@@ -18,6 +18,7 @@ export class ResetPasswordComponent extends ClearObservable {
 	constructor(
 		private route: ActivatedRoute,
 		private router: Router,
+		private ngZone: NgZone,
 		private authService: AuthService,
 		private toastrService: ToastrService
 	) {
@@ -38,8 +39,10 @@ export class ResetPasswordComponent extends ClearObservable {
 					takeUntil(this.destroy$)
 				)
 				.subscribe(({ message }: ApiMessageResponse) => {
-					this.router.navigate(["/auth/login"]).then(() => {
-						this.toastrService.success(message);
+					this.ngZone.run(() => {
+						this.router.navigate(["/auth/login"]).then(() => {
+							this.toastrService.success(message);
+						});
 					});
 				});
 		} else {

@@ -56,10 +56,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
 // eslint-disable-next-line
 function errorMessageHandle(err: any, toastrService: ToastrService): void {
-	console.error(err);
-
-	const errorTitle = err.error.message?.error || "Error";
-	const errorMessage = err.error.message?.message ? err.error.message.message : err.error.message;
+	const errorTitle = err?.error?.message?.error || "Error";
+	const errorMessage = err?.error?.message?.message || err?.message || "An unknown error occurred";
 
 	toastrService.error(errorMessage, errorTitle);
 }

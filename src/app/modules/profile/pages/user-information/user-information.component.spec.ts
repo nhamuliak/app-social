@@ -6,16 +6,16 @@ import { ToastrService } from "ngx-toastr";
 import { ProfileService } from "@modules/profile/services/profile/profile.service";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { MockAuthService, MockProfileService, MockStoreService, MockToastrService } from "@mock/services";
-import { of } from "rxjs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { UserStoreService } from "@core/services/user-store/user-store.service";
+import { mockUserData } from "@mock/data";
 
 describe("UserInformationComponent", () => {
 	let component: UserInformationComponent;
 	let fixture: ComponentFixture<UserInformationComponent>;
 	let profileService: MockProfileService;
 	let toastrService: MockToastrService;
-	let authService: MockAuthService;
+	let mockUserStoreService: MockStoreService;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
@@ -35,7 +35,7 @@ describe("UserInformationComponent", () => {
 
 		profileService = TestBed.inject(ProfileService) as unknown as MockProfileService;
 		toastrService = TestBed.inject(ToastrService) as unknown as MockToastrService;
-		authService = TestBed.inject(AuthService) as unknown as MockAuthService;
+		mockUserStoreService = TestBed.inject(UserStoreService) as unknown as MockStoreService;
 
 		fixture.detectChanges();
 	});
@@ -45,6 +45,8 @@ describe("UserInformationComponent", () => {
 	});
 
 	it("should initialize the form", () => {
+		jest.spyOn(mockUserStoreService, "getItem", "get").mockReturnValue(null);
+
 		component.ngOnInit();
 		expect(component.form).toBeTruthy();
 		expect(component.form.controls["firstName"].value).toBe("");
@@ -53,15 +55,17 @@ describe("UserInformationComponent", () => {
 	});
 
 	it("should not submit if the form is empty", () => {
+		component.form.controls["firstName"].setValue("");
+		component.form.controls["lastName"].setValue("");
+		component.form.controls["age"].setValue("");
+
 		component.onSubmit();
 		expect(profileService.updateUserInformation).not.toHaveBeenCalled();
 		expect(toastrService.success).not.toHaveBeenCalled();
 	});
 
 	it("should omit empty fields when submitting", () => {
-		const user = { id: "123" };
-		authService.getUser.mockReturnValue(user);
-		profileService.updateUserInformation.mockReturnValue(of(user)); // mock successful response
+		const user = mockUserData;
 
 		component.form.controls["firstName"].setValue("");
 		component.form.controls["lastName"].setValue("Doe");
