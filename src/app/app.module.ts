@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { NgModule, isDevMode } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { SocketIoModule } from "ngx-socket-io";
 import { ToastrModule } from "ngx-toastr";
@@ -11,6 +11,7 @@ import { errorInterceptor } from "@core/interceptors/error/error.interceptor";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig } from "@abacritt/angularx-social-login";
 import { environment } from "@environments/environment";
+import { ServiceWorkerModule } from "@angular/service-worker";
 
 @NgModule({
 	declarations: [AppComponent],
@@ -27,7 +28,13 @@ import { environment } from "@environments/environment";
 		SocketIoModule,
 		AppRoutingModule,
 		FaIconComponent,
-		HttpClientModule
+		HttpClientModule,
+		ServiceWorkerModule.register("ngsw-worker.js", {
+			enabled: !isDevMode(),
+			// Register the ServiceWorker as soon as the application is stable
+			// or after 30 seconds (whichever comes first).
+			registrationStrategy: "registerWhenStable:30000"
+		})
 	],
 	providers: [
 		provideHttpClient(withInterceptors([errorInterceptor, tokenInterceptor])),

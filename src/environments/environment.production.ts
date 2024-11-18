@@ -1,4 +1,4 @@
-const rootUrl = "http://localhost:3000";
+const rootUrl = "https://api.example.com";
 
 export const environment = {
 	production: true,
