@@ -16,7 +16,7 @@
   },
   "private": true,
   "dependencies": {
-    "@abacritt/angularx-social-login": "^2.2.0",
+    "@abacritt/angularx-social-login": "2.2.0",
     "@angular/animations": "^17.3.11",
     "@angular/common": "^17.3.11",
     "@angular/compiler": "^17.3.11",
@@ -34,7 +34,7 @@
     "angular-oauth2-oidc": "^17.0.2",
     "idb": "^8.0.0",
     "jwt-decode": "^4.0.0",
-    "ngx-socket-io": "^4.6.1",
+    "ngx-socket-io": "4.6.1",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
