@@ -18,16 +18,11 @@ jobs:
               with:
                   node-version: 20.11.1
 
-            - name: Authenticate to npm
-              run: echo "//registry.npmjs.org/:_authToken=${{ secrets.APP_SOCIAL }}" > ~/.npmrc
-
             - name: Install dependencies
-              run: |
-                npm cache clean --force
-                npm install
+              run: npm ci
 
             - name: Run lint
               run: npm run lint
 
-#            - name: Run tests
-#              run: npm run test
+            - name: Run tests
+              run: npm run test
