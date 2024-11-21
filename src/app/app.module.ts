@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig } from "@abacritt/angularx-social-login";
 import { environment } from "@environments/environment";
 import { ServiceWorkerModule } from "@angular/service-worker";
+import { cacheInterceptor } from "@core/interceptors/cache/cache.interceptor";
 
 @NgModule({
 	declarations: [AppComponent],
@@ -37,7 +38,7 @@ import { ServiceWorkerModule } from "@angular/service-worker";
 		})
 	],
 	providers: [
-		provideHttpClient(withInterceptors([errorInterceptor, tokenInterceptor])),
+		provideHttpClient(withInterceptors([errorInterceptor, tokenInterceptor, cacheInterceptor])),
 		{
 			provide: "SocialAuthServiceConfig",
 			useValue: {
