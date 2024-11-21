@@ -49,6 +49,10 @@
 					<a [routerLink]="['/', item.roomId]">Message</a>
 				</div>
 			</div>
+		} @empty {
+			<div class="chat-item">
+				<p>There are no conversations yet...</p>
+			</div>
 		}
 	}
 </section>

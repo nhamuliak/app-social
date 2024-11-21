@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, NgZone, OnInit } from "@angular/core";
-import { finalize, switchMap, takeUntil, tap } from "rxjs";
+import { filter, finalize, switchMap, takeUntil, tap } from "rxjs";
 import { FacebookLoginProvider, SocialAuthService, SocialUser } from "@abacritt/angularx-social-login";
 import { AuthResponse, SocialAuthRequestBody } from "@modules/auth/models/auth.model";
 import { ClearObservable } from "@utils/clear-observable";
@@ -41,6 +41,7 @@ export class SocialsComponent extends ClearObservable implements OnInit {
 	private handleSocialAuth(): void {
 		this.socialAuthService.authState
 			.pipe(
+				filter(user => !!user),
 				tap(() => (this.loading = true)),
 				switchMap((user: SocialUser) => {
 					const body: SocialAuthRequestBody = {
@@ -61,6 +62,7 @@ export class SocialsComponent extends ClearObservable implements OnInit {
 
 				this.ngZone.run(() => {
 					this.router.navigate(["/"]).then(() => {
+						this.socialAuthService.signOut(false);
 						this.authService.userSubject.next(response.user);
 						this.socket.connect();
 					});
