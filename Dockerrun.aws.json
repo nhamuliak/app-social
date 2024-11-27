@@ -1,0 +1,19 @@
+{
+	"AWSEBDockerrunVersion": "1",
+	"Image": {
+		"Name": "app-social",
+		"Update": "true"
+	},
+	"Ports": [
+		{
+			"HostPort": "4300",
+			"ContainerPort": "4300"
+		}
+	],
+	"Volumes": [
+		{
+			"HostDirectory" : "/var/app/current",
+			"ContainerDirectory": "/usr/src/app-social"
+		}
+	]
+}

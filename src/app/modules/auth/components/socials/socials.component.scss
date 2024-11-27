@@ -1,0 +1,10 @@
+.restyle {
+	display: block;
+	width: 45px;
+	height: 90%;
+	position: absolute;
+	border: 10px solid #fff;
+	border-radius: 10px;
+	z-index: 1;
+	pointer-events: none;
+}
