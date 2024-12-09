@@ -1,4 +1,4 @@
-const rootUrl = "https://api.example.com";
+const rootUrl = "http://chat-backend-alb-1721051390.eu-central-1.elb.amazonaws.com";
 
 export const environment = {
 	production: true,
