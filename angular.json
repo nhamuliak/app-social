@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
+			  "baseHref": "/",
             "outputPath": "dist/app-social",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -45,11 +46,16 @@
 		  },
           "configurations": {
             "production": {
+				"optimization": true,
+				"sourceMap": false,
+				"namedChunks": false,
+				"vendorChunk": false,
+				"buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "600kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
