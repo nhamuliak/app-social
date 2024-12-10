@@ -1,4 +1,4 @@
-const rootUrl = "http://chat-backend-alb-1721051390.eu-central-1.elb.amazonaws.com";
+const rootUrl = "https://api.myappchat.com";
 
 export const environment = {
 	production: true,

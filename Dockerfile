@@ -11,6 +11,10 @@ COPY . .
 # Install deps inside the container
 RUN npm install
 
+# Clean angular cache
+RUN ng cache clean
+
+# Run build
 RUN npm run build-prod
 
 EXPOSE 4300

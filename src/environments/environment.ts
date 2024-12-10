@@ -1,4 +1,4 @@
-const rootUrl = "http://chat-backend-alb-1721051390.eu-central-1.elb.amazonaws.com";
+const rootUrl = "http://localhost:3000";
 
 export const environment = {
 	production: false,
