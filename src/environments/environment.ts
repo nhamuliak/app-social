@@ -1,7 +1,7 @@
-const rootUrl = "http://localhost:3000";
+const rootUrl = "https://api.myappchat.com";
 
 export const environment = {
-	production: false,
+	production: true,
 	rootUrl: rootUrl,
 	apiUrl: `${rootUrl}/api`,
 	featureXEnabled: true,
