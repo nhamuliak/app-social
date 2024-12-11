@@ -20,5 +20,5 @@ RUN npm install -g http-server
 EXPOSE 4300
 
 # Set the default command to start the application
-CMD ["http-server", "dist/app-social", "-p", "4300"]
+CMD ["http-server", "dist/app-social", "-p", "4300:80"]
 
