@@ -119,6 +119,9 @@ export interface ExtendedSocketIoConfig extends SocketIoConfig {
 const config = (token: string): ExtendedSocketIoConfig => ({
 	url: `${environment.rootUrl}/chat`,
 	options: {
+		reconnection: true,
+		reconnectionAttempts: 5,
+		reconnectionDelay: 2000,
 		extraHeaders: {
 			Authorization: token
 		}

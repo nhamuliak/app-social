@@ -32,7 +32,7 @@
 		{
 			"name": "api-cache",
 			"urls": [
-				"https://api.myappchat.com/**"
+				"https://api.myappchat.com/api/**"
 			],
 			"cacheConfig": {
 				"strategy": "freshness",

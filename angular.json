@@ -40,12 +40,12 @@
             "scripts": [],
 			  "stylePreprocessorOptions": {
 				  "includePaths": ["./src/scss"]
-        },
-        "serviceWorker": true,
-        "ngswConfigPath": "ngsw-config.json"
+        	}
 		  },
           "configurations": {
             "production": {
+				"serviceWorker": true,
+				"ngswConfigPath": "ngsw-config.json",
 				"optimization": true,
 				"sourceMap": false,
 				"namedChunks": false,
