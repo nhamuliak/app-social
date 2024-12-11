@@ -14,9 +14,11 @@ RUN npm install
 # Run build
 RUN npm run build-prod
 
+# Install http-server globally to serve the production files
+RUN npm install -g http-server
+
 EXPOSE 4300
 
 # Set the default command to start the application
-#CMD ["npm", "run", "start"]
-ENTRYPOINT ["npm", "run", "serve"]
+CMD ["http-server", "dist/app-social", "-p", "4300"]
 
