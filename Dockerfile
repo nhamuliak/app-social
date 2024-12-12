@@ -14,17 +14,20 @@ RUN npm install
 # Run build
 RUN npm run build-prod
 
-# Stage 2: Serve the application with Nginx
-FROM nginx:stable-alpine
+# Stage 2: Use 'serve' to serve the application
+FROM node:20-alpine
 
-# Copy the built application from the previous stage
-COPY --from=build /usr/src/app-social/dist/app-social /usr/share/nginx/html
+# Install 'serve'
+RUN npm install -g serve
 
-# Copy custom Nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Set working directory
+WORKDIR /usr/src/app-social
 
-# Expose the port that Nginx will run on
+# Copy the built Angular app from the build stage
+COPY --from=build /usr/src/app-social/dist/app-social /usr/src/app-social
+
+# Expose the port Serve will use
 EXPOSE 80
 
-# Set the default command to start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Command to start the application
+CMD ["serve", "-s", ".", "--single", "-l", "80"]
