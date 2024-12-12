@@ -1,4 +1,5 @@
 @import "variables";
+@import "mixins";
 
 .room-main {
 	display: flex;
@@ -14,6 +15,10 @@
 	border-right: 1px solid $border-color;
 	height: calc(100vh - 74px);
 	background: #fff;
+
+	@include mq-max-width(768px) {
+		display: none;
+	}
 }
 
 .chat-room-item {
@@ -237,8 +242,7 @@
 
 .room-container {
 	padding: 15px 40px 25px;
-	min-height: calc(100% - 120px - 80px);
-	//height: 2000px;
+	min-height: calc(100vh - 120px - 155px);
 }
 
 .room-item {
