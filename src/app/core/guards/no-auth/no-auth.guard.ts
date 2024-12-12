@@ -12,5 +12,6 @@ export const noAuthGuard: CanActivateFn = () => {
 		return false;
 	}
 
+	router.navigate(["/auth/login"]);
 	return true;
 };
