@@ -16,11 +16,18 @@ const routes: Routes = [
 		canActivate: [authGuard],
 		children: [
 			{
-				path: "", // chat
+				path: "",
 				loadChildren: () => import("./modules/chat/chat.module").then(module => module.ChatModule)
-			},
+			}
+		]
+	},
+	{
+		path: "profile",
+		component: HomeComponent,
+		canActivate: [authGuard],
+		children: [
 			{
-				path: "profile",
+				path: "",
 				loadChildren: () => import("./modules/profile/profile.module").then(module => module.ProfileModule)
 			}
 		]
