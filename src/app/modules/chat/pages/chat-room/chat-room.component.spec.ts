@@ -32,7 +32,7 @@ const activatedRouteStub = {
 		paramMap: {
 			get: (key: string) => {
 				if (key === "roomId") {
-					return 1; // return a mock roomId, change as needed
+					return 1;
 				}
 				return null;
 			}
@@ -102,8 +102,6 @@ describe("ChatRoomComponent", () => {
 		mockDialogService = TestBed.inject(DialogService) as unknown as MockDialogService;
 		mockToastrService = TestBed.inject(ToastrService) as unknown as MockToastrService;
 		mockRouter = TestBed.inject(Router) as unknown as MockRouter;
-
-		// fixture.detectChanges();
 	});
 
 	afterEach(() => {

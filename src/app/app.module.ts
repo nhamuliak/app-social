@@ -15,6 +15,7 @@ import { ServiceWorkerModule } from "@angular/service-worker";
 import { cacheInterceptor } from "@core/interceptors/cache/cache.interceptor";
 import { HomeComponent } from "@core/components/home/home.component";
 import { AvatarComponent } from "@shared/components/avatar/avatar.component";
+import { ClickOutsideDirective } from "@shared/directives/click-outside/click-outside.directive";
 
 @NgModule({
 	declarations: [AppComponent, HomeComponent],
@@ -38,7 +39,8 @@ import { AvatarComponent } from "@shared/components/avatar/avatar.component";
 			// or after 3 seconds (whichever comes first).
 			registrationStrategy: "registerWhenStable:3000"
 		}),
-		AvatarComponent
+		AvatarComponent,
+		ClickOutsideDirective
 	],
 	providers: [
 		provideHttpClient(withInterceptors([errorInterceptor, tokenInterceptor, cacheInterceptor])),
