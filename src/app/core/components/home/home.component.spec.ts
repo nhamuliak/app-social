@@ -10,6 +10,7 @@ import { Router } from "@angular/router";
 import { MockRouter } from "@mock/helpers";
 import { UserStoreService } from "@core/services/user-store/user-store.service";
 import { TokenStoreService } from "@core/services/token-store/token-store.service";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
 
 describe("HomeComponent", () => {
 	let component: HomeComponent;
@@ -19,7 +20,7 @@ describe("HomeComponent", () => {
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [HomeComponent],
+			declarations: [HomeComponent],
 			providers: [
 				{
 					provide: AuthService,
@@ -41,7 +42,8 @@ describe("HomeComponent", () => {
 					provide: Router,
 					useClass: MockRouter
 				}
-			]
+			],
+			schemas: [NO_ERRORS_SCHEMA]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(HomeComponent);
