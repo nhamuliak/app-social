@@ -1,0 +1,11 @@
+@mixin mq-max-width($width) {
+	@media (max-width: $width) {
+		@content;
+	}
+}
+
+@mixin mq-min-width($width) {
+	@media (min-width: $width) {
+		@content;
+	}
+}

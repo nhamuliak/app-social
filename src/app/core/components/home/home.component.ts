@@ -1,21 +1,16 @@
 import { Component, NgZone, OnInit } from "@angular/core";
-import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { faAngleDown, faMessage, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { Router, RouterOutlet } from "@angular/router";
+import { faAngleDown, faBars, faMessage, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { Router } from "@angular/router";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { ClearObservable } from "@utils/clear-observable";
 import { CustomSocketService } from "@core/services/custom-socket/custom-socket.service";
 import { User } from "@shared/models/user.model";
-import { AvatarComponent } from "@shared/components/avatar/avatar.component";
 import { takeUntil } from "rxjs";
-import { ClickOutsideDirective } from "@shared/directives/click-outside/click-outside.directive";
 import { UserStoreService } from "@core/services/user-store/user-store.service";
 import { TokenStoreService } from "@core/services/token-store/token-store.service";
 
 @Component({
 	selector: "app-home",
-	standalone: true,
-	imports: [FaIconComponent, RouterOutlet, AvatarComponent, ClickOutsideDirective],
 	templateUrl: "./home.component.html",
 	styleUrl: "./home.component.scss"
 })
@@ -23,7 +18,9 @@ export class HomeComponent extends ClearObservable implements OnInit {
 	protected readonly faMessage = faMessage;
 	protected readonly faAngleDown = faAngleDown;
 	protected readonly faRightFromBracket = faRightFromBracket;
+	protected readonly faBars = faBars;
 
+	public isSidePanelActive: boolean = false;
 	public menuOpened: boolean = false;
 	public user: User | null;
 

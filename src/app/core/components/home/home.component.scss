@@ -1,4 +1,5 @@
 @import "variables";
+@import "mixins";
 
 $header-height: 74px;
 $aside-width: 230px;
@@ -16,16 +17,39 @@ $aside-width: 230px;
 }
 
 .header-side {
+	display: flex;
+	align-items: center;
 	width: $aside-width;
 	height: 100%;
 
-	a:hover {
-		border-bottom: none;
+	.menu-burger {
+		font-size: 24px;
+		background: transparent;
+		margin-left: 30px;
+		padding: 5px;
+		display: none;
+		cursor: pointer;
+
+		@include mq-max-width(992px) {
+			display: inline-block;
+		}
 	}
 
-	img {
-		width: 100%;
-		height: 100%;
+	@include mq-max-width(992px) {
+		width: auto;
+	}
+
+	.header-logo {
+		display: inline-flex;
+
+		@include mq-max-width(992px) {
+			width: 95px;
+			overflow: hidden;
+		}
+
+		&:hover {
+			border-bottom: none;
+		}
 	}
 }
 
@@ -47,10 +71,11 @@ $aside-width: 230px;
 	cursor: pointer;
 
 	.user-avatar {
-		display: block;
+		display: inline-block;
 		border: 2px solid #4C6FFF66;
 		border-radius: 50%;
 		overflow: hidden;
+		min-width: 48px;
 	}
 
 	.user-name {
@@ -74,6 +99,17 @@ $aside-width: 230px;
 	height: calc(100vh - $header-height);
 	border-right: 1px solid $border-color;
 	background-color: #fff;
+	z-index: 9;
+	transition: all .3s;
+	transform: translateX(-100%);
+
+	&.active {
+		transform: translateX(0);
+	}
+
+	@include mq-min-width(992px) {
+		transform: none;
+	}
 }
 
 .aside-title {
@@ -150,4 +186,9 @@ $aside-width: 230px;
 	margin-left: $aside-width;
 	width: calc(100% - $aside-width);
 	height: auto;
+
+	@include mq-max-width(992px) {
+		width: 100%;
+		margin-left: 0;
+	}
 }

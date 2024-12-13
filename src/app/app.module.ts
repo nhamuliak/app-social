@@ -13,9 +13,11 @@ import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthServiceConfig } f
 import { environment } from "@environments/environment";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { cacheInterceptor } from "@core/interceptors/cache/cache.interceptor";
+import { HomeComponent } from "@core/components/home/home.component";
+import { AvatarComponent } from "@shared/components/avatar/avatar.component";
 
 @NgModule({
-	declarations: [AppComponent],
+	declarations: [AppComponent, HomeComponent],
 	imports: [
 		BrowserModule,
 		BrowserAnimationsModule,
@@ -35,7 +37,8 @@ import { cacheInterceptor } from "@core/interceptors/cache/cache.interceptor";
 			// Register the ServiceWorker as soon as the application is stable
 			// or after 3 seconds (whichever comes first).
 			registrationStrategy: "registerWhenStable:3000"
-		})
+		}),
+		AvatarComponent
 	],
 	providers: [
 		provideHttpClient(withInterceptors([errorInterceptor, tokenInterceptor, cacheInterceptor])),

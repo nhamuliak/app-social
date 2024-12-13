@@ -1,6 +1,9 @@
 <header class="header">
 	<div class="header-side">
-		<a href="/">
+		<button class="menu-burger" (click)="isSidePanelActive = !isSidePanelActive">
+			<fa-icon [icon]="faBars"></fa-icon>
+		</button>
+		<a class="header-logo" routerLink="/">
 			<img src="./assets/images/logo.svg" />
 		</a>
 	</div>
@@ -16,18 +19,18 @@
 					<fa-icon [icon]="faAngleDown"></fa-icon>
 				</div>
 
-				<menu class="menu-block" [class.opened]="menuOpened">
-					<a class="menu-item" href="/profile/user-information">Edit Profile</a>
+				<menu class="menu-block" [class.opened]="menuOpened" (click)="menuOpened = false">
+					<a class="menu-item" routerLink="/profile/user-information">Edit Profile</a>
 					<button class="menu-item" (click)="logout()">Log out</button>
 				</menu>
 			</div>
 		}
 	</div>
 </header>
-<aside class="aside">
+<aside class="aside" [class.active]="isSidePanelActive">
 	<h3 class="aside-title">Main Menu</h3>
-	<nav class="aside-menu">
-		<a href="/">
+	<nav class="aside-menu" (click)="isSidePanelActive = false">
+		<a routerLink="/">
 			<fa-icon [icon]="faMessage"></fa-icon>
 			Chat
 		</a>
