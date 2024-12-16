@@ -15,4 +15,13 @@ export class MockCustomSocketService {
 	}
 
 	public open = jest.fn();
+
+	public ioSocket = {
+		io: {
+			opts: {
+				extraHeaders: {}
+			}
+		}
+	};
+	public connect = jest.fn();
 }

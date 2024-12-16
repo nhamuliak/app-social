@@ -43,7 +43,7 @@ import { ClickOutsideDirective } from "@shared/directives/click-outside/click-ou
 		ClickOutsideDirective
 	],
 	providers: [
-		provideHttpClient(withInterceptors([errorInterceptor, tokenInterceptor, cacheInterceptor])),
+		provideHttpClient(withInterceptors([tokenInterceptor, cacheInterceptor, errorInterceptor])),
 		{
 			provide: "SocialAuthServiceConfig",
 			useValue: {

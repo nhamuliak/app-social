@@ -1,9 +1,9 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testing";
+import { ComponentFixture, fakeAsync, TestBed } from "@angular/core/testing";
 
 import { LoginComponent } from "./login.component";
 import { Router, RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MockAuthService, MockStoreService } from "@mock/services";
+import { MockAuthService, MockCustomSocketService, MockStoreService } from "@mock/services";
 import { AuthService } from "@modules/auth/services/auth/auth.service";
 import { CustomSocketService } from "@core/services/custom-socket/custom-socket.service";
 import { of } from "rxjs";
@@ -11,10 +11,6 @@ import { mockUserData } from "@mock/data";
 import { UserStoreService } from "@core/services/user-store/user-store.service";
 import { TokenStoreService } from "@core/services/token-store/token-store.service";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-
-class MockCustomSocketService {
-	public connect = jest.fn();
-}
 
 describe("LoginComponent", () => {
 	let component: LoginComponent;
@@ -24,7 +20,6 @@ describe("LoginComponent", () => {
 	let mockRouter: Router;
 	let mockUserStoreService: MockStoreService;
 	let mockTokenStoreService: MockStoreService;
-	// let mockSocketService: MockCustomSocketService;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
@@ -89,8 +84,6 @@ describe("LoginComponent", () => {
 		mockAuthService.login.mockReturnValue(of({ accessToken: "fakeToken", user: mockUserData }));
 
 		component.onLogin();
-
-		tick();
 
 		expect(mockAuthService.login).toHaveBeenCalledWith({ email: "test@example.com", password: "password" });
 		expect(mockTokenStoreService.setItem).toHaveBeenCalledWith("fakeToken");

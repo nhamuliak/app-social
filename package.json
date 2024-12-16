@@ -12,7 +12,9 @@
     "test:coverage": "jest --coverage",
     "lint": "ng lint",
     "lint-fix": "ng lint --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "docker-build": "docker build -t app-social .",
+    "docker-run": "docker run -p 4300:80 app-social"
   },
   "private": true,
   "dependencies": {

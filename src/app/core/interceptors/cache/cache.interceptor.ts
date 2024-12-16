@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpEvent, HttpInterceptorFn, HttpRequest, HttpResponse } from "@angular/common/http";
-import { catchError, Observable, of, switchMap } from "rxjs";
+import { catchError, Observable, of, switchMap, throwError } from "rxjs";
 import { openDB } from "idb";
 import { environment } from "@environments/environment";
 
@@ -62,7 +62,7 @@ export const cacheInterceptor: HttpInterceptorFn = (req, next): Observable<HttpE
 			return of(event); // Return the response (whether cached or fresh)
 		}),
 		catchError((error: HttpErrorResponse) => {
-			return of(error); // Return any errors that occur
+			return throwError(() => error);
 		})
 	) as Observable<HttpEvent<unknown>>;
 };

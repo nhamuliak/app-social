@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from "@angular/core/testing";
+import { ComponentFixture, fakeAsync, TestBed } from "@angular/core/testing";
 
 import { UserAvatarComponent } from "./user-avatar.component";
 import { ToastrService } from "ngx-toastr";
@@ -70,13 +70,10 @@ describe("UserAvatarComponent", () => {
 
 	it("should handle loading state on save file", fakeAsync(() => {
 		component.file = new File([""], "avatar.png", { type: "image/png" });
-		const user = mockUserData;
 
-		profileService.updateUserAvatar.mockReturnValue(of(user));
+		profileService.updateUserAvatar.mockReturnValue(of(mockUserData));
 
 		component.onSaveFile();
-
-		tick();
 
 		expect(component.loading).toBe(false);
 	}));

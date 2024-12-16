@@ -42,6 +42,10 @@ export class LoginComponent extends ClearObservable implements OnInit {
 					this.tokenStoreService.setItem(response.accessToken);
 					this.userStoreService.setItem(response.user);
 
+					this.socket.ioSocket.io.opts.extraHeaders = {
+						Authorization: response.accessToken
+					};
+
 					this.ngZone.run(() => {
 						this.router.navigate(["/"]).then(() => {
 							this.authService.userSubject.next(response.user);
